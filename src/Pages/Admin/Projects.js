@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ProjectCardsList from '../../Components/ProjectCard/ProjectCard';
+import NavigationBar from '../../Components/NavigationBar/NavigationBar'
 import SearchBar from '../../Components/SearchBar/SearchBar';
 import DropdownMenu from '../../Components/DropdownMenu/DropdownMenu'; // Import DropdownMenu component
 import { dropdownOptions } from '../../MockData/MockData';
@@ -18,6 +19,7 @@ function Projects() {
 
     return (
         <>  
+            <NavigationBar NameSection={"Proyectos"}/>
             <div className="container-fluid mt-3">
                 <div className="row mb-3">
                     <SearchBar onSearch={handleSearch} />

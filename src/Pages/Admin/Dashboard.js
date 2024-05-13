@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Widget from '../../Components/Widget/Widget';
+import NavigationBar from '../../Components/NavigationBar/NavigationBar'
 import DoughnutChart from '../../Components/DoughnutChart/DoughnutChart';
 import Checklist from '../../Components/Checklist/Checklist';
 import Timer from '../../Components/Timer/Timer';
@@ -11,7 +12,7 @@ function Dashboard() {
 
     return (
       <>
-
+      <NavigationBar NameSection={"Tablero"}/>
       <div className="container-fluid mt-3">
         <div className="row">
           <div className="col-lg-4">

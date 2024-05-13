@@ -3,6 +3,7 @@ import Table from '../../Components/Table/Table';
 import { userTabledata } from '../../MockData/MockData';
 import SearchBar from '../../Components/SearchBar/SearchBar';
 import RoleFilter from '../../Components/RoleFilter/RoleFilter';
+import NavigationBar from '../../Components/NavigationBar/NavigationBar'
 
 function Users() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +19,7 @@ function Users() {
 
     return (
         <>
+            <NavigationBar NameSection={"Usuarios"}/>
             <div className="container-fluid mt-3">
                 <div className="row">
                     <SearchBar onSearch={handleSearch} />

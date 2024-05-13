@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NavigationBar from '../../Components/NavigationBar/NavigationBar'
 import DropdownMenu from '../../Components/DropdownMenu/DropdownMenu';
 import ContentCard from '../../Components/ContentCard/ContentCard';
 import { dropdownOptions } from '../../MockData/MockData';
@@ -22,6 +23,7 @@ function Historical() {
 
   return (
     <>
+    <NavigationBar NameSection={"Histórico"}/>
       <div className="container">
         <div className="row justify-content-center mt-3">
           <div className="col-md-12">
