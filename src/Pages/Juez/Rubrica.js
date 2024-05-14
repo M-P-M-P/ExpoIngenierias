@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { criteria } from './components/rubricadata.js';
-import { Lienzo } from './components/Lienzo.js';
+import { criteria } from '../../Components/rubricadata.js';
 import { Link } from 'react-router-dom';
 import './Rubrica.css';
-import './components/rubricadata.js';
+import '../../Components/rubricadata.js';
+import NavigationBar from '../../Components/NavigationBar/Judge/NavigationBar';
 
 const Rubrica = () => {
   const [selectedCriteria, setSelectedCriteria] = useState(Array(criteria.length).fill(0));
@@ -52,8 +52,9 @@ const Rubrica = () => {
   };
 
   return (
+    <>
+     <NavigationBar NameSection={"Rúbrica"}/>
     <div className="container">
-      <Lienzo />
       <h1>CALIFICA EL PROYECTO EN BASE A LA RÚBRICA</h1>
       <div className="rubrica-container">
         {criteria.map((criterion, index) => (
@@ -99,6 +100,7 @@ const Rubrica = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

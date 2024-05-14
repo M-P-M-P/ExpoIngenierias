@@ -7,6 +7,7 @@ import VideoCard from '../../Components/VideoCard/VideoCard';
 import AssignJudge from '../../Components/AsignJudge/AsignJudge';
 import ProjectScore from '../../Components/ProjectScore/ProjectScore';
 import ProjectMembers from '../../Components/ProjectMembers/ProjectMembers';
+import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar';
 
 function ProjectPage({ setPageTitle }) {
   const { projectId } = useParams(); // Get the project ID from URL parameter
@@ -36,10 +37,11 @@ function ProjectPage({ setPageTitle }) {
 
   return (
     <>
+    <NavigationBar NameSection={project.title}/>
       <div className="container-fluid mt-3">
         <div className="row">
           <div className="col-lg-6">
-            <Widget title={"Poster"} centered={true} content={<img style={{height:"625px"}} src={`${process.env.PUBLIC_URL}/${poster}`} alt="Project Image" />} />
+            <Widget title={"Póster"} centered={true} content={<img style={{height:"625px"}} src={`${process.env.PUBLIC_URL}/${poster}`} alt="Project Image" />} />
           </div>
           <div className="col-lg-6">
             <div className="row">
@@ -47,7 +49,7 @@ function ProjectPage({ setPageTitle }) {
                 <Widget title={"Video"} centered={true} content={<VideoCard url={video} />} />
               </div>
               <div className="col-lg-12">
-                <Widget title={"Project Description"} centered={true} content={<p style={{marginLeft:"10px", marginRight:"10px"}}>{description}</p>} />
+                <Widget title={"Descripción del proyecto"} centered={true} content={<p style={{marginLeft:"10px", marginRight:"10px"}}>{description}</p>} />
               </div>
             </div>
           </div>

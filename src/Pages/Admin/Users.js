@@ -3,7 +3,7 @@ import Table from '../../Components/Table/Table';
 import { userTabledata } from '../../MockData/MockData';
 import SearchBar from '../../Components/SearchBar/SearchBar';
 import RoleFilter from '../../Components/RoleFilter/RoleFilter';
-import NavigationBar from '../../Components/NavigationBar/NavigationBar'
+import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
 
 function Users() {
     const [searchQuery, setSearchQuery] = useState("");

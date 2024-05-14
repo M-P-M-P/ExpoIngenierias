@@ -1,89 +1,93 @@
 .Titulo{
 
-    font-weight: bolder;
-    color: #0C356A;
-    font-size: 20px;
-    
-
-  }
+  font-weight: bolder;
+  color: #0C356A;
+  font-size: 20px;
   
-  .Subtitulo{
+
+}
+
+.Subtitulo1{
+
+  font-weight: bolder;
+  font-size: 20px;
+
+}
+
+.Texto{
+
+  margin-left: 5px;
+
+}
+
+.TextoValid{
+
+  margin-left: 5px;
+  font-size: 25px;
+
+}
+
+
+.Info{
+
+  background-color: #ffffff;
+  border-radius: 5px;
   
-    font-weight: bolder;
-  
-  }
-  
-  .Texto{
-  
-    margin-left: 5px;
-  
-  }
 
-  .TextoValid{
-  
-    margin-left: 5px;
-    font-size: 25px;
-  
-  }
+}
 
+.Info2{
 
+  background-color: #ffffff;
+  border-radius: 5px;
+  height: 292px;
+}
 
+.BGResume{
 
-  .Info{
+  background-image: url('../../Assets/CardProto.png'); 
+  background-size: cover; 
+  background-position: center;
 
-    background-color: #ffffff;
-    border-radius: 5px;
+  border-radius: 5px;
 
-  }
+  height: 292px;
 
-  .BGResume{
+  overflow-y: auto;
 
-    background-image: url('./img/proyec.svg'); 
-    background-size: cover; 
-    background-position: center;
+}
 
-    border-radius: 5px;
+.proj-sub-bold{
 
+  color: #ffffff;
+  font-weight: bolder;
 
+}
 
+.proj-sub{
 
-  }
+  color: #ffffff;
 
-  .proj-sub-bold{
+}
 
+.proj-tit{
 
-    color: #ffffff;
-    font-weight: bolder;
+  color: #ffffff;
+  font-weight: bolder;
+  font-size: 40px;
 
-  }
+}
 
-  .proj-sub{
+.BGBar{
 
+  background-color: rgba(8, 34, 67, 0.8);
+  border-radius: 5px;
 
-    color: #ffffff;
-
-  }
-
-  .proj-tit{
-
-
-    color: #ffffff;
-    font-weight: bolder;
-    font-size: 40px;
-
-  }
-
-  .BGBar{
-
-
-    background-color: rgba(8, 34, 67, 0.8);
-    border-radius: 5px;
-
-  }
+}
 
 .gemelo{
 
-    font-size: 20px ;
+  font-size: 20px ;
 
 }
 
@@ -91,27 +95,77 @@
 
   font-size: 27px;
 
+}
+
+.docu-icon2{
+
+  font-size: 27px;
+  color: #13417d;
 
 }
 
-.aceptado{
+
+.Aceptado{
 
   color:rgb(0, 104, 47);
   font-weight: bold;
+  border-radius: 5px;
+
 
 }
 
-.rechazado{
+.Rechazado{
 
   color:rgb(207, 42, 42);
   font-weight: bold;
+  border-radius: 5px;
+
 
 }
 
-.espera{
-
+.Espera{
   color:rgb(121, 121, 121);
   font-weight: bold;
+  border-radius: 5px;
+}
+
+
+.AceptadoCont{
+
+  background-color:rgb(0, 104, 47);
+  padding: 5px;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 5px;
+
+  color: #ffffff;
+
+
+}
+
+.RechazadoCont{
+
+  background-color:rgb(207, 42, 42);
+  padding: 5px;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 5px;
+
+  color: #ffffff;
+
+
+}
+
+
+.EsperaCont{
+
+  background-color:rgb(121, 121, 121);
+  padding: 5px;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 5px;
+
+  color: #ffffff;
 
 }
 
@@ -131,9 +185,114 @@
 
 .FinalResul{
 
-  color: gray;
+  color: #0C356A;
   font-weight: bolder;
+  font-size: 100px;
 
-  font-size: 75px;
+}
 
+.ContFinalRes{
+  border-radius: 5px;
+  width: 275px;
+}
+
+.Resultado{
+
+  font-weight: bolder;
+  color: #6da0e2;
+
+}
+
+
+.ContCommentIndiJudge{
+  background-color: #e6e6e6e5;
+  border-radius: 5px;
+}
+
+.ComentariosCOntenidoWrap{
+  white-space: wrap;
+}
+
+.SilderCont{
+  white-space: nowrap;
+
+  overflow-y: auto;
+  height: 300px;
+
+}
+
+
+.SilderCont::-webkit-scrollbar {
+  width: 5px;
+}
+
+.SilderCont::-webkit-scrollbar-track {
+  background: #aeaeae;
+  
+}
+
+.SilderCont::-webkit-scrollbar-thumb {
+  background: #555555e6;
+  border-radius: 5px; 
+}
+
+.SilderCont::-webkit-scrollbar-thumb:hover {
+  background: #000000; 
+}
+
+.TextoEdit{
+
+  font-weight: bolder;
+  color: #ffffff;
+  background-color: #0C356A;
+  padding: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.TextoEdit:hover{
+
+  background-color: #0b5ed7;
+
+}
+
+.btn4 {
+  width: 100%;
+  min-height: 8.5vh;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #0C356A;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.4s;
+  
+  /* Aplicar flexbox para centrar texto verticalmente */
+  display: flex;
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  text-decoration: none;
+}
+.btn5 {
+  width: 100%;
+  min-height: 8.5vh;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #406eaa;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.4s;
+  
+  /* Aplicar flexbox para centrar texto verticalmente */
+  display: flex;
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  text-decoration: none;
 }

@@ -3,8 +3,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
-import logo from '../../Assets/logo.svg';
-import logo2 from '../../Assets/logo2.svg';
+import logo from '../../../Assets/logo.svg';
+import logo2 from '../../../Assets/logo2.svg';
 
 import { useState } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ProjectCardsList from '../../Components/ProjectCard/ProjectCard';
-import NavigationBar from '../../Components/NavigationBar/NavigationBar'
+import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
 import SearchBar from '../../Components/SearchBar/SearchBar';
 import DropdownMenu from '../../Components/DropdownMenu/DropdownMenu'; // Import DropdownMenu component
 import { dropdownOptions } from '../../MockData/MockData';

@@ -6,29 +6,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './Juez.css';
 import Badge from '../Badge/Badge.js';
 
-function Card({ title, image, description }) {
-  const truncateText = (text, limit) => {
-    if (text.length <= limit) {
-      return text;
-    }
-    return text.slice(0, limit) + '...';
-  };
-
-  return (
-    <div className="card">
-      <div className="imag">
-        <img src={require("../../Assets/"+image)} alt={title}/>
-      </div>
-
-      <div className="text">
-        <p className="h3">{truncateText(title, 50)}</p>
-        <p className="p">{truncateText(description, 100)}</p>
-
-        <Link to="/inicio" className="btn">Ver Proyecto</Link>
-      </div>
-    </div>
-  );
-}
 
 function CardCalif({ title, image, description, ubicacion, categoria, nivelDesarrollo, status }) {
   const truncateText = (text, limit) => {
@@ -41,7 +18,7 @@ function CardCalif({ title, image, description, ubicacion, categoria, nivelDesar
   const badgeClassName = status === "No calificado" ? "badge2" : "badge3";
   const btnClassName = status === "No calificado" ? "btncalif" : "btncalifdisable";
   const btnText = status === "No calificado" ? "Calificar" : "Calificado";
-  const btnAction = status === "No calificado" ? "/rubrica" : null;
+  const btnAction = status === "No calificado" ? "/ProyectoJuez/Calificar/:projectId" : null;
   const alreadyCalifiedMessage = "Este proyecto ya ha sido calificado.";
 
   return (
@@ -60,7 +37,7 @@ function CardCalif({ title, image, description, ubicacion, categoria, nivelDesar
           <Badge data={status} className={badgeClassName} />
         </div>
 
-        <Link to="/inicio" className="btn23">Ver Proyecto</Link>
+        <Link to="/ProyectoJuez/:projectId" className="btn23">Ver Proyecto</Link>
         
         {btnAction ? (
           <Link to={btnAction} className={btnClassName}>{btnText}</Link>

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { data } from '../../Components/data.js';
-import NavigationBar from '../../Components/NavigationBar/NavigationBar';
+import NavigationBar from '../../Components/NavigationBar/Judge/NavigationBar';
 import {Cardlist} from '../../Components/CardJuez/CardJuez.js';
-import '../../Components/CardJuez/Juez.css';
 
 function PageJuez() {
   const [filterText, setFilterText] = useState("");
@@ -17,10 +16,9 @@ function PageJuez() {
 
   return (
     <>
+    <NavigationBar NameSection={"Proyectos"}/>
       <div className="container-fluid">
         <div className="centered-content">
-        <NavigationBar NameSection={"Proyectos"}/>
-
           <input placeholder="Buscar proyecto por nombre" type="text" name="text" class="input" value={filterText} onChange={handleChange}></input>
         </div>
         <div className="proyectos">

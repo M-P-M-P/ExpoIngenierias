@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
-import TitleBar from './Components/TitleBar/TitleBar';
 import Dashboard from './Pages/Admin/Dashboard';
 import Historical from './Pages/Admin/Historical';
 import Users from './Pages/Admin/Users';
 import Projects from './Pages/Admin/Projects';
 import ProjectPage from './Pages/Admin/ProjectPage';
-// import Juez from './Pages/Juez/Juez';
+import Juez from './Pages/Juez/Juez';
+import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
+import Rubrica from './Pages/Juez/Rubrica';
 
 function App() {
   return (
@@ -39,7 +40,9 @@ function MainContent() {
         <Route path="/proyecto/:projectId" element={<ProjectPage setPageTitle={setPageTitle} />} />
 
 
-        {/* <Route path='/verProyectos' element={<Juez />}/> */}
+        <Route path='/ProyectosJuez' element={<Juez />}/>
+        <Route path="/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
+        <Route path="/ProyectoJuez/Calificar/:projectId" element={<Rubrica />} />
       </Routes>
     </>
   );

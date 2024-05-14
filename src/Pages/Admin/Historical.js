@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NavigationBar from '../../Components/NavigationBar/NavigationBar'
+import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
 import DropdownMenu from '../../Components/DropdownMenu/DropdownMenu';
 import ContentCard from '../../Components/ContentCard/ContentCard';
 import { dropdownOptions } from '../../MockData/MockData';

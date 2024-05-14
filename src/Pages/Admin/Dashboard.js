@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Widget from '../../Components/Widget/Widget';
-import NavigationBar from '../../Components/NavigationBar/NavigationBar'
+import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
 import DoughnutChart from '../../Components/DoughnutChart/DoughnutChart';
 import Checklist from '../../Components/Checklist/Checklist';
 import Timer from '../../Components/Timer/Timer';
