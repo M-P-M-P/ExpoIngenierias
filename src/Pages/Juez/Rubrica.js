@@ -47,7 +47,7 @@ const Rubrica = () => {
 
     // Display total score, criteria, and comments in a pop-up
     if (window.confirm(`¿Estás seguro de que deseas enviar tu rúbrica?\n\nPuntaje Total: ${totalScore/5}\n${criteriaMessage}\nComentario adicional: ${additionalComment}`)) {
-      window.location.href = './juez'; // Redirect the user to the /judge page
+      window.location.href = './ProyectosJuez'; // Redirect the user to the /judge page
     }
   };
 
@@ -95,7 +95,7 @@ const Rubrica = () => {
         {/* Mensaje de error si el comentario adicional es insuficiente */}
         {showErrorMessage && additionalComment.trim().length < 100 && <p className="error-message">Por favor, ingresa un comentario adicional con al menos 100 caracteres.</p>}
         <div className="buttons-container2">
-          <Link to="/Juez" className="btn2">Cancelar</Link>
+          <Link to="/ProyectosJuez" className="btn2">Cancelar</Link>
           <button onClick={handleSubmit} className="btn3">Enviar</button>
         </div>
       </div>

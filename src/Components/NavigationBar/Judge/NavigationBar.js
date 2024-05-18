@@ -43,7 +43,7 @@ function ToggleBarStudent({SectionName}) {
               <div className='row'>
                 <div className='col'>
                 <center><i className='bi bi-person-circle docu-icon2'>
-                  </i><Link to='/student-profile' className='Titulo-toggle'>Daniel Pérez Rojas</Link></center>
+                  </i><Link to='/teacher-profile' className='Titulo-toggle'>Daniel Pérez Rojas</Link></center>
                 </div>
               </div>
             </div>

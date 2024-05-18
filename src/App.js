@@ -42,7 +42,7 @@ function MainContent() {
 
         <Route path='/ProyectosJuez' element={<Juez />}/>
         <Route path="/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
-        <Route path="/ProyectoJuez/Calificar/:projectId" element={<Rubrica />} />
+        <Route path="/Calificar/:projectId" element={<Rubrica />} />
       </Routes>
     </>
   );

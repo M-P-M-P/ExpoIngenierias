@@ -18,7 +18,7 @@ function CardCalif({ title, image, description, ubicacion, categoria, nivelDesar
   const badgeClassName = status === "No calificado" ? "badge2" : "badge3";
   const btnClassName = status === "No calificado" ? "btncalif" : "btncalifdisable";
   const btnText = status === "No calificado" ? "Calificar" : "Calificado";
-  const btnAction = status === "No calificado" ? "/ProyectoJuez/Calificar/:projectId" : null;
+  const btnAction = status === "No calificado" ? "/Calificar/:projectId" : null;
   const alreadyCalifiedMessage = "Este proyecto ya ha sido calificado.";
 
   return (

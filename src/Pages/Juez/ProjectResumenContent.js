@@ -178,7 +178,7 @@ function ProjVal({finalRes, postVal, vidVal}){
                   </span>
                 </div>
               )}
-              <Link to="/ProyectoJuez/Calificar/:projectId" className="btn4">CALIFICAR PROYECTO</Link>
+              <Link to="/Calificar/:projectId" className="btn4">CALIFICAR PROYECTO</Link>
               <Link to="/ProyectosJuez" className="btn5">Regresar a Mis Proyectos</Link>
           </div>
         </div>
