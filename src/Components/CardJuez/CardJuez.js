@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
@@ -6,8 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './Juez.css';
 import Badge from '../Badge/Badge.js';
 
-
-function CardCalif({ title, image, description, ubicacion, categoria, nivelDesarrollo, status }) {
+function CardCalif({ title, description, status }) {
   const truncateText = (text, limit) => {
     if (text.length <= limit) {
       return text;
@@ -24,7 +23,7 @@ function CardCalif({ title, image, description, ubicacion, categoria, nivelDesar
   return (
     <div className="card">
       <div className="imag">
-        <img src={require("../../Assets/"+image)} alt={title}/>
+        <img src={require("../../Assets/CardProto.png")} alt={title}/>
       </div>
 
       <div className="text">
@@ -32,8 +31,8 @@ function CardCalif({ title, image, description, ubicacion, categoria, nivelDesar
         <p className="p">{truncateText(description, 100)}</p>
 
         <div className="badge-container">
-          <Badge data={categoria} className="badge" />
-          <Badge data={nivelDesarrollo} className="badge" />
+          <Badge data="categoria" className="badge" />
+          <Badge data="nivelDesarrollo" className="badge" />
           <Badge data={status} className={badgeClassName} />
         </div>
 
@@ -49,23 +48,27 @@ function CardCalif({ title, image, description, ubicacion, categoria, nivelDesar
   );
 }
 
-export function Cardlist({ posts }) {
-  const list = posts.map(post => 
-    <CardCalif
-      title={post.title}
-      image={post.image}
-      description={post.description}
-      ubicacion={post.ubicacion}
-      categoria={post.categoria}
-      nivelDesarrollo={post.nivelDesarrollo}
-      status={post.status}
-      key={post.id}
-    />
-  )
+export function Cardlist() {
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    // Realizar la llamada al servidor para obtener los proyectos
+    fetch('http://localhost:8000/api/projects')
+      .then(response => response.json())
+      .then(data => setProjects(data))
+      .catch(error => console.error('Error al obtener los proyectos:', error));
+  }, []);
 
   return (
     <>
-      {list}
+      {projects.map(project => 
+        <CardCalif
+          title={project.title}
+          description={project.description}
+          status={"No calificado"}
+          key={project.id}
+        />
+      )}
     </>
   );
 }
