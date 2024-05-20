@@ -6,7 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './Juez.css';
 import Badge from '../Badge/Badge.js';
 
-function CardCalif({ projectId, title, description, categoria, status }) {
+function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, status }) {
   const truncateText = (text, limit) => {
     if (text.length <= limit) {
       return text;
@@ -31,7 +31,7 @@ function CardCalif({ projectId, title, description, categoria, status }) {
 
         <div className="badge-container">
           <Badge data={categoria} className="badge" />
-          <Badge data="nivelDesarrollo" className="badge" />
+          <Badge data={nivelDesarrollo} className="badge" />
           <Badge data={status} className={badgeClassName} />
         </div>
 
