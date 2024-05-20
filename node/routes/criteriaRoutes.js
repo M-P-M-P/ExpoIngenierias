@@ -1,15 +1,16 @@
 import express from 'express';
-import { fetchCriteriaById } from '../controllers/criteriaController.js';
+import Criteria from '../models/criterias.js';
 
 const router = express.Router();
 
-router.get('/:id', async (req, res) => {
+// Ruta para obtener todos los criterios
+router.get('/criterias', async (req, res) => {
   try {
-    const criteriaId = req.params.id;
-    const criteria = await fetchCriteriaById(criteriaId);
-    res.json(criteria);
+    const criterias = await Criteria.findAll();
+    res.json(criterias);
   } catch (error) {
-    res.status(500).json({ error: 'Error al buscar el criterio.' });
+    console.error('Error al obtener los criterios:', error);
+    res.status(500).json({ error: 'Error al obtener los criterios.' });
   }
 });
 

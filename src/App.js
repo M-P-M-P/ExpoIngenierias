@@ -33,7 +33,7 @@ function MainContent() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Juez />} />
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
         <Route path="/proyectos" element={<Projects />} />

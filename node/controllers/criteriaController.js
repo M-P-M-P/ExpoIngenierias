@@ -1,18 +1,14 @@
 import Criteria from '../models/criterias.js';
 
-async function fetchCriteriaById(id) {
+async function fetchAllCriterias() {
   try {
-    const criteria = await Criteria.findOne({
-      where: {
-        id: id,
-      },
-    });
-    console.log('Criteria:', JSON.stringify(criteria, null, 2));
-    return criteria;
+    const criterias = await Criteria.findAll();
+    console.log('Criterias:', JSON.stringify(criterias, null, 1));
+    return criterias;
   } catch (error) {
-    console.error('Error al buscar el criterio:', error);
+    console.error('Error al buscar los criterios:', error);
     throw error;
   }
 }
 
-export { fetchCriteriaById };
+export { fetchAllCriterias };
