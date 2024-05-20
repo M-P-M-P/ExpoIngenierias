@@ -6,7 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './Juez.css';
 import Badge from '../Badge/Badge.js';
 
-function CardCalif({ title, description, categoria, nivelDesarrollo, status }) {
+function CardCalif({ projectId, title, description, categoria, status }) {
   const truncateText = (text, limit) => {
     if (text.length <= limit) {
       return text;
@@ -17,8 +17,7 @@ function CardCalif({ title, description, categoria, nivelDesarrollo, status }) {
   const badgeClassName = status === "No calificado" ? "badge2" : "badge3";
   const btnClassName = status === "No calificado" ? "btncalif" : "btncalifdisable";
   const btnText = status === "No calificado" ? "Calificar" : "Calificado";
-  const btnAction = status === "No calificado" ? "/Calificar/:projectId" : null;
-  const alreadyCalifiedMessage = "Este proyecto ya ha sido calificado.";
+  const calificarLink = status === "No calificado" ? `/Calificar/${projectId}` : null;
 
   return (
     <div className="card">
@@ -32,14 +31,14 @@ function CardCalif({ title, description, categoria, nivelDesarrollo, status }) {
 
         <div className="badge-container">
           <Badge data={categoria} className="badge" />
-          <Badge data={nivelDesarrollo} className="badge" />
+          <Badge data="nivelDesarrollo" className="badge" />
           <Badge data={status} className={badgeClassName} />
         </div>
 
         <Link to="/ProyectoJuez/:projectId" className="btn23">Ver Proyecto</Link>
         
-        {btnAction ? (
-          <Link to={btnAction} className={btnClassName}>{btnText}</Link>
+        {calificarLink ? (
+          <Link to={calificarLink} className={btnClassName}>{btnText}</Link>
         ) : (
           <span className={btnClassName}>{btnText}</span>
         )}
@@ -91,6 +90,7 @@ export function Cardlist() {
     <>
       {projects.map(project => 
         <CardCalif
+          projectId={project.id}
           title={project.title}
           description={project.description}
           categoria={categories[project.id_category]}
