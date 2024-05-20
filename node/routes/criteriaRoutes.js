@@ -1,4 +1,4 @@
-import express from 'express';
+/*import express from 'express';
 import Criteria from '../models/criterias.js';
 
 const router = express.Router();
@@ -13,5 +13,14 @@ router.get('/criterias', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los criterios.' });
   }
 });
+
+export default router;
+*/
+import express from 'express';
+import { fetchAllCriterias } from '../controllers/criteriaController.js';
+
+const router = express.Router();
+
+router.get('/criterias', fetchAllCriterias);
 
 export default router;

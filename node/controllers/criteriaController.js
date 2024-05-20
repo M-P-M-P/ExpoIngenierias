@@ -1,13 +1,14 @@
 import Criteria from '../models/criterias.js';
 
-async function fetchAllCriterias() {
+async function fetchAllCriterias(req, res) {
   try {
-    const criterias = await Criteria.findAll();
-    console.log('Criterias:', JSON.stringify(criterias, null, 1));
-    return criterias;
+    const criterias = await Criteria.findAll({
+      order: [['id', 'ASC']]  // Ordenar por ID ascendente
+    });
+    res.json(criterias);
   } catch (error) {
-    console.error('Error al buscar los criterios:', error);
-    throw error;
+    console.error('Error al obtener los criterios:', error);
+    res.status(500).json({ error: 'Error al obtener los criterios.' });
   }
 }
 
