@@ -4,10 +4,10 @@ import oracledb from 'oracledb';
 
 const db = new Sequelize({
     dialect: 'oracle',
-    username: 'admin',
-    password: config.DB_PASSWORD,
+    username: 'ADMIN',
+    password: 'uj@@FpVFwkZ7Uvn',
     dialectOptions: {   
-        connectString: config.DB_CONNECTION_STRING,
+        connectString: '(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.mx-queretaro-1.oraclecloud.com))(connect_data=(service_name=g10e8bcafdb4ced_nctc1obxti1z34rl_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))',
         dialectModule: oracledb
     },
     logging: console.log
