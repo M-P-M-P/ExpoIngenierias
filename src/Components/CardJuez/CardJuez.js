@@ -65,45 +65,8 @@ function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, 
   );
 }
 
-export function Cardlist() {
-  const [projects, setProjects] = useState([]);
-  const [categories, setCategories] = useState({});
-  const [areas, setAreas] = useState({});
+export function Cardlist({ projects, categories, areas }) {
   const defaultIdPersona = 5;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
-
-  useEffect(() => {
-    // Realizar la llamada al servidor para obtener los proyectos
-    fetch('http://localhost:8000/api/projects')
-      .then(response => response.json())
-      .then(data => setProjects(data))
-      .catch(error => console.error('Error al obtener los proyectos:', error));
-
-    // Realizar la llamada al servidor para obtener las categorías
-    fetch('http://localhost:8000/api/categories')
-      .then(response => response.json())
-      .then(data => {
-        // Organizar las categorías en un objeto por id para facilitar la búsqueda
-        const categoryMap = {};
-        data.forEach(category => {
-          categoryMap[category.id] = category.title;
-        });
-        setCategories(categoryMap);
-      })
-      .catch(error => console.error('Error al obtener las categorías:', error));
-
-    // Realizar la llamada al servidor para obtener las áreas
-    fetch('http://localhost:8000/api/areas')
-      .then(response => response.json())
-      .then(data => {
-        // Organizar las áreas en un objeto por id para facilitar la búsqueda
-        const areaMap = {};
-        data.forEach(area => {
-          areaMap[area.id] = area.name;
-        });
-        setAreas(areaMap);
-      })
-      .catch(error => console.error('Error al obtener las áreas:', error));
-  }, []);
 
   return (
     <>
