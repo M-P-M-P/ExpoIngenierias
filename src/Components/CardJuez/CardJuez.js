@@ -7,6 +7,8 @@ import './Juez.css';
 import Badge from '../Badge/Badge.js';
 
 function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, status }) {
+  const defaultIdPersona = 1;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
+  
   const truncateText = (text, limit) => {
     if (text.length <= limit) {
       return text;
@@ -17,7 +19,7 @@ function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, 
   const badgeClassName = status === "No calificado" ? "badge2" : "badge3";
   const btnClassName = status === "No calificado" ? "btncalif" : "btncalifdisable";
   const btnText = status === "No calificado" ? "Calificar" : "Calificado";
-  const calificarLink = status === "No calificado" ? `/Calificar/${projectId}` : null;
+  const calificarLink = status === "No calificado" ? `/Juez/${defaultIdPersona}/Calificar/${projectId}` : null;
 
   return (
     <div className="card">
@@ -35,7 +37,7 @@ function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, 
           <Badge data={status} className={badgeClassName} />
         </div>
 
-        <Link to="/ProyectoJuez/:projectId" className="btn23">Ver Proyecto</Link>
+        <Link to="/Juez/:idpersona/ProyectoJuez/:projectId" className="btn23">Ver Proyecto</Link>
         
         {calificarLink ? (
           <Link to={calificarLink} className={btnClassName}>{btnText}</Link>

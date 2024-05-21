@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
 import Dashboard from './Pages/Admin/Dashboard';
 import Historical from './Pages/Admin/Historical';
@@ -22,6 +22,8 @@ function App() {
 }
 
 function MainContent() {
+  const defaultIdPersona = 1;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
+
   const location = useLocation(); // Get current location
   const [pageTitle, setPageTitle] = useState('');
 
@@ -33,16 +35,21 @@ function MainContent() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Juez />} />
+        <Route path="/" element={<Navigate to={`/Juez/${defaultIdPersona}`} />} />
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
         <Route path="/proyectos" element={<Projects />} />
         <Route path="/proyecto/:projectId" element={<ProjectPage setPageTitle={setPageTitle} />} />
 
+        <Route path="/Juez/:idpersona" element={<Juez />} />
+        <Route path="/Juez/:idpersona/Calificar/:projectId" element={<Rubrica />} />
+        <Route path="/Juez/:idpersona/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
 
+{/*
         <Route path='/ProyectosJuez' element={<Juez />}/>
         <Route path="/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
         <Route path="/Calificar/:projectId" element={<Rubrica />} />
+        */}
       </Routes>
     </>
   );
