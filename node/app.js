@@ -7,10 +7,9 @@ import SequelizeStore from 'connect-session-sequelize'
 //importamos la conexión a la DB
 import db from "./database/db.js"
 //importamos nuestro enrutador
-import AnnounceAdminRoutes from "./routes/AnnounceAdminRoutes.js"
+import AdminRoutes from "./routes/AdminRoutes.js"
 //hay que importar las rutas de admin
 // las rutas de juez
-
 
 
 const app = express()
@@ -18,7 +17,7 @@ const app = express()
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use('/Announce',  AnnounceAdminRoutes);
+app.use('/Admin',  AdminRoutes);
 // app.use('/projects', projectRoutes);
 // app.use('/students', studentRoutes);
 
