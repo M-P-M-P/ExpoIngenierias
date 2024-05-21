@@ -7,7 +7,7 @@ import './Juez.css';
 import Badge from '../Badge/Badge.js';
 
 function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, status }) {
-  const defaultIdPersona = 1;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
+  const defaultIdPersona = 5;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
   
   const truncateText = (text, limit) => {
     if (text.length <= limit) {

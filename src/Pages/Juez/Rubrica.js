@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './Rubrica.css';
 import NavigationBar from '../../Components/NavigationBar/Judge/NavigationBar';
 
 const Rubrica = () => {
+  const { idpersona, projectId } = useParams(); // Capturamos los parámetros de la URL
   const [criteria, setCriteria] = useState([]);
   const [selectedCriteria, setSelectedCriteria] = useState([]);
   const [comments, setComments] = useState([]);
@@ -46,20 +47,43 @@ const Rubrica = () => {
     setAdditionalComment(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (additionalComment.trim().length < 100) {
       setShowErrorMessage(true);
       return;
     }
 
+    setShowErrorMessage(false);
+    const criteriaData = criteria.map((criterion, index) => ({
+      id_person: idpersona,
+      id_criteria: criterion.id,
+      grade: selectedCriteria[index],
+      id_project: projectId,
+      Comentario: comments[index]
+    }));
+
     const totalScore = selectedCriteria.reduce((acc, value) => acc + value, 0);
 
-    const criteriaMessage = selectedCriteria.map((value, index) => {
-      return `${criteria[index].description}: Score: ${value}\nComentario: ${comments[index]}`;
-    }).join('\n');
+    try {
+      for (const criterionData of criteriaData) {
+        const response = await fetch('http://localhost:8000/api/criteria_judges', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(criterionData)
+        });
+        if (!response.ok) {
+          throw new Error('Error al enviar la rúbrica');
+        }
+      }
 
-    if (window.confirm(`¿Estás seguro de que deseas enviar tu rúbrica?\n\nPuntaje Total: ${totalScore / 5}\n${criteriaMessage}\nComentario adicional: ${additionalComment}`)) {
-      window.location.href = './ProyectosJuez';
+      if (window.confirm(`¿Estás seguro de que deseas enviar tu rúbrica?\n\nPuntaje Total: ${totalScore / criteria.length}\nComentario adicional: ${additionalComment}`)) {
+        window.location.href = `/Juez/${idpersona}`;
+      }
+    } catch (error) {
+      console.error('Error al enviar la rúbrica:', error);
+      alert('Hubo un problema al enviar la rúbrica. Por favor, inténtalo de nuevo.');
     }
   };
 
@@ -103,7 +127,7 @@ const Rubrica = () => {
           />
           {showErrorMessage && additionalComment.trim().length < 100 && <p className="error-message">Por favor, ingresa un comentario adicional con al menos 100 caracteres.</p>}
           <div className="buttons-container2">
-            <Link to="/ProyectosJuez" className="btn2">Cancelar</Link>
+            <Link to={`/Juez/${idpersona}/ProyectosJuez`} className="btn2">Cancelar</Link>
             <button onClick={handleSubmit} className="btn3">Enviar</button>
           </div>
         </div>

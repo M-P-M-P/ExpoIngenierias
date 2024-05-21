@@ -22,7 +22,7 @@ function App() {
 }
 
 function MainContent() {
-  const defaultIdPersona = 1;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
+  const defaultIdPersona = 5;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
 
   const location = useLocation(); // Get current location
   const [pageTitle, setPageTitle] = useState('');
