@@ -85,3 +85,4 @@ export default async function main() {
     console.log('No new users to process.');
   }
 }
+
