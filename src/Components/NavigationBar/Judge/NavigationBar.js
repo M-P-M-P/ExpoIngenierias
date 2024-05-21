@@ -14,6 +14,8 @@ import {Link} from 'react-router-dom';
 
 function ToggleBarStudent({SectionName}) {
     const [show, setShow] = useState(false);
+    const defaultIdPersona = 5;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
+
   
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -52,8 +54,15 @@ function ToggleBarStudent({SectionName}) {
             <div className='container'>
               <div className='row m-2'>
                 <div className ='col-md-auto '>
-                  <Link to='/ProyectosJuez' onClick={() => { handleClose();}} class="bi bi-boxes docu-icon2"></Link>
-                  <Link to='/ProyectosJuez' className ="TextoValid2" onClick={() => { handleClose(); }}>Mis proyectos</Link> 
+                  <Link to={`/Juez/${defaultIdPersona}`} onClick={() => { handleClose();}} class="bi bi-boxes docu-icon2"></Link>
+                  <Link to={`/Juez/${defaultIdPersona}`} className ="TextoValid2" onClick={() => { handleClose(); }}>Mis proyectos</Link> 
+                </div>  
+              </div>
+
+              <div className='row m-2'>
+                <div className ='col-md-auto '>
+                  <Link to={`/Juez/general`} onClick={() => { handleClose();}} class="bi bi-boxes docu-icon2"></Link>
+                  <Link to={`/Juez/general`} className ="TextoValid2" onClick={() => { handleClose(); }}>Todos los proyectos</Link> 
                 </div>  
               </div>
 
