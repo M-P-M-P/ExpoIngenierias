@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
+// Admin
 import Dashboard from './Pages/Admin/Dashboard';
 import Historical from './Pages/Admin/Historical';
 import Users from './Pages/Admin/Users';
+import EditUserPage from './Pages/Admin/EditUserPage';
 import Projects from './Pages/Admin/Projects';
 import ProjectPage from './Pages/Admin/ProjectPage';
+
+// Judge
 import Juez from './Pages/Juez/Juez';
 import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
 import Rubrica from './Pages/Juez/Rubrica';
@@ -36,6 +40,7 @@ function MainContent() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
+        <Route path="/usuarios/:userId" element={<EditUserPage />} />
         <Route path="/proyectos" element={<Projects />} />
         <Route path="/proyecto/:projectId" element={<ProjectPage setPageTitle={setPageTitle} />} />
 

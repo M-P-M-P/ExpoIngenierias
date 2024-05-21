@@ -4,10 +4,14 @@ import express  from "express"
 import cors from 'cors'
 import session from 'express-session'
 import SequelizeStore from 'connect-session-sequelize'
+
 //importamos la conexión a la DB
 import db from "./database/db.js"
+
 //importamos nuestro enrutador
+
 //hay que importar las rutas de admin
+import UserRoutes from './routes/UserRoutes.js';
 // las rutas de juez
 
 
@@ -17,12 +21,14 @@ const app = express()
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-// app.use('/projects', projectRoutes);
-// app.use('/students', studentRoutes);
+
+// Adimn Routes
+app.use('/users', UserRoutes);
+
+// Judge Routes
 
 
 //console.log(process.env.DB_CONNECTION_STRING)
-
 
 try {
     await db.authenticate()
