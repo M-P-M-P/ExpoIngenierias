@@ -64,43 +64,46 @@ const Rubrica = () => {
 
     const totalScore = selectedCriteria.reduce((acc, value) => acc + value, 0);
 
-    try {
-      // Enviamos los datos de la rúbrica
-      for (const criterionData of criteriaData) {
-        const response = await fetch('http://localhost:8000/api/criteria_judges', {
+    // Mostrar confirmación al usuario
+    const confirmMessage = `¿Estás seguro de que deseas enviar tu rúbrica? ESTA ACCION NO SE PUEDE DESHACER\n\nPuntaje Total: ${totalScore / criteria.length}/5\nComentario adicional: ${additionalComment}`;
+    if (window.confirm(confirmMessage)) {
+      try {
+        // Enviamos los datos de la rúbrica
+        for (const criterionData of criteriaData) {
+          const response = await fetch('http://localhost:8000/api/criteria_judges', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(criterionData)
+          });
+          if (!response.ok) {
+            throw new Error('Error al enviar la rúbrica');
+          }
+        }
+
+        // Enviamos el comentario adicional
+        const response = await fetch('http://localhost:8000/api/comments', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(criterionData)
+          body: JSON.stringify({
+            id_person: idpersona,
+            id_project: projectId,
+            comment: additionalComment
+          })
         });
         if (!response.ok) {
-          throw new Error('Error al enviar la rúbrica');
+          throw new Error('Error al enviar el comentario adicional');
         }
-      }
 
-      // Enviamos el comentario adicional
-      const response = await fetch('http://localhost:8000/api/comments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id_person: idpersona,
-          id_project: projectId,
-          comment: additionalComment
-        })
-      });
-      if (!response.ok) {
-        throw new Error('Error al enviar el comentario adicional');
-      }
-
-      if (window.confirm(`¿Estás seguro de que deseas enviar tu rúbrica? ESTA ACCION NO SE PUEDE DESHACER\n\nPuntaje Total: ${totalScore / criteria.length}/5\nComentario adicional: ${additionalComment}`)) {
+        // Redirigimos al usuario después de enviar la rúbrica y el comentario adicional
         window.location.href = `/Juez/${idpersona}`;
+      } catch (error) {
+        console.error('Error al enviar la rúbrica:', error);
+        alert('Hubo un problema al enviar la rúbrica. Por favor, inténtalo de nuevo.');
       }
-    } catch (error) {
-      console.error('Error al enviar la rúbrica:', error);
-      alert('Hubo un problema al enviar la rúbrica. Por favor, inténtalo de nuevo.');
     }
   };
 
