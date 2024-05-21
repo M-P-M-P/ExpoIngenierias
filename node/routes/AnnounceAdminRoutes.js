@@ -1,8 +1,12 @@
 import express from 'express'
-import { createAnnounce } from '../controllers/AnnounceAdminController.js'
+import { createAnnounce, updateAnnounce,deleteAnnounce } from '../controllers/AnnounceAdminController.js'
 
 const router = express.Router()
 
-router.post('/Create',createAnnounce);
+router.post('/create',createAnnounce);
+
+router.put('/update/:id',updateAnnounce);
+
+router.delete('/delete/:id',deleteAnnounce);
 
 export default router;

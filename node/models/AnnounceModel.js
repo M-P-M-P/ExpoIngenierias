@@ -1,19 +1,30 @@
-import db from "../database/db.js";
+import db from '../database/db.js';
+import { DataTypes } from 'sequelize';
 
-import { DataTypes } from "sequelize";
-
-const AnnounModel = db.define('announcements', {
+const AnnounceModel = db.define('announcements', {
     id: { 
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    title: { type: DataTypes.STRING },
-    description: { type: DataTypes.STRING }, 
-    audience: { type: DataTypes.STRING },
-    multimedia: {type: DataTypes.STRING},
-    createdAt: {type: DataTypes.DATE},
-    updatedAt: {type: DataTypes.DATE}
+    title: { 
+        type: DataTypes.STRING, 
+        allowNull: false 
+    },
+    description: { 
+        type: DataTypes.STRING, 
+        allowNull: false 
+    },
+    audience: { 
+        type: DataTypes.STRING, 
+        allowNull: false 
+    },
+    multimedia: {
+        type: DataTypes.STRING,
+        allowNull: true
+    }
+}, {
+    timestamps: true 
 });
-         
-export default AnnounModel;
+
+export default AnnounceModel;
