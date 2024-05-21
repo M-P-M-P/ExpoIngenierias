@@ -65,6 +65,7 @@ const Rubrica = () => {
     const totalScore = selectedCriteria.reduce((acc, value) => acc + value, 0);
 
     try {
+      // Enviamos los datos de la rúbrica
       for (const criterionData of criteriaData) {
         const response = await fetch('http://localhost:8000/api/criteria_judges', {
           method: 'POST',
@@ -78,7 +79,23 @@ const Rubrica = () => {
         }
       }
 
-      if (window.confirm(`¿Estás seguro de que deseas enviar tu rúbrica?\n\nPuntaje Total: ${totalScore / criteria.length}\nComentario adicional: ${additionalComment}`)) {
+      // Enviamos el comentario adicional
+      const response = await fetch('http://localhost:8000/api/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id_person: idpersona,
+          id_project: projectId,
+          comment: additionalComment
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Error al enviar el comentario adicional');
+      }
+
+      if (window.confirm(`¿Estás seguro de que deseas enviar tu rúbrica? ESTA ACCION NO SE PUEDE DESHACER\n\nPuntaje Total: ${totalScore / criteria.length}/5\nComentario adicional: ${additionalComment}`)) {
         window.location.href = `/Juez/${idpersona}`;
       }
     } catch (error) {
@@ -127,7 +144,7 @@ const Rubrica = () => {
           />
           {showErrorMessage && additionalComment.trim().length < 100 && <p className="error-message">Por favor, ingresa un comentario adicional con al menos 100 caracteres.</p>}
           <div className="buttons-container2">
-            <Link to={`/Juez/${idpersona}/ProyectosJuez`} className="btn2">Cancelar</Link>
+            <Link to={`/Juez/${idpersona}`} className="btn2">Cancelar</Link>
             <button onClick={handleSubmit} className="btn3">Enviar</button>
           </div>
         </div>
