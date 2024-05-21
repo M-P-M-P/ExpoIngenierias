@@ -44,10 +44,6 @@ function PageJuez() {
     setFilterText(e.target.value);
   }
 
-  const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(filterText.toLowerCase())
-  );
-
   return (
     <>
       <NavigationBar NameSection={"Proyectos"} />
@@ -64,7 +60,7 @@ function PageJuez() {
         </div>
         <div className="proyectos">
           <Cardlist
-            projects={filteredProjects}
+            filterText={filterText}
             categories={categories}
             areas={areas}
           />

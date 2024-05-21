@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavigationBar from '../../Components/NavigationBar/Judge/NavigationBar';
-import { CardlistGeneral } from '../../Components/CardJuez/CardJuez.js';
+import { Cardlist } from '../../Components/CardJuez/CardJuez.js';
 
 function PageJuez() {
   const [filterText, setFilterText] = useState("");
@@ -63,7 +63,7 @@ function PageJuez() {
           />
         </div>
         <div className="proyectos">
-          <CardlistGeneral
+          <Cardlist
             projects={filteredProjects}
             categories={categories}
             areas={areas}
