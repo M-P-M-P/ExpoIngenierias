@@ -165,16 +165,41 @@ function CommentCont({ role, comment }) {
   );
 }
 
-function Rubrica({ Calf11, Calf21, Calf31, Calf41, Calf51, Rubri11, Rubri21, Rubri31, Rubri41, Rubri51 }) {
+function Rubrica({ criterias }) {
+  const [selectedCriterio, setSelectedCriterio] = useState(null);
+
+  const handleCriterioChange = (index) => {
+    setSelectedCriterio(index !== "" ? parseInt(index) : null);
+  };
+
   return (
     <div className="col-xxl-3 h-75">
       <h1 className="Titulo ps-0">Desgloce de rubrica</h1>
       <div className='container-fluid p-1 mb-3'>
-        <RubricaCalf Calf1={Calf11} Calf2={Calf21} Calf3={Calf31} Calf4={Calf41} Calf5={Calf51} Rubri1={Rubri11} Rubri2={Rubri21} Rubri3={Rubri31} Rubri4={Rubri41} Rubri5={Rubri51} />
+        <select className="form-select" onChange={(e) => handleCriterioChange(e.target.value)}>
+          <option value="">Seleccione un criterio...</option>
+          {criterias && criterias.map((criteria, index) => (
+            <option key={index} value={index}>{criteria.description}</option>
+          ))}
+        </select>
+        {selectedCriterio !== null ? (
+          <div>
+            <h1>Otogarste 0/5 en el criterio de {criterias[selectedCriterio].description}</h1>
+            
+            {/* Aquí puedes agregar la lógica para mostrar los demás detalles del criterio */}
+          </div>
+        ) : (
+          <p>Seleccione un criterio que desee ver</p>
+        )}
       </div>
     </div>
   );
 }
+
+
+
+
+
 
 function FinalCalf({ finalCalf }) {
   return (
@@ -191,6 +216,7 @@ function FinalCalf({ finalCalf }) {
   );
 }
 
+// Componente ProjResumeCont
 export default function ProjResumeCont() {
   const { idpersona, projectId } = useParams();
   const [projectInfo, setProjectInfo] = useState(null);
@@ -199,8 +225,20 @@ export default function ProjResumeCont() {
   const [studentInfo, setStudentInfo] = useState(null);
   const [professorInfo, setProfessorInfo] = useState(null);
   const [commentStatus, setCommentStatus] = useState("No Calificado");
+  const [criterias, setCriterias] = useState([]);
 
   useEffect(() => {
+    // Obtener los criterios de la rúbrica desde la API
+    fetch('http://localhost:8000/api/criterias')
+      .then(response => response.json())
+      .then(data => {
+        // Obtener solo los primeros 5 criterios
+        const firstFiveCriterias = data.slice(0, 5);
+        setCriterias(firstFiveCriterias);
+      })
+      .catch(error => console.error('Error fetching criterias:', error));
+
+    // Obtener la información del proyecto
     fetch(`http://localhost:8000/api/projects/${projectId}`)
       .then(response => response.json())
       .then(data => {
@@ -227,19 +265,20 @@ export default function ProjResumeCont() {
             .then(data => setStudentInfo(data))
             .catch(error => console.error('Error fetching student info:', error));
         }
-        // Aquí verificamos si hay comentarios para este proyecto
+        // Verificar si hay comentarios para este proyecto
         fetch(`http://localhost:8000/api/comments/${idpersona}/${projectId}`)
           .then(response => {
             if (response.ok) {
               setCommentStatus("Calificado");
             } else {
-              setCommentStatus("No calificado");
+              setCommentStatus("No Calificado");
             }
           })
           .catch(error => console.error('Error fetching comments:', error));
       })
       .catch(error => console.error('Error fetching project info:', error));
-  
+
+    // Obtener las categorías
     fetch('http://localhost:8000/api/categories')
       .then(response => response.json())
       .then(data => {
@@ -250,7 +289,8 @@ export default function ProjResumeCont() {
         setCategories(categoryMap);
       })
       .catch(error => console.error('Error al obtener las categorías:', error));
-  
+
+    // Obtener las áreas
     fetch('http://localhost:8000/api/areas')
       .then(response => response.json())
       .then(data => {
@@ -262,6 +302,7 @@ export default function ProjResumeCont() {
       })
       .catch(error => console.error('Error al obtener las áreas:', error));
   }, [projectId, setStudentInfo, setProfessorInfo, idpersona]);
+
   return (
     <>
       <NavigationBar NameSection={"Proyecto"} />
@@ -292,10 +333,9 @@ export default function ProjResumeCont() {
                     <div className='row'>
                       <CommentCont role={"Profesor"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
                       <CommentCont role={"Juez"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
-                      <Rubrica Calf11={"10"} Calf21={"6"} Calf31={"8"} Calf41={"9"} Calf51={"7"} Rubri11={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri21={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri31={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri41={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri51={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
-                      
-                      
-                      
+                      <Rubrica
+                        criterias={criterias}
+                      />
                       <FinalCalf finalCalf={"9"} />
                     </div>
                   </div>
@@ -308,8 +348,3 @@ export default function ProjResumeCont() {
     </>
   );
 }
-
-
-
-
-
