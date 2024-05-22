@@ -29,26 +29,31 @@ function Table({ data, searchQuery, selectedRole }) {
 
     const handleRoleChange = (id, role) => {
         const updatedData = tableData.map((row) => {
-            if (row.id === id) {
-                if (role === "Alumno") {
-                    return { ...row, roles: ["Alumno"] };
-                } else {
-                    if (row.roles.includes("Alumno")) {
-                        return { ...row, roles: [role] };
-                    } else {
-                        if (row.roles.includes(role)) {
-                            return { ...row, roles: row.roles.filter((r) => r !== role) };
-                        } else {
-                            return { ...row, roles: [...row.roles, role] };
-                        }
+            if (row.id !== id) return row; // Only update the target row
+    
+            // Prevent changes for "Administrador" role
+            if (row.roles.includes("Administrador")) return row;
+    
+            // Prevent "Alumno" role from being changed or having roles changed if the user is an "Alumno"
+            if (row.roles.includes("Alumno") || role === "Alumno") return row;
+    
+            // Handle role changes between "Profesor" and "Juez" only
+            if (role === "Profesor" || role === "Juez") {
+                if (row.roles.includes(role)) {
+                    // Remove role if user has more than one role
+                    if (row.roles.length > 1) {
+                        return { ...row, roles: row.roles.filter((r) => r !== role) };
                     }
+                } else {
+                    // Add the new role
+                    return { ...row, roles: [...row.roles, role] };
                 }
-            } else {
-                return row;
             }
+            return row;
         });
         setTableData(updatedData);
     };
+    
 
     return (
         <div className="table-container">

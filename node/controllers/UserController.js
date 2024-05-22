@@ -3,29 +3,8 @@ import { PersonModel, StudentModel, AdminModel } from "../models/UserModel.js";
 import  sequelize  from "../database/db.js";
 import ProjectModel from "../models/ProjectModel.js";
 
-// export const getUsers = async (req, res) => {
-//   try {
-//     const persons = await PersonModel.findAll();
-//     const students = await StudentModel.findAll();
-//     const admins = await AdminModel.findAll();
-
-//     const allUsers = {
-//       persons,
-//       students,
-//       admins
-//     };
-
-//     res.json(allUsers);
-
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
-
 export const getUsers = async (req, res) => {
   try {
-
     // Fetch all users concurrently
     const [persons, students, admins] = await Promise.all([
       PersonModel.findAll(),
@@ -33,12 +12,23 @@ export const getUsers = async (req, res) => {
       AdminModel.findAll()
     ]);
 
-    const transformedPersons = persons.map(person => ({
-      id: person.id,
-      name: `${person.name} ${person.lastName}`,
-      roles: ["Profesor", "Juez"],
-      email: person.email || ""
-    }));
+    const transformedPersons = persons.map(person => {
+      // Initialize roles with "Profesor"
+      let roles = ["Profesor"];
+
+      // Add "Juez" to roles if person.isJudge is equal to 1
+      if (person.isJudge === 1) {
+        roles.push("Juez");
+      }
+
+      return {
+        id: person.id,
+        name: `${person.name} ${person.lastName}`,
+        roles: roles,
+        email: person.email || "",
+        isJudge: person.isJudge || 0
+      };
+    });
 
     const transformedStudents = students.map(student => ({
       id: student.id,
@@ -115,11 +105,12 @@ export const getUserById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    console.log(`Fetching user with ID: ${id}`); // Log for debugging
     let user = await PersonModel.findByPk(id);
+
     if (!user) {
       user = await StudentModel.findByPk(id);
     }
+
     if (!user) {
       user = await AdminModel.findByPk(id);
     }
@@ -147,96 +138,133 @@ export const getUserById = async (req, res) => {
   }
 }
 
+// Define updateUserRole function
+export const updateUserRole = async (req, res) => {
+  try {
+    const userId = req.params.userId; // Assuming userId is passed in the request params
+    const rolesArray = req.body.roles; // Assuming roles array is passed in the request body
 
-export const updatePersonId = async (req, res) => {
-    let transaction;
-    try {
-        // Validate input data
-        if (!req.body.newId || !req.body.name || !req.body.lastName || !req.body.email) {
-            return res.status(400).json({ message: "Please provide all required fields: newId, name, lastName, email" });
-        }
+    const user = await PersonModel.findByPk(userId); // Assuming PersonModel represents Professors
 
-        // Start a transaction
-        transaction = await sequelize.transaction();
-
-        // Create a new record with the updated id
-        const newPerson = await PersonModel.create({
-            id: req.body.newId,
-            name: req.body.name,
-            lastName: req.body.lastName,
-            email: req.body.email
-        }, { transaction });
-
-        // Update the child records in the projects table to reference the new id
-        await ProjectModel.update(
-            { id_responsable: req.body.newId },
-            { where: { id_responsable: req.params.id }, transaction }
-        );
-
-        // Delete the old person record
-        await PersonModel.destroy({
-            where: { id: req.params.id },
-            transaction
-        });
-
-        // Commit the transaction
-        await transaction.commit();
-
-        res.json({
-            message: "Record updated successfully",
-            newPerson
-        });
-    } catch (error) {
-        // Rollback the transaction if an error occurs
-        if (transaction) await transaction.rollback();
-        res.status(500).json({ message: error.message });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-};
 
-export const updateStudentId = async (req, res) => {
-    let transaction;
-    try {
-        // Validate input data
-        if (!req.body.newId || !req.body.name || !req.body.lastName || !req.body.enrollment) {
-            return res.status(400).json({ message: "Please provide all required fields: newId, name, lastName, enrollment" });
-        }
-
-        // Start a transaction
-        transaction = await sequelize.transaction();
-
-        // Create a new record with the updated id
-        const newStudent = await StudentModel.create({
-            id: req.body.newId,
-            name: req.body.name,
-            lastName: req.body.lastName,
-            enrollment: req.body.enrollment
-        }, { transaction });
-
-        // Update the child records in the projects table to reference the new id
-        await ProjectModel.update(
-            { id_lider: req.body.newId },
-            { where: { id_lider: req.params.id }, transaction }
-        );
-
-        // Delete the old student record
-        await StudentModel.destroy({
-            where: { id: req.params.id },
-            transaction
-        });
-
-        // Commit the transaction
-        await transaction.commit();
-
-        res.json({
-            message: "Record updated successfully",
-            newStudent
-        });
-    } catch (error) {
-        // Rollback the transaction if an error occurs
-        if (transaction) await transaction.rollback();
-        res.status(500).json({ message: error.message });
+    // Check if the user is already a Juez
+    if (user.isJudge === 1 && !rolesArray.includes('Juez')) {
+      user.isJudge = 0; // If "Juez" role is not in the roles array, set isJudge to 0
+    } else if (user.isJudge === 1 && rolesArray.includes('Juez')) {
+      return res.status(400).json({ error: 'User is already a Juez' });
     }
-};
+
+    // Check if "Juez" role is contained in the roles array received from frontend
+    if (rolesArray.includes('Juez')) {
+      user.isJudge = 1;
+    }
+
+    // Update the user's roles based on the rolesArray received from frontend
+    // Add your logic here to update user roles based on rolesArray
+
+    await user.save();
+
+    res.json({ message: 'User role updated successfully' });
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    res.status(500).json({ error: 'Internal server error while updating user role' });
+  }
+}
+
+
+
+// export const updatePersonId = async (req, res) => {
+//     let transaction;
+//     try {
+//         // Validate input data
+//         if (!req.body.newId || !req.body.name || !req.body.lastName || !req.body.email) {
+//             return res.status(400).json({ message: "Please provide all required fields: newId, name, lastName, email" });
+//         }
+
+//         // Start a transaction
+//         transaction = await sequelize.transaction();
+
+//         // Create a new record with the updated id
+//         const newPerson = await PersonModel.create({
+//             id: req.body.newId,
+//             name: req.body.name,
+//             lastName: req.body.lastName,
+//             email: req.body.email
+//         }, { transaction });
+
+//         // Update the child records in the projects table to reference the new id
+//         await ProjectModel.update(
+//             { id_responsable: req.body.newId },
+//             { where: { id_responsable: req.params.id }, transaction }
+//         );
+
+//         // Delete the old person record
+//         await PersonModel.destroy({
+//             where: { id: req.params.id },
+//             transaction
+//         });
+
+//         // Commit the transaction
+//         await transaction.commit();
+
+//         res.json({
+//             message: "Record updated successfully",
+//             newPerson
+//         });
+//     } catch (error) {
+//         // Rollback the transaction if an error occurs
+//         if (transaction) await transaction.rollback();
+//         res.status(500).json({ message: error.message });
+//     }
+// };
+
+// export const updateStudentId = async (req, res) => {
+//     let transaction;
+//     try {
+//         // Validate input data
+//         if (!req.body.newId || !req.body.name || !req.body.lastName || !req.body.enrollment) {
+//             return res.status(400).json({ message: "Please provide all required fields: newId, name, lastName, enrollment" });
+//         }
+
+//         // Start a transaction
+//         transaction = await sequelize.transaction();
+
+//         // Create a new record with the updated id
+//         const newStudent = await StudentModel.create({
+//             id: req.body.newId,
+//             name: req.body.name,
+//             lastName: req.body.lastName,
+//             enrollment: req.body.enrollment
+//         }, { transaction });
+
+//         // Update the child records in the projects table to reference the new id
+//         await ProjectModel.update(
+//             { id_lider: req.body.newId },
+//             { where: { id_lider: req.params.id }, transaction }
+//         );
+
+//         // Delete the old student record
+//         await StudentModel.destroy({
+//             where: { id: req.params.id },
+//             transaction
+//         });
+
+//         // Commit the transaction
+//         await transaction.commit();
+
+//         res.json({
+//             message: "Record updated successfully",
+//             newStudent
+//         });
+//     } catch (error) {
+//         // Rollback the transaction if an error occurs
+//         if (transaction) await transaction.rollback();
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 
 
 

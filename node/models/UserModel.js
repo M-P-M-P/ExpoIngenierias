@@ -9,7 +9,8 @@ export const PersonModel = db.define('Person', {
   },
   name: { type: DataTypes.STRING },
   lastName: { type: DataTypes.STRING }, // CLOB puede ser representado como STRING con un límite alto en Sequelize
-  email: { type: DataTypes.STRING }
+  email: { type: DataTypes.STRING },
+  isJudge: {type: DataTypes.INTEGER}
   // Define other columns as needed
 }, {
     tableName: 'persons'
