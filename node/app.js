@@ -8,6 +8,8 @@ import areasRoutes from './routes/areasRoutes.js';
 import criteriaJudgesRoutes from './routes/criteriaJudgesRoutes.js'; 
 import commentRoutes from './routes/commentRoutes.js';
 import judgeProjectRoutes from './routes/judgeProjectRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
+import personRoutes from './routes/personRoutes.js';
 const app = express();
 
 app.use(cors());
@@ -21,6 +23,8 @@ app.use('/api', areasRoutes);
 app.use('/api', criteriaJudgesRoutes);
 app.use('/api', commentRoutes); 
 app.use('/api', judgeProjectRoutes); 
+app.use('/api', studentRoutes);
+app.use('/api', personRoutes);
 
 app.listen(8000, () => {
     console.log('Server UP running in http://localhost:8000/');

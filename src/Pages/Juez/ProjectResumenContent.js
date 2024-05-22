@@ -105,7 +105,10 @@ function ProjResume({ type, area, descr, title }) {
   );
 }
 
-function ProjVal({ finalRes }) {
+
+function ProjVal({ commentStatus }) {
+  const params = useParams();
+
   return (
     <div className='col-md-3'>
       <div className="Info2 m-2 p-4">
@@ -113,31 +116,21 @@ function ProjVal({ finalRes }) {
           <div className='col-md-auto'>
             <span className="Subtitulo1">Estado:</span>
           </div>
-          {finalRes === "Aceptado" && (
-            <div className='col-md-auto'>
-              <span className="AceptadoCont">
-                <i className='bi bi-check-circle'> {finalRes}</i>
-              </span>
-            </div>
+          <div className='col-md-auto'>
+            <span className="Subtitulo1">{commentStatus === "Calificado" ? "Calificado" : "No Calificado"}</span>
+          </div>
+          {commentStatus === "Calificado" ? (
+            <Link className="btn6"disabled>Proyecto Calificado</Link>
+          ) : (
+            <Link to={`/Juez/${params.idpersona}/Calificar/${params.projectId}`} className="btn4" >CALIFICAR PROYECTO</Link>
           )}
-          {finalRes === "Rechazado" && (
-            <>
-              <div className='col-md-auto'>
-                <span className="RechazadoCont">
-                  <i className='bi bi-x-circle'> {finalRes}</i>
-                </span>
-              </div>
-              <div className='row mt-4'>
-              </div>
-            </>
-          )}
-          <Link to={`/Juez/${useParams().idpersona}/Calificar/${useParams().projectId}`} className="btn4">CALIFICAR PROYECTO</Link>
-          <Link to={`/Juez/${useParams().idpersona}`} className="btn5">Regresar a Mis Proyectos</Link>
+          <Link to={`/Juez/${params.idpersona}`} className="btn5">Regresar a Mis Proyectos</Link>
         </div>
       </div>
     </div>
   );
 }
+
 
 function JuezContComment({ comment, id_judge }) {
   return (
@@ -203,17 +196,53 @@ export default function ProjResumeCont() {
   const [projectInfo, setProjectInfo] = useState(null);
   const [categories, setCategories] = useState({});
   const [areas, setAreas] = useState({});
+  const [studentInfo, setStudentInfo] = useState(null);
+  const [professorInfo, setProfessorInfo] = useState(null);
+  const [commentStatus, setCommentStatus] = useState("No Calificado");
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/projects/${projectId}`)
       .then(response => response.json())
-      .then(data => setProjectInfo(data))
+      .then(data => {
+        setProjectInfo(data);
+        if (data && data.id_responsable) {
+          fetch(`http://localhost:8000/api/persons/${data.id_responsable}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al obtener la información del profesor.');
+              }
+              return response.json();
+            })
+            .then(data => setProfessorInfo(data))
+            .catch(error => console.error('Error fetching professor info:', error));
+        }
+        if (data && data.id_lider) {
+          fetch(`http://localhost:8000/api/students/${data.id_lider}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Error al obtener la información del estudiante.');
+              }
+              return response.json();
+            })
+            .then(data => setStudentInfo(data))
+            .catch(error => console.error('Error fetching student info:', error));
+        }
+        // Aquí verificamos si hay comentarios para este proyecto
+        fetch(`http://localhost:8000/api/comments/${idpersona}/${projectId}`)
+          .then(response => {
+            if (response.ok) {
+              setCommentStatus("Calificado");
+            } else {
+              setCommentStatus("No calificado");
+            }
+          })
+          .catch(error => console.error('Error fetching comments:', error));
+      })
       .catch(error => console.error('Error fetching project info:', error));
   
-  fetch('http://localhost:8000/api/categories')
+    fetch('http://localhost:8000/api/categories')
       .then(response => response.json())
       .then(data => {
-        // Organizar las categorías en un objeto por id para facilitar la búsqueda
         const categoryMap = {};
         data.forEach(category => {
           categoryMap[category.id] = category.title;
@@ -221,41 +250,38 @@ export default function ProjResumeCont() {
         setCategories(categoryMap);
       })
       .catch(error => console.error('Error al obtener las categorías:', error));
-      fetch('http://localhost:8000/api/areas')
+  
+    fetch('http://localhost:8000/api/areas')
       .then(response => response.json())
       .then(data => {
-        // Organizar las áreas en un objeto por id para facilitar la búsqueda
         const areaMap = {};
         data.forEach(area => {
           areaMap[area.id] = area.name;
         });
         setAreas(areaMap);
       })
-    }, [projectId]);
-
-
-    
-
+      .catch(error => console.error('Error al obtener las áreas:', error));
+  }, [projectId, setStudentInfo, setProfessorInfo, idpersona]);
   return (
     <>
       <NavigationBar NameSection={"Proyecto"} />
       <div className='container-fluid centered-container mt-3 '>
         <div className='container-fluid'>
           <div className='row justify-content-between d-flex align-items-center'>
-            {projectInfo && (
-              <InfoProj lead={projectInfo.id_lider} profLead={projectInfo.id_responsable}memeber={"Marcela Dominguez"} />
+            {studentInfo && professorInfo && (
+              <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`}  memeber={"Marcela Dominguez"} />
             )}
             {projectInfo && (
               <ProjResume
                 type={categories[projectInfo.id_category]}
-                area= {areas[projectInfo.id_area]}
+                area={areas[projectInfo.id_area]}
                 descr={projectInfo.description}
                 title={projectInfo.title}
                 profesor={projectInfo.id_responsable}
               />
             )}
             {projectInfo && (
-              <ProjVal postVal={"Aceptado"} vidVal={"Rechazado"} finalRes={projectInfo.statusGeneral} />
+              <ProjVal commentStatus={commentStatus} />
             )}
           </div>
           <div className='row m-2 justify-content-between d-flex align-items-center w-100 mb-4'>
@@ -264,11 +290,14 @@ export default function ProjResumeCont() {
                 <div className='container-fluid'>
                   <div className='row'>
                     <div className='row'>
-                    <CommentCont role={"Profesor"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
-                    <CommentCont role={"Juez"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
-                    <Rubrica Calf11={"10"} Calf21={"6"} Calf31={"8"} Calf41={"9"} Calf51={"7"} Rubri11={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri21={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri31={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri41={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri51={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
-                    <FinalCalf finalCalf={"9"} />
-                  </div>
+                      <CommentCont role={"Profesor"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
+                      <CommentCont role={"Juez"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
+                      <Rubrica Calf11={"10"} Calf21={"6"} Calf31={"8"} Calf41={"9"} Calf51={"7"} Rubri11={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri21={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri31={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri41={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri51={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
+                      
+                      
+                      
+                      <FinalCalf finalCalf={"9"} />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -279,3 +308,8 @@ export default function ProjResumeCont() {
     </>
   );
 }
+
+
+
+
+
