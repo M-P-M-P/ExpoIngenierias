@@ -1,4 +1,4 @@
-import AnnounceModel from "../models/AnnounceModel.js"
+import {AnnounceModel} from "../models/Relations.js"
 
 export const createAnnounce = async(req,res)=>{
     const { title, description, audience, multimedia } = req.body;

@@ -1,4 +1,4 @@
-import AreaModel from "../models/AreaModel.js";
+import {AreaModel} from "../models/Relations.js";
 
 export const updateArea = async(req,res)=>{
     try{

@@ -1,4 +1,4 @@
-import CategoryModel from "../models/CategoryModel.js";
+import {CategoryModel} from "../models/Relations.js";
 
 export const updateCategory = async(req,res)=>{
     try{
