@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './Juez.css';
 import Badge from '../Badge/Badge.js';
-import { useParams } from 'react-router-dom';
-
 
 function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, idpersona }) {
   const [status, setStatus] = useState('No calificado');
@@ -90,17 +88,6 @@ export function Cardlist() {
     })
     .catch(error => console.error('Error al obtener los proyectos asignados al juez:', error));
 
-
-  
-    /*
-    VER TODOS LOS PROYECTOS
-    fetch('http://localhost:8000/api/projects')
-      .then(response => response.json())
-      .then(data => setProjects(data))
-      .catch(error => console.error('Error al obtener los proyectos:', error));
-      
-      */
-
     // Realizar la llamada al servidor para obtener las categorías
     fetch('http://localhost:8000/api/categories')
       .then(response => response.json())
@@ -126,7 +113,7 @@ export function Cardlist() {
         setAreas(areaMap);
       })
       .catch(error => console.error('Error al obtener las áreas:', error));
-  }, []);
+  }, [idpersona]);
 
   return (
     <>
@@ -144,8 +131,3 @@ export function Cardlist() {
     </>
   );
 }
-
-
-
-
-//general

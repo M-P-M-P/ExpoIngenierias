@@ -6,6 +6,7 @@ import Loader from '../../Components/Loader/Loader';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
+
 function PageJuez() {
   const { idpersona } = useParams();
   const [filterText, setFilterText] = useState("");
@@ -89,11 +90,19 @@ function PageJuez() {
           {loading ? (
             <Loader />  // Mostrar el loader mientras se cargan los datos
           ) : (
-            <Cardlist
-              projects={filteredProjects}
-              categories={categories}
-              areas={areas}
-            />
+            <>
+              {filteredProjects.length > 0 ? (
+                <Cardlist
+                  projects={filteredProjects}
+                  categories={categories}
+                  areas={areas}
+                />
+              ) : (
+                <div className="custom-alert">
+                  <p>No tienes proyectos para calificar</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -102,3 +111,4 @@ function PageJuez() {
 }
 
 export default PageJuez;
+
