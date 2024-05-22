@@ -6,6 +6,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import { Link } from 'react-router-dom';
 import './Page.css';
 import './Resume.css';
+import React, { useState, useEffect } from 'react';
 
 function RubricaCalf({ Calf1, Calf2, Calf3, Calf4, Calf5, Rubri1, Rubri2, Rubri3, Rubri4, Rubri5 }) {
   return (
@@ -88,7 +89,7 @@ function ProjResume({ type, area, descr, title }) {
     <div className='col-md-6 ps-4 pe-4 '>
       <div className="container-fluid BGResume  w-100 ">
         <div className="row p-1 BGBar">
-          <div className="col proj-sub-bold text-start"><span className='gemelo'>Tipo de proyecto: {type}</span></div>
+          <div className="col proj-sub-bold text-start"><span className='gemelo'>Nivel de Desarrollo: {type}</span></div>
           <div className="col proj-sub-bold text-end"><span className='gemelo'>{area}</span></div>
         </div>
         <div className='m-4 p-0'>
@@ -129,13 +130,6 @@ function ProjVal({ finalRes }) {
               <div className='row mt-4'>
               </div>
             </>
-          )}
-          {finalRes === "En revisión" && (
-            <div className='col-md-auto'>
-              <span className="EsperaCont">
-                <i className='bi bi-hourglass-split'> {finalRes}</i>
-              </span>
-            </div>
           )}
           <Link to={`/Juez/${useParams().idpersona}/Calificar/${useParams().projectId}`} className="btn4">CALIFICAR PROYECTO</Link>
           <Link to={`/Juez/${useParams().idpersona}`} className="btn5">Regresar a Mis Proyectos</Link>
@@ -192,7 +186,7 @@ function Rubrica({ Calf11, Calf21, Calf31, Calf41, Calf51, Rubri11, Rubri21, Rub
 function FinalCalf({ finalCalf }) {
   return (
     <div className='col-xxl-3 h-50'>
-      <h1 className="Titulo text-break">Calificación final</h1>
+      <h1 className="Titulo text-break">Calificación Otorgada</h1>
       <div className='container-fluid p-1 centered-FinalRescontainer '>
         <div className="row pb-3 align-items-center">
           <div className='col-md-auto ContFinalRes text-center p-3'>
@@ -206,26 +200,75 @@ function FinalCalf({ finalCalf }) {
 
 export default function ProjResumeCont() {
   const { idpersona, projectId } = useParams();
+  const [projectInfo, setProjectInfo] = useState(null);
+  const [categories, setCategories] = useState({});
+  const [areas, setAreas] = useState({});
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/projects/${projectId}`)
+      .then(response => response.json())
+      .then(data => setProjectInfo(data))
+      .catch(error => console.error('Error fetching project info:', error));
+  
+  fetch('http://localhost:8000/api/categories')
+      .then(response => response.json())
+      .then(data => {
+        // Organizar las categorías en un objeto por id para facilitar la búsqueda
+        const categoryMap = {};
+        data.forEach(category => {
+          categoryMap[category.id] = category.title;
+        });
+        setCategories(categoryMap);
+      })
+      .catch(error => console.error('Error al obtener las categorías:', error));
+      fetch('http://localhost:8000/api/areas')
+      .then(response => response.json())
+      .then(data => {
+        // Organizar las áreas en un objeto por id para facilitar la búsqueda
+        const areaMap = {};
+        data.forEach(area => {
+          areaMap[area.id] = area.name;
+        });
+        setAreas(areaMap);
+      })
+    }, [projectId]);
+
+
+    
 
   return (
     <>
-      <NavigationBar NameSection={"loco"} />
+      <NavigationBar NameSection={"Proyecto"} />
       <div className='container-fluid centered-container mt-3 '>
         <div className='container-fluid'>
           <div className='row justify-content-between d-flex align-items-center'>
-            <InfoProj lead={"Gerardo Deustúa Hernández"} profLead={"Michel Lara Wainstein"} memeber={"Marcela Dominguez"} />
-            <ProjResume type={"Prototipo"} area={"Biotecnologia"} descr={"Robot Automata para Automatizar Autómatas  es un proyecto innovador para desarrollar un sistema robótico que automatiza tareas complejas en la industria. Utiliza algoritmos avanzados de inteligencia artificial y aprendizaje automático para aumentar la eficiencia y precisión en la producción, optimizando recursos."} title={"Robot automata para automatizar automatas"} />
-            <ProjVal postVal={"Aceptado"} vidVal={"Rechazado"} finalRes={"Rechazado"} />
+            {projectInfo && (
+              <InfoProj lead={projectInfo.id_lider} profLead={projectInfo.id_responsable}memeber={"Marcela Dominguez"} />
+            )}
+            {projectInfo && (
+              <ProjResume
+                type={categories[projectInfo.id_category]}
+                area= {areas[projectInfo.id_area]}
+                descr={projectInfo.description}
+                title={projectInfo.title}
+                profesor={projectInfo.id_responsable}
+              />
+            )}
+            {projectInfo && (
+              <ProjVal postVal={"Aceptado"} vidVal={"Rechazado"} finalRes={projectInfo.statusGeneral} />
+            )}
           </div>
           <div className='row m-2 justify-content-between d-flex align-items-center w-100 mb-4'>
             <div className='Info col-md-12'>
               <div className="m-auto p-4">
                 <div className='container-fluid'>
                   <div className='row'>
+                    <div className='row'>
                     <CommentCont role={"Profesor"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
                     <CommentCont role={"Juez"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
                     <Rubrica Calf11={"10"} Calf21={"6"} Calf31={"8"} Calf41={"9"} Calf51={"7"} Rubri11={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri21={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri31={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri41={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} Rubri51={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
                     <FinalCalf finalCalf={"9"} />
+                  </div>
                   </div>
                 </div>
               </div>
