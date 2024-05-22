@@ -14,5 +14,18 @@ async function fetchAllProjects() {
     throw error;
   }
 }
+// Función para obtener un proyecto por su ID
+async function fetchProjectById(projectId) {
+  try {
+    const project = await Project.findByPk(projectId); // Utilizamos findByPk para buscar por primary key
+    if (!project) {
+      throw new Error(`Proyecto con id ${projectId} no encontrado`);
+    }
+    return project;
+  } catch (error) {
+    console.error(`Error al obtener el proyecto con id ${projectId}:`, error);
+    throw error;
+  }
+}
 
-export { fetchAllProjects };
+export { fetchAllProjects, fetchProjectById};

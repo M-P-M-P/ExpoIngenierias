@@ -1,5 +1,6 @@
 import express from 'express';
 import Project from '../models/project.js';
+import { fetchProjectById } from '../controllers/projectController.js';
 
 const router = express.Router();
 
@@ -11,6 +12,16 @@ router.get('/projects', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener los proyectos:', error);
     res.status(500).json({ error: 'Error al obtener los proyectos.' });
+  }
+});
+
+router.get('/projects/:id', async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const project = await fetchProjectById(projectId);
+    res.json(project);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
