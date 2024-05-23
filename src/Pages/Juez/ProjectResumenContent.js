@@ -223,6 +223,32 @@ function FinalCalf({ finalCalf }) {
     </div>
   );
 }
+
+function Multimedia({ Video, Poster }) {
+  const openURL = (url) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      window.open(url, '_blank');
+    } else {
+      window.open('http://' + url, '_blank');
+    }
+  };
+
+  return (
+    <div className='col-xxl-3 h-50'>
+      <h1 className="Titulo text-break text-center">Multimedia</h1>
+      <div className='container-fluid p-1 d-flex justify-content-center align-items-center'>
+        <div className="row pb-3 align-items-center w-100">
+          <div className='col-md-auto ContFinalRes text-center p-3 mx-auto'>
+            <button className="btn4" onClick={() => openURL(Video)}>Ver Video</button>
+            <button className="btn4" onClick={() => openURL(Poster)}>Ver Póster</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 // Componente ProjResumeCont
 
 export default function ProjResumeCont() {
@@ -366,7 +392,7 @@ export default function ProjResumeCont() {
               <div className='Info col-md-12'>
                 <div className="m-auto p-4">
                   <div className='container-fluid'>
-                    <div className='row'>
+                    <div className='row justify-content-between d-flex align-items-center'>
                       <div className='row'>
                         <CommentCont role={"Juez"} comments={judgeComments} />
                         <Rubrica
@@ -375,6 +401,7 @@ export default function ProjResumeCont() {
                           comments={comments}
                         />
                         <FinalCalf finalCalf={grades.reduce((a, b) => a + b, 0)} />
+                        <Multimedia Video= "Youtube.com" Poster= "google.com"/>
                       </div>
                     </div>
                   </div>
