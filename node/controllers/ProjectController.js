@@ -1,6 +1,7 @@
 //importamos el Modelo
 import db from "../database/db.js"
-import {ProjectModel,PersonModel, StudentModel, TeamModel, MaterialProjectModel, CategoryModel, AreaModel} from "../models/Relations.js"
+import {ProjectModel,PersonModel, StudentModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel} from "../models/Relations.js"
+import { Sequelize } from 'sequelize';  // Import Sequelize
 
 //** Métodos para el CRUD **/
 
@@ -374,3 +375,65 @@ export const handleResumen = async (req, res) => {
         res.status(405).send('Método HTTP no permitido');
     }
 };
+
+//** Extra Methods **/
+
+// Fetch project status data for the doughnut chart
+export const getProjectStatusData = async (req, res) => {
+  try {
+    const reviewedCount = await ProjectModel.count({
+      where: {
+        statusGeneral: 'revisado'
+      }
+    });
+
+    const pendingCount = await ProjectModel.count({
+      where: {
+        statusGeneral: 'en revision'
+      }
+    });
+
+    res.json({
+      labels: ['Revisado', 'Pendiente'],
+      data: [reviewedCount, pendingCount]
+    });
+  } catch (error) {
+    console.error('Error fetching project status data:', error);
+    res.status(500).json({ error: 'Internal server error while fetching project status data.' });
+  }
+};
+
+// controllers/MaterialController.js
+export const getMaterialChecklistItems = async (req, res) => {
+    try {
+        // Fetch all materials
+        const materials = await MaterialModel.findAll();
+
+        // Fetch the total amounts for each material
+        const totalAmounts = await MaterialProjectModel.findAll({
+            attributes: [
+                'id_material',
+                [Sequelize.fn('SUM', Sequelize.col('amount')), 'totalAmount']
+            ],
+            group: ['id_material']
+        });
+
+        // Convert the totals to a lookup object
+        const totalAmountsLookup = totalAmounts.reduce((acc, item) => {
+            acc[item.id_material] = item.dataValues.totalAmount;
+            return acc;
+        }, {});
+
+        // Format materials into checklist items
+        const checklistItems = materials.map(material => ({
+            id: material.id,
+            text: `${material.name} (${totalAmountsLookup[material.id] || 0})`, // Name with total amount in brackets
+        }));
+
+        res.json(checklistItems);
+    } catch (error) {
+        console.error("Error fetching checklist items:", error);
+        res.status(500).json({ error: "Internal server error while fetching checklist items." });
+    }
+};
+

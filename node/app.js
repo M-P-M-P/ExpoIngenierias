@@ -12,6 +12,7 @@ import db from "./database/db.js"
 
 //hay que importar las rutas de admin
 import UserRoutes from './routes/UserRoutes.js';
+import CategoryRoutes from './routes/CategoryRoutes.js'
 import studentRoutes from './routes/StudentRoutes.js'
 import projectRoutes from './routes/ProjectRoutes.js'
 import AnnounRoutes from './routes/AnnounRoutes.js'
@@ -29,6 +30,7 @@ app.use(express.urlencoded({extended: true}));
 
 // Adimn Routes
 app.use('/users', UserRoutes);
+app.use('/categories', CategoryRoutes);
 
 // Judge Routes
 app.use('/projects', projectRoutes);
