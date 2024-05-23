@@ -37,7 +37,7 @@ function MainContent() {
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
         <Route path="/proyectos" element={<Projects />} />
-        <Route path="/proyecto/:projectId" element={<ProjectPage setPageTitle={setPageTitle} />} />
+        <Route path="/proyecto/:id" element={<ProjectPage setPageTitle={setPageTitle} />} />
 
 
         <Route path='/ProyectosJuez' element={<Juez />}/>

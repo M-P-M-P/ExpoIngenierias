@@ -11,7 +11,8 @@ import studentRoutes from './routes/StudentRoutes.js'
 import projectRoutes from './routes/ProjectRoutes.js'
 import AnnounRoutes from './routes/AnnounRoutes.js'
 import AdminRoutes from "./routes/AdminRoutes.js"
-//hay que importar las rutas de admin
+//rutas de edicion
+import EditionRoutes from "./routes/EditionRoutes.js"
 // las rutas de juez
 
 
@@ -24,6 +25,7 @@ app.use('/projects', projectRoutes);
 app.use('/students', studentRoutes);
 app.use('/announ', AnnounRoutes);
 app.use('/Admin',  AdminRoutes);
+app.use('/Ediciones',EditionRoutes);
 // app.use('/projects', projectRoutes);
 // app.use('/students', studentRoutes);
 
