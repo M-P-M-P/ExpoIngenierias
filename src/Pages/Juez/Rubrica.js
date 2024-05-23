@@ -154,7 +154,9 @@ const Rubrica = () => {
                 onChange={(e) => handleAdditionalCommentChange(e.target.value)}
               />
               {showErrorMessage && additionalComment.trim().length < 100 && <p className="error-message">Por favor, ingresa un comentario adicional con al menos 100 caracteres.</p>}
+              
               <div className="buttons-container2">
+
                 <Link to={`/Juez/${idpersona}`} className="btn2">Cancelar</Link>
                 <button onClick={handleSubmit} className="btn3">Enviar</button>
               </div>

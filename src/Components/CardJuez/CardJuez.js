@@ -37,10 +37,23 @@ function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, 
     return text.slice(0, limit) + '...';
   };
 
+  const getImageSrc = (nivelDesarrollo) => {
+    switch (nivelDesarrollo) {
+      case 'Concepto':
+        return require('../../Assets/Concepto.jpg');
+      case 'Prototipo':
+        return require('../../Assets/Prototipo.jpg');
+      case 'Producto':
+        return require('../../Assets/Producto.jpg');
+      default:
+        return require('../../Assets/CardProto.png');
+    }
+  };
+
   return (
     <div className="card">
       <div className="imag">
-        <img src={require("../../Assets/CardProto.png")} alt={title} />
+        <img src={getImageSrc(nivelDesarrollo)} alt={title} />
       </div>
 
       <div className="text">
@@ -74,19 +87,19 @@ export function Cardlist() {
   useEffect(() => {
     // Realizar la llamada al servidor para obtener los proyectos asignados al juez
     fetch(`http://localhost:8000/api/judgeProjects/${idpersona}`)
-    .then(response => response.json())
-    .then(projectIds => {
-      // Realizar la segunda llamada al servidor para obtener todos los proyectos
-      fetch('http://localhost:8000/api/projects')
-        .then(response => response.json())
-        .then(allProjects => {
-          // Filtrar proyectos con los IDs obtenidos del primer fetch
-          const filteredProjects = allProjects.filter(project => projectIds.includes(project.id));
-          setProjects(filteredProjects);
-        })
-        .catch(error => console.error('Error al obtener los proyectos:', error));
-    })
-    .catch(error => console.error('Error al obtener los proyectos asignados al juez:', error));
+      .then(response => response.json())
+      .then(projectIds => {
+        // Realizar la segunda llamada al servidor para obtener todos los proyectos
+        fetch('http://localhost:8000/api/projects')
+          .then(response => response.json())
+          .then(allProjects => {
+            // Filtrar proyectos con los IDs obtenidos del primer fetch
+            const filteredProjects = allProjects.filter(project => projectIds.includes(project.id));
+            setProjects(filteredProjects);
+          })
+          .catch(error => console.error('Error al obtener los proyectos:', error));
+      })
+      .catch(error => console.error('Error al obtener los proyectos asignados al juez:', error));
 
     // Realizar la llamada al servidor para obtener las categorías
     fetch('http://localhost:8000/api/categories')
@@ -122,8 +135,8 @@ export function Cardlist() {
           projectId={project.id}
           title={project.title}
           description={project.description}
-          categoria={categories[project.id_category]}
-          nivelDesarrollo={areas[project.id_area]}
+          categoria={areas[project.id_area]}
+          nivelDesarrollo={categories[project.id_category]}
           idpersona={idpersona}
           key={project.id}
         />
