@@ -239,6 +239,7 @@ export default function ProjResumeCont() {
   const [judgeComments, setJudgeComments] = useState([]);
   const [loading, setLoading] = useState(true);  // Estado de carga
   const [members, setMembers] = useState([]);  // Variable para almacenar los id_member
+  const [memberNames, setMemberNames] = useState([]);  // Variable para almacenar los nombres de los miembros
 
   useEffect(() => {
     const fetchData = async () => {
@@ -266,6 +267,13 @@ export default function ProjResumeCont() {
             const membersResponse = await fetch(`http://localhost:8000/api/teamMembers/team/${teamId}`);
             const membersData = await membersResponse.json();
             setMembers(membersData.map(member => member.id_member)); // Obtener solo los id_member
+            // Obtener los nombres de los miembros
+            const names = await Promise.all(membersData.map(async member => {
+              const studentResponse = await fetch(`http://localhost:8000/api/students/${member.id_member}`);
+              const studentData = await studentResponse.json();
+              return studentData.name + " " + studentData.lastName;
+            }));
+            setMemberNames(names);
           }
           const studentResponse = await fetch(`http://localhost:8000/api/students/${projectData.id_lider}`);
           const studentData = await studentResponse.json();
@@ -336,7 +344,7 @@ export default function ProjResumeCont() {
             ) : (
               <>
                 {studentInfo && professorInfo && (
-                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={members.join(', ')}/>
+                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={memberNames.join(', ')}/>
                 )}
                 {projectInfo && (
                   <ProjResume
