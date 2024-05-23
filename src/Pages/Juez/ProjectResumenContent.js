@@ -140,16 +140,15 @@ function JuezContComment({ comment, id_judge }) {
   );
 }
 
-function CommentCont({ role, comment }) {
+function CommentCont({ role, comments }) {
   return (
     <>
       {role === 'Juez' && (
         <div className="col-xxl-3 SilderCont">
           <h1 className="Titulo ps-0">Comentarios de {role}</h1>
-          <JuezContComment comment={comment} id_judge={1} />
-          <JuezContComment comment={comment} id_judge={1} />
-          <JuezContComment comment={comment} id_judge={1} />
-          <JuezContComment comment={comment} id_judge={1} />
+          {comments.map((comment, index) => (
+            <JuezContComment key={index} comment={comment.comment} id_judge={comment.id_person} />
+          ))}
         </div>
       )}
     </>
@@ -174,15 +173,14 @@ function Rubrica({ criterias, grades, comments }) {
     </div>
   );
 }
-
 function FinalCalf({ finalCalf }) {
   return (
     <div className='col-xxl-3 h-50'>
-      <h1 className="Titulo text-break">Calificación Otorgada</h1>
-      <div className='container-fluid p-1 centered-FinalRescontainer '>
-        <div className="row pb-3 align-items-center">
-          <div className='col-md-auto ContFinalRes text-center p-3'>
-            <span className="FinalResul text-center">{finalCalf/5}/5</span>
+      <h1 className="Titulo text-break text-center">Calificación Otorgada</h1>
+      <div className='container-fluid p-1 d-flex justify-content-center align-items-center'>
+        <div className="row pb-3 align-items-center w-100">
+          <div className='col-md-auto ContFinalRes text-center p-3 mx-auto'>
+            <span className="FinalResul">{(finalCalf / 5).toFixed(1)}/5</span>
           </div>
         </div>
       </div>
@@ -202,6 +200,7 @@ export default function ProjResumeCont() {
   const [criterias, setCriterias] = useState([]);
   const [grades, setGrades] = useState([0, 0, 0, 0, 0]);
   const [comments, setComments] = useState(["", "", "", "", ""]);
+  const [judgeComments, setJudgeComments] = useState([]);
 
   useEffect(() => {
     // Obtener los criterios de la rúbrica desde la API
@@ -296,6 +295,12 @@ export default function ProjResumeCont() {
         setAreas(areaMap);
       })
       .catch(error => console.error('Error al obtener las áreas:', error));
+
+    // Obtener comentarios del juez
+    fetch(`http://localhost:8000/api/comments/project/${projectId}`)
+      .then(response => response.json())
+      .then(data => setJudgeComments(data))
+      .catch(error => console.error('Error fetching judge comments:', error));
   }, [projectId, setStudentInfo, setProfessorInfo, idpersona]);
 
   return (
@@ -305,7 +310,7 @@ export default function ProjResumeCont() {
         <div className='container-fluid'>
           <div className='row justify-content-between d-flex align-items-center'>
             {studentInfo && professorInfo && (
-              <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`}  memeber={"Marcela Dominguez"} />
+              <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={"Marcela Dominguez"} />
             )}
             {projectInfo && (
               <ProjResume
@@ -326,8 +331,7 @@ export default function ProjResumeCont() {
                 <div className='container-fluid'>
                   <div className='row'>
                     <div className='row'>
-                      <CommentCont role={"Profesor"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
-                      <CommentCont role={"Juez"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
+                      <CommentCont role={"Juez"} comments={judgeComments} />
                       <Rubrica
                         criterias={criterias}
                         grades={grades}
