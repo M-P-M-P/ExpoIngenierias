@@ -224,7 +224,6 @@ function FinalCalf({ finalCalf }) {
   );
 }
 // Componente ProjResumeCont
-
 export default function ProjResumeCont() {
   const { idpersona, projectId } = useParams();
   const [projectInfo, setProjectInfo] = useState(null);
@@ -238,6 +237,7 @@ export default function ProjResumeCont() {
   const [comments, setComments] = useState(["", "", "", "", ""]);
   const [judgeComments, setJudgeComments] = useState([]);
   const [loading, setLoading] = useState(true);  // Estado de carga
+  const [member, setMember] = useState(null);  // Variable para almacenar el id del miembro
 
   useEffect(() => {
     const fetchData = async () => {
@@ -258,6 +258,11 @@ export default function ProjResumeCont() {
           setProfessorInfo(professorData);
         }
         if (projectData && projectData.id_lider) {
+          const teamsResponse = await fetch(`http://localhost:8000/api/teams/leader/${projectData.id_lider}`);
+          const teamsData = await teamsResponse.json();
+          if (teamsData.length > 0) {
+            setMember(teamsData[0].id); // Utilizar el id del primer equipo como el valor de member
+          }
           const studentResponse = await fetch(`http://localhost:8000/api/students/${projectData.id_lider}`);
           const studentData = await studentResponse.json();
           setStudentInfo(studentData);
@@ -327,7 +332,7 @@ export default function ProjResumeCont() {
             ) : (
               <>
                 {studentInfo && professorInfo && (
-                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={projectInfo.id_lider}/>
+                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={member}/>
                 )}
                 {projectInfo && (
                   <ProjResume
@@ -368,5 +373,5 @@ export default function ProjResumeCont() {
         </div>
       </div>
     </>
-  );  
+  );
 }
