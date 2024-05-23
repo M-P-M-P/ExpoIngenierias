@@ -8,7 +8,7 @@ import './Page.css';
 import './Resume.css';
 import React, { useState, useEffect } from 'react';
 
-function RubricaCalf({ criterias, grades }) {
+function RubricaCalf({ criterias, grades, comments }) {
   return (
     <Accordion>
       {criterias.map((criteria, index) => (
@@ -17,7 +17,11 @@ function RubricaCalf({ criterias, grades }) {
             <span className='Subtitulo'>Calificación rubro {index + 1}: </span>
             <span className='Texto Resultado'>{grades[index] !== undefined ? grades[index] : "No disponible"} pts</span>
           </Accordion.Header>
-          <Accordion.Body>{criteria.description}</Accordion.Body>
+          <Accordion.Body>
+            {criteria.description}
+            <br />
+            <strong>Comentario otorgado: </strong>{comments[index] !== undefined ? comments[index] : "No disponible"}
+          </Accordion.Body>
         </Accordion.Item>
       ))}
     </Accordion>
@@ -152,7 +156,7 @@ function CommentCont({ role, comment }) {
   );
 }
 
-function Rubrica({ criterias, grades }) {
+function Rubrica({ criterias, grades, comments }) {
   return (
     <div className="col-xxl-3 h-75">
       <h1 className="Titulo ps-0">Desgloce de rubrica</h1>
@@ -161,6 +165,7 @@ function Rubrica({ criterias, grades }) {
           <RubricaCalf
             criterias={criterias}
             grades={grades}
+            comments={comments}
           />
         ) : (
           <p>Seleccione un criterio que desee ver</p>
@@ -196,6 +201,7 @@ export default function ProjResumeCont() {
   const [commentStatus, setCommentStatus] = useState("No Calificado");
   const [criterias, setCriterias] = useState([]);
   const [grades, setGrades] = useState([0, 0, 0, 0, 0]);
+  const [comments, setComments] = useState(["", "", "", "", ""]);
 
   useEffect(() => {
     // Obtener los criterios de la rúbrica desde la API
@@ -247,18 +253,23 @@ export default function ProjResumeCont() {
           .catch(error => console.error('Error fetching comments:', error));
 
         // Realizar fetch para cada criterio
-        const fetchGrade = (criterionId) => {
+        const fetchGradeAndComment = (criterionId) => {
           return fetch(`http://localhost:8000/api/criteria_judges/${criterionId}/${idpersona}/${projectId}`)
             .then(response => response.json())
-            .then(data => data.grade)
+            .then(data => ({ grade: data.grade, comment: data.Comentario }))
             .catch(error => {
-              console.error(`Error fetching grade for criterion ${criterionId}:`, error);
-              return 0; // Retornar 0 en caso de error
+              console.error(`Error fetching grade and comment for criterion ${criterionId}:`, error);
+              return { grade: 0, comment: "No disponible" }; // Retornar 0 y comentario en caso de error
             });
         };
 
-        Promise.all([1, 2, 3, 4, 5].map(criterionId => fetchGrade(criterionId)))
-          .then(grades => setGrades(grades));
+        Promise.all([1, 2, 3, 4, 5].map(criterionId => fetchGradeAndComment(criterionId)))
+          .then(results => {
+            const grades = results.map(result => result.grade);
+            const comments = results.map(result => result.comment);
+            setGrades(grades);
+            setComments(comments);
+          });
       })
       .catch(error => console.error('Error fetching project info:', error));
 
@@ -320,6 +331,7 @@ export default function ProjResumeCont() {
                       <Rubrica
                         criterias={criterias}
                         grades={grades}
+                        comments={comments}
                       />
                       <FinalCalf finalCalf={grades.reduce((a, b) => a + b, 0)} />
                     </div>
