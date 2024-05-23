@@ -27,40 +27,27 @@ function RubricaCalf({ criterias, grades, comments }) {
     </Accordion>
   );
 }
-
 function InfoProj({ lead, profLead, memeber }) {
   return (
     <div className='col-md-3 '>
       <div className="Info m-2 p-4">
         <h1 className="Titulo text-wrap ps-0">Información del proyecto</h1>
         <div className='container-fluid p-1'>
-          <div className="row pb-1">
+          <div className="row mb-1">
             <div className='col-md pe-0'>
               <span className="Subtitulo">Líder:</span>
+              <p className="Texto text-wrap ps-3">{lead}</p>
             </div>
           </div>
-          <div className='row pb-4'>
-            <div className='col-md ps-0'>
-              <span className="Texto text-wrap ps-3">{lead}</span>
-            </div>
-          </div>
-          <div className="row pb-1">
+          <div className="row mb-1">
             <div className='col-md pe-0'>
               <span className="Subtitulo">Profesor líder:</span>
+              <p className="Texto text-wrap ps-3">{profLead}</p>
             </div>
           </div>
-          <div className="row pb-4">
-            <div className='col-md ps-0'>
-              <span className="Texto text-wrap ps-3">{profLead}</span>
-            </div>
-          </div>
-          <div className="row pb">
+          <div className="row mb-1">
             <div className='col-md pe-0'>
               <span className="Subtitulo">Miembros del proyecto:</span>
-            </div>
-          </div>
-          <div className="row pb-1">
-            <div className='col-md ps-0'>
               <p className="Texto text-wrap ps-3">{memeber}</p>
             </div>
           </div>
@@ -69,6 +56,7 @@ function InfoProj({ lead, profLead, memeber }) {
     </div>
   );
 }
+
 
 function ProjResume({ type, area, descr, title }) {
   const truncateText = (text, limit) => {
@@ -123,12 +111,22 @@ function ProjVal({ commentStatus }) {
   );
 }
 
-function JuezContComment({ comment, judgeName }) {
+function JuezContComment({ comment, judgeName, createdAt }) {
+  const formattedDate = new Date(createdAt).toLocaleString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
   return (
     <div className='container-fluid p-3 mt-3 mb-3 ContCommentIndiJudge'>
       <div className="row align-items-center">
         <div className='col-md-auto'>
           <p className='text-wrap fw-bold'>Comentario del juez {judgeName}:</p>
+          <p className='text-wrap'>Fecha del comentario: {formattedDate}</p>
         </div>
       </div>
       <div className="row pb-3 align-items-center">
@@ -145,6 +143,8 @@ function CommentCont({ role, comments }) {
 
   useEffect(() => {
     const fetchJudgeNames = async () => {
+      if (!Array.isArray(comments)) return;
+
       const names = await Promise.all(
         comments.map(comment =>
           fetch(`http://localhost:8000/api/persons/${comment.id_person}`)
@@ -172,9 +172,18 @@ function CommentCont({ role, comments }) {
       {role === 'Juez' && (
         <div className="col-xxl-3 SilderCont">
           <h1 className="Titulo ps-0">Comentarios de {role}</h1>
-          {comments.map((comment, index) => (
-            <JuezContComment key={index} comment={comment.comment} judgeName={judgeNames[comment.id_person]} />
-          ))}
+          {Array.isArray(comments) && comments.length > 0 ? (
+            comments.map((comment, index) => (
+              <JuezContComment 
+                key={index} 
+                comment={comment.comment} 
+                judgeName={judgeNames[comment.id_person]} 
+                createdAt={comment.createdAt} 
+              />
+            ))
+          ) : (
+            <p>Sin comentarios por el momento</p>
+          )}
         </div>
       )}
     </>
@@ -327,6 +336,8 @@ export default function ProjResumeCont() {
       .then(response => response.json())
       .then(data => setJudgeComments(data))
       .catch(error => console.error('Error fetching judge comments:', error));
+
+      
   }, [projectId, setStudentInfo, setProfessorInfo, idpersona]);
 
   return (
