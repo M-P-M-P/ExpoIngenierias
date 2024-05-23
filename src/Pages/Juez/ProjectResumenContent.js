@@ -8,29 +8,18 @@ import './Page.css';
 import './Resume.css';
 import React, { useState, useEffect } from 'react';
 
-function RubricaCalf({ Calf1, Calf2, Calf3, Calf4, Calf5, Rubri1, Rubri2, Rubri3, Rubri4, Rubri5 }) {
+function RubricaCalf({ criterias, grades }) {
   return (
     <Accordion>
-      <Accordion.Item eventKey="0">
-        <Accordion.Header><span className='Subtitulo'>Calificación rubro 1: </span> <span className='Texto Resultado'>{Calf1 + " pts"}</span></Accordion.Header>
-        <Accordion.Body>{Rubri1}</Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="1">
-        <Accordion.Header><span className='Subtitulo'>Calificación rubro 2: </span> <span className='Texto Resultado'>{Calf2 + " pts"}</span></Accordion.Header>
-        <Accordion.Body>{Rubri2}</Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="2">
-        <Accordion.Header><span className='Subtitulo'>Calificación rubro 3: </span> <span className='Texto Resultado'>{Calf3 + " pts"}</span></Accordion.Header>
-        <Accordion.Body>{Rubri3}</Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="3">
-        <Accordion.Header><span className='Subtitulo'>Calificación rubro 4: </span> <span className='Texto Resultado'>{Calf4 + " pts"}</span></Accordion.Header>
-        <Accordion.Body>{Rubri4}</Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="4">
-        <Accordion.Header><span className='Subtitulo'>Calificación rubro 5: </span> <span className='Texto Resultado'>{Calf5 + " pts"}</span></Accordion.Header>
-        <Accordion.Body>{Rubri5}</Accordion.Body>
-      </Accordion.Item>
+      {criterias.map((criteria, index) => (
+        <Accordion.Item key={index} eventKey={index.toString()}>
+          <Accordion.Header>
+            <span className='Subtitulo'>Calificación rubro {index + 1}: </span>
+            <span className='Texto Resultado'>{grades[index] !== undefined ? grades[index] : "No disponible"} pts</span>
+          </Accordion.Header>
+          <Accordion.Body>{criteria.description}</Accordion.Body>
+        </Accordion.Item>
+      ))}
     </Accordion>
   );
 }
@@ -105,7 +94,6 @@ function ProjResume({ type, area, descr, title }) {
   );
 }
 
-
 function ProjVal({ commentStatus }) {
   const params = useParams();
 
@@ -120,9 +108,9 @@ function ProjVal({ commentStatus }) {
             <span className="Subtitulo1">{commentStatus === "Calificado" ? "Calificado" : "No Calificado"}</span>
           </div>
           {commentStatus === "Calificado" ? (
-            <Link className="btn6"disabled>Proyecto Calificado</Link>
+            <Link className="btn6" disabled>Proyecto Calificado</Link>
           ) : (
-            <Link to={`/Juez/${params.idpersona}/Calificar/${params.projectId}`} className="btn4" >CALIFICAR PROYECTO</Link>
+            <Link to={`/Juez/${params.idpersona}/Calificar/${params.projectId}`} className="btn4">CALIFICAR PROYECTO</Link>
           )}
           <Link to={`/Juez/${params.idpersona}`} className="btn5">Regresar a Mis Proyectos</Link>
         </div>
@@ -130,7 +118,6 @@ function ProjVal({ commentStatus }) {
     </div>
   );
 }
-
 
 function JuezContComment({ comment, id_judge }) {
   return (
@@ -165,29 +152,16 @@ function CommentCont({ role, comment }) {
   );
 }
 
-function Rubrica({ criterias }) {
-  const [selectedCriterio, setSelectedCriterio] = useState(null);
-
-  const handleCriterioChange = (index) => {
-    setSelectedCriterio(index !== "" ? parseInt(index) : null);
-  };
-
+function Rubrica({ criterias, grades }) {
   return (
     <div className="col-xxl-3 h-75">
       <h1 className="Titulo ps-0">Desgloce de rubrica</h1>
       <div className='container-fluid p-1 mb-3'>
-        <select className="form-select" onChange={(e) => handleCriterioChange(e.target.value)}>
-          <option value="">Seleccione un criterio...</option>
-          {criterias && criterias.map((criteria, index) => (
-            <option key={index} value={index}>{criteria.description}</option>
-          ))}
-        </select>
-        {selectedCriterio !== null ? (
-          <div>
-            <h1>Otogarste 0/5 en el criterio de {criterias[selectedCriterio].description}</h1>
-            
-            {/* Aquí puedes agregar la lógica para mostrar los demás detalles del criterio */}
-          </div>
+        {criterias && criterias.length > 0 ? (
+          <RubricaCalf
+            criterias={criterias}
+            grades={grades}
+          />
         ) : (
           <p>Seleccione un criterio que desee ver</p>
         )}
@@ -196,11 +170,6 @@ function Rubrica({ criterias }) {
   );
 }
 
-
-
-
-
-
 function FinalCalf({ finalCalf }) {
   return (
     <div className='col-xxl-3 h-50'>
@@ -208,7 +177,7 @@ function FinalCalf({ finalCalf }) {
       <div className='container-fluid p-1 centered-FinalRescontainer '>
         <div className="row pb-3 align-items-center">
           <div className='col-md-auto ContFinalRes text-center p-3'>
-            <span className="FinalResul text-center">{finalCalf}/100</span>
+            <span className="FinalResul text-center">{finalCalf/5}/5</span>
           </div>
         </div>
       </div>
@@ -226,6 +195,7 @@ export default function ProjResumeCont() {
   const [professorInfo, setProfessorInfo] = useState(null);
   const [commentStatus, setCommentStatus] = useState("No Calificado");
   const [criterias, setCriterias] = useState([]);
+  const [grades, setGrades] = useState([0, 0, 0, 0, 0]);
 
   useEffect(() => {
     // Obtener los criterios de la rúbrica desde la API
@@ -275,6 +245,20 @@ export default function ProjResumeCont() {
             }
           })
           .catch(error => console.error('Error fetching comments:', error));
+
+        // Realizar fetch para cada criterio
+        const fetchGrade = (criterionId) => {
+          return fetch(`http://localhost:8000/api/criteria_judges/${criterionId}/${idpersona}/${projectId}`)
+            .then(response => response.json())
+            .then(data => data.grade)
+            .catch(error => {
+              console.error(`Error fetching grade for criterion ${criterionId}:`, error);
+              return 0; // Retornar 0 en caso de error
+            });
+        };
+
+        Promise.all([1, 2, 3, 4, 5].map(criterionId => fetchGrade(criterionId)))
+          .then(grades => setGrades(grades));
       })
       .catch(error => console.error('Error fetching project info:', error));
 
@@ -335,8 +319,9 @@ export default function ProjResumeCont() {
                       <CommentCont role={"Juez"} comment={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."} />
                       <Rubrica
                         criterias={criterias}
+                        grades={grades}
                       />
-                      <FinalCalf finalCalf={"9"} />
+                      <FinalCalf finalCalf={grades.reduce((a, b) => a + b, 0)} />
                     </div>
                   </div>
                 </div>
