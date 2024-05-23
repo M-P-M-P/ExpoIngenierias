@@ -42,7 +42,7 @@ function MainContent() {
         <Route path="/usuarios" element={<Users />} />
         <Route path="/usuarios/:userId" element={<EditUserPage />} />
         <Route path="/proyectos" element={<Projects />} />
-        <Route path="/proyecto/:projectId" element={<ProjectPage setPageTitle={setPageTitle} />} />
+        <Route path="/proyecto/:id" element={<ProjectPage setPageTitle={setPageTitle} />} />
 
 
         <Route path='/ProyectosJuez' element={<Juez />}/>

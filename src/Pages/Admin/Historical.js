@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
 import DropdownMenu from '../../Components/DropdownMenu/DropdownMenu';
 import ContentCard from '../../Components/ContentCard/ContentCard';
-import { dropdownOptions } from '../../MockData/MockData';
+
+const URI='http://localhost:8000/Ediciones/'
 
 function Historical() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -17,7 +18,7 @@ function Historical() {
     if (!selectedOption) {
       alert("Debes seleccionar una opción antes de exportar.");
     } else {
-      // Export logic
+      alert(selectedOption);
     }
   };
 
@@ -29,8 +30,8 @@ function Historical() {
           <div className="col-md-12">
             <ContentCard title="Exportar Histórico" subtitle="Selecciona Edición" content={
               <>
-                <DropdownMenu title="Selecciona la Edición" options={dropdownOptions} onSelect={handleOptionSelect} />
-                {buttonClicked && !selectedOption && <p className="text-danger">Debes seleccionar una opción.</p>}
+                <DropdownMenu title="Selecciona la Edición" url={URI} onSelect={handleOptionSelect}/>
+                {buttonClicked && !selectedOption && <p className="text-danger" style={{marginTop:"4vh"}}>Debes seleccionar una opción.</p>}
               </>
             } />
             <div className="d-flex justify-content-center mt-3">

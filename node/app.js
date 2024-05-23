@@ -12,13 +12,18 @@ import db from "./database/db.js"
 
 //hay que importar las rutas de admin
 import UserRoutes from './routes/UserRoutes.js';
+import studentRoutes from './routes/StudentRoutes.js'
+import projectRoutes from './routes/ProjectRoutes.js'
+import AnnounRoutes from './routes/AnnounRoutes.js'
+import AdminRoutes from "./routes/AdminRoutes.js"
+//rutas de edicion
+import EditionRoutes from "./routes/EditionRoutes.js"
 // las rutas de juez
-
 
 
 const app = express()
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -26,6 +31,13 @@ app.use(express.urlencoded({extended: true}));
 app.use('/users', UserRoutes);
 
 // Judge Routes
+app.use('/projects', projectRoutes);
+app.use('/students', studentRoutes);
+app.use('/announ', AnnounRoutes);
+app.use('/Admin',  AdminRoutes);
+app.use('/Ediciones',EditionRoutes);
+// app.use('/projects', projectRoutes);
+// app.use('/students', studentRoutes);
 
 
 //console.log(process.env.DB_CONNECTION_STRING)
