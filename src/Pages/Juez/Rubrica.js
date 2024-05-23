@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import './Rubrica.css';
 import NavigationBar from '../../Components/NavigationBar/Judge/NavigationBar';
+import Loader from '../../Components/Loader/Loader';
 
 const Rubrica = () => {
   const { idpersona, projectId } = useParams(); // Capturamos los parámetros de la URL
@@ -10,6 +11,7 @@ const Rubrica = () => {
   const [comments, setComments] = useState([]);
   const [additionalComment, setAdditionalComment] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [loading, setLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
     const fetchCriteria = async () => {
@@ -19,8 +21,10 @@ const Rubrica = () => {
         setCriteria(data);
         setSelectedCriteria(Array(data.length).fill(0));
         setComments(Array(data.length).fill(''));
+        setLoading(false); // Desactivar el estado de carga después de obtener los datos
       } catch (error) {
         console.error('Error al obtener los criterios:', error);
+        setLoading(false); // Desactivar el estado de carga en caso de error
       }
     };
 
@@ -111,46 +115,52 @@ const Rubrica = () => {
     <>
       <NavigationBar NameSection={"Rúbrica"} />
       <div className="container">
-        <h1>CALIFICA EL PROYECTO EN BASE A LA RÚBRICA</h1>
-        <div className="rubrica-container">
-          {criteria.map((criterion, index) => (
-            <div className="criterion" key={index}>
-              <h3>{criterion.description}</h3>
-              <p>Calificación: {selectedCriteria[index]}</p>
+        {loading ? (
+          <Loader />  // Mostrar el loader mientras se cargan los datos
+        ) : (
+          <>
+            <h1>CALIFICA EL PROYECTO EN BASE A LA RÚBRICA</h1>
+            <div className="rubrica-container">
+              {criteria.map((criterion, index) => (
+                <div className="criterion" key={index}>
+                  <h3>{criterion.description}</h3>
+                  <p>Calificación: {selectedCriteria[index]}</p>
 
-              <div className="PB-range-slider-div">
-                <p>0 (Deficiente)</p>
-                <input
-                  type="range"
-                  min="0"
-                  max="5"
-                  step="1"
-                  value={selectedCriteria[index]}
-                  onChange={(e) => handleSliderChange(index, parseInt(e.target.value))}
-                  id={`myRange${index}`}
-                />
-                <p>5 (Excelente)</p>
-              </div>
+                  <div className="PB-range-slider-div">
+                    <p>0 (Deficiente)</p>
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      step="1"
+                      value={selectedCriteria[index]}
+                      onChange={(e) => handleSliderChange(index, parseInt(e.target.value))}
+                      id={`myRange${index}`}
+                    />
+                    <p>5 (Excelente)</p>
+                  </div>
+                  <textarea
+                    placeholder={`Comentarios adicionales sobre ${criterion.description}`}
+                    className="comment-box"
+                    value={comments[index]}
+                    onChange={(e) => handleCommentChange(index, e.target.value)}
+                  />
+                </div>
+              ))}
               <textarea
-                placeholder={`Comentarios adicionales sobre ${criterion.description}`}
+                placeholder="Comentario adicional sobre el proyecto (mínimo 100 caracteres)"
                 className="comment-box"
-                value={comments[index]}
-                onChange={(e) => handleCommentChange(index, e.target.value)}
+                value={additionalComment}
+                onChange={(e) => handleAdditionalCommentChange(e.target.value)}
               />
+              {showErrorMessage && additionalComment.trim().length < 100 && <p className="error-message">Por favor, ingresa un comentario adicional con al menos 100 caracteres.</p>}
+              <div className="buttons-container2">
+                <Link to={`/Juez/${idpersona}`} className="btn2">Cancelar</Link>
+                <button onClick={handleSubmit} className="btn3">Enviar</button>
+              </div>
             </div>
-          ))}
-          <textarea
-            placeholder="Comentario adicional sobre el proyecto (mínimo 100 caracteres)"
-            className="comment-box"
-            value={additionalComment}
-            onChange={(e) => handleAdditionalCommentChange(e.target.value)}
-          />
-          {showErrorMessage && additionalComment.trim().length < 100 && <p className="error-message">Por favor, ingresa un comentario adicional con al menos 100 caracteres.</p>}
-          <div className="buttons-container2">
-            <Link to={`/Juez/${idpersona}`} className="btn2">Cancelar</Link>
-            <button onClick={handleSubmit} className="btn3">Enviar</button>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </>
   );
