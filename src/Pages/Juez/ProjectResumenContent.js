@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import './Page.css';
 import './Resume.css';
 import React, { useState, useEffect } from 'react';
+import Loader from '../../Components/Loader/Loader';
 
 function RubricaCalf({ criterias, grades, comments }) {
   return (
@@ -222,7 +223,7 @@ function FinalCalf({ finalCalf }) {
     </div>
   );
 }
-
+// Componente ProjResumeCont
 // Componente ProjResumeCont
 export default function ProjResumeCont() {
   const { idpersona, projectId } = useParams();
@@ -236,109 +237,84 @@ export default function ProjResumeCont() {
   const [grades, setGrades] = useState([0, 0, 0, 0, 0]);
   const [comments, setComments] = useState(["", "", "", "", ""]);
   const [judgeComments, setJudgeComments] = useState([]);
+  const [loading, setLoading] = useState(true);  // Estado de carga
 
   useEffect(() => {
-    // Obtener los criterios de la rúbrica desde la API
-    fetch('http://localhost:8000/api/criterias')
-      .then(response => response.json())
-      .then(data => {
-        // Obtener solo los primeros 5 criterios
-        const firstFiveCriterias = data.slice(0, 5);
+    const fetchData = async () => {
+      try {
+        // Obtener los criterios de la rúbrica desde la API
+        const criteriasResponse = await fetch('http://localhost:8000/api/criterias');
+        const criteriasData = await criteriasResponse.json();
+        const firstFiveCriterias = criteriasData.slice(0, 5);
         setCriterias(firstFiveCriterias);
-      })
-      .catch(error => console.error('Error fetching criterias:', error));
 
-    // Obtener la información del proyecto
-    fetch(`http://localhost:8000/api/projects/${projectId}`)
-      .then(response => response.json())
-      .then(data => {
-        setProjectInfo(data);
-        if (data && data.id_responsable) {
-          fetch(`http://localhost:8000/api/persons/${data.id_responsable}`)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Error al obtener la información del profesor.');
-              }
-              return response.json();
-            })
-            .then(data => setProfessorInfo(data))
-            .catch(error => console.error('Error fetching professor info:', error));
+        // Obtener la información del proyecto
+        const projectResponse = await fetch(`http://localhost:8000/api/projects/${projectId}`);
+        const projectData = await projectResponse.json();
+        setProjectInfo(projectData);
+        if (projectData && projectData.id_responsable) {
+          const professorResponse = await fetch(`http://localhost:8000/api/persons/${projectData.id_responsable}`);
+          const professorData = await professorResponse.json();
+          setProfessorInfo(professorData);
         }
-        if (data && data.id_lider) {
-          fetch(`http://localhost:8000/api/students/${data.id_lider}`)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Error al obtener la información del estudiante.');
-              }
-              return response.json();
-            })
-            .then(data => setStudentInfo(data))
-            .catch(error => console.error('Error fetching student info:', error));
+        if (projectData && projectData.id_lider) {
+          const studentResponse = await fetch(`http://localhost:8000/api/students/${projectData.id_lider}`);
+          const studentData = await studentResponse.json();
+          setStudentInfo(studentData);
         }
         // Verificar si hay comentarios para este proyecto
-        fetch(`http://localhost:8000/api/comments/${idpersona}/${projectId}`)
-          .then(response => {
-            if (response.ok) {
-              setCommentStatus("Calificado");
-            } else {
-              setCommentStatus("No Calificado");
-            }
-          })
-          .catch(error => console.error('Error fetching comments:', error));
+        const commentsResponse = await fetch(`http://localhost:8000/api/comments/${idpersona}/${projectId}`);
+        if (commentsResponse.ok) {
+          setCommentStatus("Calificado");
+        } else {
+          setCommentStatus("No Calificado");
+        }
 
         // Realizar fetch para cada criterio
-        const fetchGradeAndComment = (criterionId) => {
-          return fetch(`http://localhost:8000/api/criteria_judges/${criterionId}/${idpersona}/${projectId}`)
-            .then(response => response.json())
-            .then(data => ({ grade: data.grade, comment: data.Comentario }))
-            .catch(error => {
-              console.error(`Error fetching grade and comment for criterion ${criterionId}:`, error);
-              return { grade: 0, comment: "No disponible" }; // Retornar 0 y comentario en caso de error
-            });
+        const fetchGradeAndComment = async (criterionId) => {
+          const criterionResponse = await fetch(`http://localhost:8000/api/criteria_judges/${criterionId}/${idpersona}/${projectId}`);
+          const criterionData = await criterionResponse.json();
+          return { grade: criterionData.grade, comment: criterionData.Comentario || "No disponible" };
         };
 
-        Promise.all([1, 2, 3, 4, 5].map(criterionId => fetchGradeAndComment(criterionId)))
-          .then(results => {
-            const grades = results.map(result => result.grade);
-            const comments = results.map(result => result.comment);
-            setGrades(grades);
-            setComments(comments);
-          });
-      })
-      .catch(error => console.error('Error fetching project info:', error));
+        const results = await Promise.all([1, 2, 3, 4, 5].map(criterionId => fetchGradeAndComment(criterionId)));
+        const grades = results.map(result => result.grade);
+        const comments = results.map(result => result.comment);
+        setGrades(grades);
+        setComments(comments);
 
-    // Obtener las categorías
-    fetch('http://localhost:8000/api/categories')
-      .then(response => response.json())
-      .then(data => {
+        // Obtener las categorías
+        const categoriesResponse = await fetch('http://localhost:8000/api/categories');
+        const categoriesData = await categoriesResponse.json();
         const categoryMap = {};
-        data.forEach(category => {
+        categoriesData.forEach(category => {
           categoryMap[category.id] = category.title;
         });
         setCategories(categoryMap);
-      })
-      .catch(error => console.error('Error al obtener las categorías:', error));
 
-    // Obtener las áreas
-    fetch('http://localhost:8000/api/areas')
-      .then(response => response.json())
-      .then(data => {
+        // Obtener las áreas
+        const areasResponse = await fetch('http://localhost:8000/api/areas');
+        const areasData = await areasResponse.json();
         const areaMap = {};
-        data.forEach(area => {
+        areasData.forEach(area => {
           areaMap[area.id] = area.name;
         });
         setAreas(areaMap);
-      })
-      .catch(error => console.error('Error al obtener las áreas:', error));
 
-    // Obtener comentarios del juez
-    fetch(`http://localhost:8000/api/comments/project/${projectId}`)
-      .then(response => response.json())
-      .then(data => setJudgeComments(data))
-      .catch(error => console.error('Error fetching judge comments:', error));
+        // Obtener comentarios del juez
+        const judgeCommentsResponse = await fetch(`http://localhost:8000/api/comments/project/${projectId}`);
+        const judgeCommentsData = await judgeCommentsResponse.json();
+        setJudgeComments(judgeCommentsData);
 
-      
-  }, [projectId, setStudentInfo, setProfessorInfo, idpersona]);
+        setLoading(false); // Desactivar el estado de carga después de terminar todas las solicitudes
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false); // Desactivar el estado de carga en caso de error
+      }
+    };
+
+    fetchData();
+  }, [projectId, idpersona]);
 
   return (
     <>
@@ -346,43 +322,51 @@ export default function ProjResumeCont() {
       <div className='container-fluid centered-container mt-3 '>
         <div className='container-fluid'>
           <div className='row justify-content-between d-flex align-items-center'>
-            {studentInfo && professorInfo && (
-              <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={"Marcela Dominguez"} />
-            )}
-            {projectInfo && (
-              <ProjResume
-                type={categories[projectInfo.id_category]}
-                area={areas[projectInfo.id_area]}
-                descr={projectInfo.description}
-                title={projectInfo.title}
-                profesor={projectInfo.id_responsable}
-              />
-            )}
-            {projectInfo && (
-              <ProjVal commentStatus={commentStatus} />
+            {loading ? (
+              <Loader />  // Mostrar el loader mientras se cargan los datos
+            ) : (
+              <>
+                {studentInfo && professorInfo && (
+                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={"Marcela Dominguez"} />
+                )}
+                {projectInfo && (
+                  <ProjResume
+                    type={categories[projectInfo.id_category]}
+                    area={areas[projectInfo.id_area]}
+                    descr={projectInfo.description}
+                    title={projectInfo.title}
+                    profesor={projectInfo.id_responsable}
+                  />
+                )}
+                {projectInfo && (
+                  <ProjVal commentStatus={commentStatus} />
+                )}
+              </>
             )}
           </div>
-          <div className='row m-2 justify-content-between d-flex align-items-center w-100 mb-4'>
-            <div className='Info col-md-12'>
-              <div className="m-auto p-4">
-                <div className='container-fluid'>
-                  <div className='row'>
+          {!loading && (
+            <div className='row m-2 justify-content-between d-flex align-items-center w-100 mb-4'>
+              <div className='Info col-md-12'>
+                <div className="m-auto p-4">
+                  <div className='container-fluid'>
                     <div className='row'>
-                      <CommentCont role={"Juez"} comments={judgeComments} />
-                      <Rubrica
-                        criterias={criterias}
-                        grades={grades}
-                        comments={comments}
-                      />
-                      <FinalCalf finalCalf={grades.reduce((a, b) => a + b, 0)} />
+                      <div className='row'>
+                        <CommentCont role={"Juez"} comments={judgeComments} />
+                        <Rubrica
+                          criterias={criterias}
+                          grades={grades}
+                          comments={comments}
+                        />
+                        <FinalCalf finalCalf={grades.reduce((a, b) => a + b, 0)} />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
-  );
+  );  
 }
