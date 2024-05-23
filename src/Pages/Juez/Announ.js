@@ -2,7 +2,7 @@ import Form from 'react-bootstrap/Form';
 
 import {Link} from 'react-router-dom';
 
-import StudentToggle from '../../Components/TogglebarStudent/togglebarStudent.js';
+import NavigationBar from '../../Components/NavigationBar/Judge/NavigationBar';
 
 import './Announ.css';
 
@@ -64,7 +64,7 @@ export default function AnnounCont(){
     return(
 
         <>
-            <StudentToggle NameSection={"Anuncios"}></StudentToggle>
+            <NavigationBar NameSection={"Anuncios"}></NavigationBar>
             <div className='container-fluid mt-3 p-3'>
                 <div className='row p-3 ContainerAnnoun'>
 
