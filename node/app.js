@@ -10,6 +10,7 @@ import commentRoutes from './routes/commentRoutes.js';
 import judgeProjectRoutes from './routes/judgeProjectRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import personRoutes from './routes/personRoutes.js';
+
 const app = express();
 
 app.use(cors());

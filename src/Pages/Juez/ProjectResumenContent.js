@@ -224,7 +224,7 @@ function FinalCalf({ finalCalf }) {
   );
 }
 // Componente ProjResumeCont
-// Componente ProjResumeCont
+
 export default function ProjResumeCont() {
   const { idpersona, projectId } = useParams();
   const [projectInfo, setProjectInfo] = useState(null);
@@ -327,7 +327,7 @@ export default function ProjResumeCont() {
             ) : (
               <>
                 {studentInfo && professorInfo && (
-                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={"Marcela Dominguez"} />
+                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={projectInfo.id_lider}/>
                 )}
                 {projectInfo && (
                   <ProjResume
