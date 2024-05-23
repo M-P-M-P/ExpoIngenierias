@@ -194,7 +194,7 @@ function CommentCont({ role, comments }) {
 function Rubrica({ criterias, grades, comments }) {
   return (
     <div className="col-xxl-3 h-75">
-      <h1 className="Titulo ps-0">Desgloce de rubrica</h1>
+      <h1 className="Titulo ps-0">Desglose de rúbrica</h1>
       <div className='container-fluid p-1 mb-3'>
         {criterias && criterias.length > 0 ? (
           <RubricaCalf

@@ -46,7 +46,7 @@ function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, 
       case 'Producto':
         return require('../../Assets/Producto.jpg');
       default:
-        return require('../../Assets/CardProto.png');
+        return require('../../Assets/Default.jpg');
     }
   };
 
