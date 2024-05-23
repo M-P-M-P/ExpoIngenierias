@@ -401,7 +401,7 @@ export default function ProjResumeCont() {
                           comments={comments}
                         />
                         <FinalCalf finalCalf={grades.reduce((a, b) => a + b, 0)} />
-                        <Multimedia Video= "Youtube.com" Poster= "google.com"/>
+                        <Multimedia Video= {projectInfo.linkVideo} Poster= {projectInfo.linkPoster}/>
                       </div>
                     </div>
                   </div>
