@@ -12,6 +12,7 @@ import Proyectos from './Pages/Juez/Proyectos';
 import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
 import Rubrica from './Pages/Juez/Rubrica';
 import Anuncios from './Pages/Juez/Announ';
+import DetailedAnnoun from './Pages/Juez/DetailedAnnoun';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function MainContent() {
         <Route path="/Juez/:idpersona" element={<Juez />} />
         <Route path="/Juez/general" element={<Proyectos />} />
         <Route path="/Juez/Anuncios" element={<Anuncios />} />
+        <Route path="/Juez/Anuncios/:anuncioId" element={<DetailedAnnoun />} />
         <Route path="/Juez/:idpersona/Calificar/:projectId" element={<Rubrica />} />
         <Route path="/Juez/:idpersona/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
 

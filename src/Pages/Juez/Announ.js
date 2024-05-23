@@ -30,7 +30,7 @@ function AnnounInfo({Fecha, Titulo, Cuerpo}){
     };    
 
     return(
-        <Link to={'/announ1-estudiante'} className='row m-3 p-2 AnnounInfoContainer d-flex align-items-center'>
+        <Link to={'/Juez/Anuncios/:anuncioId'} className='row m-3 p-2 AnnounInfoContainer d-flex align-items-center'>
             <div className='col-auto d-flex align-items-center'>
                 <i className='bi bi-envelope-fill AnnounIcon'></i> <span className='Titulo'> {Titulo}</span>
             </div>
