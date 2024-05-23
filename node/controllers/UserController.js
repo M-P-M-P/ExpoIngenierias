@@ -266,6 +266,35 @@ export const updateUserRole = async (req, res) => {
 //     }
 // };
 
+// controllers/UserController.js
+export const getUsersDoughnutChartData = async (req, res) => {
+  try {
+    // Fetch all persons and students concurrently
+    const [persons, students] = await Promise.all([
+      PersonModel.findAll(),
+      StudentModel.findAll()
+    ]);
+
+    // Count the number of students, teachers, and judges
+    const studentCount = students.length;
+    const teacherCount = persons.filter(person => person.isJudge !== 1).length;
+    const judgeCount = persons.filter(person => person.isJudge === 1).length;
+
+    // Construct the response data
+    const userData = {
+      labels: ['Alumnos', 'Profesores', 'Jueces'],
+      data: [studentCount, teacherCount, judgeCount]
+    };
+
+    // Send the response
+    res.json(userData);
+
+  } catch (error) {
+    console.error("Error fetching non-admin users:", error);
+    res.status(500).json({ error: 'Internal server error while fetching non-admin users.' });
+  }
+}
+
 
 
 export const deletePerson = async (req, res) => {
