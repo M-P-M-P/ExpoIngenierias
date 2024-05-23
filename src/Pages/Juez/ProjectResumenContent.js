@@ -123,12 +123,12 @@ function ProjVal({ commentStatus }) {
   );
 }
 
-function JuezContComment({ comment, id_judge }) {
+function JuezContComment({ comment, judgeName }) {
   return (
     <div className='container-fluid p-3 mt-3 mb-3 ContCommentIndiJudge'>
       <div className="row align-items-center">
         <div className='col-md-auto'>
-          <p className='text-wrap fw-bold'>Comentario del juez {id_judge}:</p>
+          <p className='text-wrap fw-bold'>Comentario del juez {judgeName}:</p>
         </div>
       </div>
       <div className="row pb-3 align-items-center">
@@ -141,13 +141,39 @@ function JuezContComment({ comment, id_judge }) {
 }
 
 function CommentCont({ role, comments }) {
+  const [judgeNames, setJudgeNames] = useState({});
+
+  useEffect(() => {
+    const fetchJudgeNames = async () => {
+      const names = await Promise.all(
+        comments.map(comment =>
+          fetch(`http://localhost:8000/api/persons/${comment.id_person}`)
+            .then(response => response.json())
+            .then(data => ({ id: comment.id_person, name: `${data.name} ${data.lastName}` }))
+            .catch(error => {
+              console.error(`Error fetching name for judge ${comment.id_person}:`, error);
+              return { id: comment.id_person, name: "Desconocido" }; // Valor por defecto en caso de error
+            })
+        )
+      );
+
+      const namesMap = {};
+      names.forEach(({ id, name }) => {
+        namesMap[id] = name;
+      });
+      setJudgeNames(namesMap);
+    };
+
+    fetchJudgeNames();
+  }, [comments]);
+
   return (
     <>
       {role === 'Juez' && (
         <div className="col-xxl-3 SilderCont">
           <h1 className="Titulo ps-0">Comentarios de {role}</h1>
           {comments.map((comment, index) => (
-            <JuezContComment key={index} comment={comment.comment} id_judge={comment.id_person} />
+            <JuezContComment key={index} comment={comment.comment} judgeName={judgeNames[comment.id_person]} />
           ))}
         </div>
       )}
