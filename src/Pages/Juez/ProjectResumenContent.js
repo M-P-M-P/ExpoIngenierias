@@ -28,6 +28,7 @@ function RubricaCalf({ criterias, grades, comments }) {
     </Accordion>
   );
 }
+
 function InfoProj({ lead, profLead, memeber }) {
   return (
     <div className='col-md-3 '>
@@ -57,7 +58,6 @@ function InfoProj({ lead, profLead, memeber }) {
     </div>
   );
 }
-
 
 function ProjResume({ type, area, descr, title }) {
   const truncateText = (text, limit) => {
@@ -224,6 +224,7 @@ function FinalCalf({ finalCalf }) {
   );
 }
 // Componente ProjResumeCont
+
 export default function ProjResumeCont() {
   const { idpersona, projectId } = useParams();
   const [projectInfo, setProjectInfo] = useState(null);
@@ -237,7 +238,7 @@ export default function ProjResumeCont() {
   const [comments, setComments] = useState(["", "", "", "", ""]);
   const [judgeComments, setJudgeComments] = useState([]);
   const [loading, setLoading] = useState(true);  // Estado de carga
-  const [member, setMember] = useState(null);  // Variable para almacenar el id del miembro
+  const [members, setMembers] = useState([]);  // Variable para almacenar los id_member
 
   useEffect(() => {
     const fetchData = async () => {
@@ -261,7 +262,10 @@ export default function ProjResumeCont() {
           const teamsResponse = await fetch(`http://localhost:8000/api/teams/leader/${projectData.id_lider}`);
           const teamsData = await teamsResponse.json();
           if (teamsData.length > 0) {
-            setMember(teamsData[0].id); // Utilizar el id del primer equipo como el valor de member
+            const teamId = teamsData[0].id; // Utilizar el id del primer equipo
+            const membersResponse = await fetch(`http://localhost:8000/api/teamMembers/team/${teamId}`);
+            const membersData = await membersResponse.json();
+            setMembers(membersData.map(member => member.id_member)); // Obtener solo los id_member
           }
           const studentResponse = await fetch(`http://localhost:8000/api/students/${projectData.id_lider}`);
           const studentData = await studentResponse.json();
@@ -332,7 +336,7 @@ export default function ProjResumeCont() {
             ) : (
               <>
                 {studentInfo && professorInfo && (
-                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={member}/>
+                  <InfoProj lead={`${studentInfo.name} ${studentInfo.lastName}`} profLead={`${professorInfo.name} ${professorInfo.lastName}`} memeber={members.join(', ')}/>
                 )}
                 {projectInfo && (
                   <ProjResume
