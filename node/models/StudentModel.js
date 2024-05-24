@@ -10,7 +10,8 @@ const StudentModel = db.define('students', {
     },
     name: { type: DataTypes.STRING },
     lastName: { type: DataTypes.STRING }, // CLOB puede ser representado como STRING con un límite alto en Sequelize
-    enrollment: { type: DataTypes.STRING },
+    enrollment: { type: DataTypes.STRING }, 
+    isActive: { type: DataTypes.INTEGER }
 });
 
  export default StudentModel
