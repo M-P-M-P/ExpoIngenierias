@@ -1,6 +1,6 @@
 // routes/commentRoutes.js
 import express from 'express';
-import { createComment, fetchAllComments, fetchCommentByPersonAndProject, fetchCommentsByProject } from '../controllers/commentController.js';
+import { createComment, fetchAllComments, fetchCommentByPersonAndProject, fetchCommentsByProject } from '../controllers/CommentController.js';
 
 const router = express.Router();
 

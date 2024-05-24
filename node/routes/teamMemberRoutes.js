@@ -1,6 +1,6 @@
 // teamMemberRoutes.js
 import express from 'express';
-import { getTeamMembersByTeamId } from '../controllers/teamMemberController.js';
+import { getTeamMembersByTeamId } from '../controllers/TeamMemberController.js';
 
 const router = express.Router();
 

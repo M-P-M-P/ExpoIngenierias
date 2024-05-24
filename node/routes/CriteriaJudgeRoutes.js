@@ -1,5 +1,5 @@
 import express from 'express';
-import { fetchAllCriteriaJudges, createCriteriaJudge, fetchCriteriaGrade } from '../controllers/criteriaJudgesController.js';
+import { fetchAllCriteriaJudges, createCriteriaJudge, fetchCriteriaGrade } from '../controllers/CriteriaJudgeController.js';
 
 const router = express.Router();
 

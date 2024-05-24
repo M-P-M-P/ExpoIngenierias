@@ -1,4 +1,4 @@
-import JudgeProject from '../models/judgeProject.js';
+import JudgeProject from '../models/JudgeProjectModel.js';
 
 // Crear un nuevo registro de relación entre juez y proyecto
 async function createJudgeProject(req, res) {

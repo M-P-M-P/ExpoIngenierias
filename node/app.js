@@ -18,17 +18,19 @@ import AdminRoutes from "./routes/AdminRoutes.js"
 import EditionRoutes from "./routes/EditionRoutes.js"
 
 // las rutas de juez
-import criteriaRoutes from './routes/criteriaRoutes.js';
-import projectRoutes from './routes/projectRoutes.js';
-import categoryRoutes from './routes/categoryRoutes.js';
-import areasRoutes from './routes/areasRoutes.js';
-import criteriaJudgesRoutes from './routes/criteriaJudgesRoutes.js'; 
-import commentRoutes from './routes/commentRoutes.js';
-import judgeProjectRoutes from './routes/judgeProjectRoutes.js';
-import studentRoutes from './routes/studentRoutes.js';
-import personRoutes from './routes/personRoutes.js';
-import teamsRoutes from './routes/teamRoutes.js';
-import teamMemberRoutes from './routes/teamMemberRoutes.js';
+import CriteriaRoutes from './routes/CriteriaRoutes.js';
+import ProjectsRoutes from './routes/ProjectsRoutes.js';
+import ProjectRoutes from './routes/ProjectRoutes.js';
+import CategoryRoutes from './routes/CategoryRoutes.js';
+import AreaRoutes from './routes/AreaRoutes.js';
+import CriteriaJudgeRoutes from './routes/CriteriaJudgeRoutes.js'; 
+import CommentRoutes from './routes/CommentRoutes.js';
+import JudgeProjectRoutes from './routes/JudgeProjectRoutes.js';
+import StudentRoutes from './routes/StudentRoutes.js';
+import StudentsRoutes from './routes/StudentsRoutes.js';
+import PersonRoutes from './routes/PersonRoutes.js';
+import TeamsRoutes from './routes/TeamRoutes.js';
+import TeamMemberRoutes from './routes/TeamMemberRoutes.js';
 
 const app = express()
 
@@ -38,32 +40,31 @@ app.use(express.urlencoded({extended: true}));
 
 // Adimn Routes
 app.use('/users', UserRoutes);
-app.use('/categories', categoryRoutes);
+//app.use('/categories', CategoryRoutes);
 
 // Judge Routes
-app.use('/projects', projectRoutes);
-app.use('/students', studentRoutes);
-app.use('/announ', AnnounRoutes);
+app.use('/projects', ProjectsRoutes);
+app.use('/students', StudentsRoutes);
+// app.use('/announ', AnnounRoutes);
 app.use('/Admin',  AdminRoutes);
 app.use('/Ediciones',EditionRoutes);
-// app.use('/projects', projectRoutes);
-// app.use('/students', studentRoutes);
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api', criteriaRoutes);
-app.use('/api', projectRoutes);
-app.use('/api', categoryRoutes);
-app.use('/api', areasRoutes);
-app.use('/api', criteriaJudgesRoutes);
-app.use('/api', commentRoutes); 
-app.use('/api', judgeProjectRoutes); 
-app.use('/api', studentRoutes);
-app.use('/api', personRoutes);
-app.use('/api', teamsRoutes);
-app.use('/api', teamMemberRoutes);
+app.use('/api', CriteriaRoutes);
+app.use('/api', ProjectRoutes);
+app.use('/api', CategoryRoutes);
+app.use('/api', AreaRoutes);
+app.use('/api', CriteriaJudgeRoutes);
+app.use('/api', CommentRoutes); 
+app.use('/api', JudgeProjectRoutes); 
+app.use('/api', StudentRoutes);
+app.use('/api', PersonRoutes);
+app.use('/api', TeamsRoutes);
+app.use('/api', TeamMemberRoutes);
+app.use('/api', AnnounRoutes);
 
 //console.log(process.env.DB_CONNECTION_STRING)
 

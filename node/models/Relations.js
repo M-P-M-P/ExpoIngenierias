@@ -1,10 +1,10 @@
 import AreaModel from "./AreaModel.js";
 import CategoryModel from "./CategoryModel.js";
 import EditionModel from "./EditionModel.js";
-import PersonModel from "./PersonModel.js";
-import ProjectModel from "./ProjectModel.js";
-import StudentModel from "./StudentModel.js";
-import TeamModel from "./TeamModel.js";
+import PersonModel from "./PersonsModel.js";
+import ProjectModel from "./ProjectsModel.js";
+import StudentModel from "./StudentsModel.js";
+import TeamModel from "./TeamsModel.js";
 import MaterialModel from "./MaterialModel.js";
 import MaterialProjectModel from "./MaterialProjectModel.js";
 import AdminModel from "./AdminsModel.js";
@@ -13,7 +13,7 @@ import MapModel from "./MapModel.js";
 import ProjectMapModel from "./ProjectsMaps.js";
 import CommentModel from "./CommentsModel.js";
 import CriteriaModel from "./CriteriasModel.js";
-import CriteriaJudgeModel from "./CriteriaJudgeModel.js";
+import CriteriaJudgeModel from "./CriteriaJudgesModel.js";
 
 
 TeamModel.belongsTo(ProjectModel, {foreignKey: 'id_project'});

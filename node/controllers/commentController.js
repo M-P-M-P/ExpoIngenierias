@@ -1,5 +1,5 @@
 // controllers/commentController.js
-import Comment from '../models/comment.js';
+import Comment from '../models/CommentModel.js';
 
 // Crear un nuevo comentario
 async function createComment(req, res) {

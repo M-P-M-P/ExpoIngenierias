@@ -1,7 +1,7 @@
 import express from 'express'
 import { createAnnounce, updateAnnounce,deleteAnnounce } from '../controllers/AnnounceAdminController.js'
 import { updateCategory } from '../controllers/CategoryController.js';
-import { updateArea } from '../controllers/AreasControllers.js';
+import { updateArea } from '../controllers/AreaController.js';
 
 const router = express.Router()
 // Rutas de anuncios

@@ -1,5 +1,5 @@
 import express from 'express';
-import { fetchAllStudents , findStudentById} from '../controllers/studentController.js';
+import { fetchAllStudents , findStudentById } from '../controllers/StudentController.js';
 
 const router = express.Router();
 

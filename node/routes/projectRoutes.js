@@ -1,6 +1,6 @@
 import express from 'express';
-import Project from '../models/project.js';
-import { fetchProjectById } from '../controllers/projectController.js';
+import Project from '../models/ProjectModel.js';
+import { fetchProjectById } from '../controllers/ProjectController.js';
 
 const router = express.Router();
 

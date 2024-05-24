@@ -1,6 +1,6 @@
 // Importar Express y controladores
 import express from 'express';
-import { fetchAllTeams, fetchTeamById, fetchTeamsByLeaderId } from '../controllers/teamController.js';
+import { fetchAllTeams, fetchTeamById, fetchTeamsByLeaderId } from '../controllers/TeamController.js';
 
 const router = express.Router();
 

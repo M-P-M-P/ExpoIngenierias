@@ -17,7 +17,7 @@ router.get('/criterias', async (req, res) => {
 export default router;
 */
 import express from 'express';
-import { fetchAllCriterias } from '../controllers/criteriaController.js';
+import { fetchAllCriterias } from '../controllers/CriteriaController.js';
 
 const router = express.Router();
 

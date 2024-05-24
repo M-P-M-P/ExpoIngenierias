@@ -1,4 +1,4 @@
-import CriteriaJudge from '../models/criteria_judges.js';
+import CriteriaJudge from '../models/CriteriaJudgeModel.js';
 
 // Función para obtener todos los criterios de jueces ordenados de manera ascendente por id_person
 async function fetchAllCriteriaJudges(req, res) {

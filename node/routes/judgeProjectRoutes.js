@@ -1,5 +1,5 @@
 import express from 'express';
-import { createJudgeProject, fetchAllJudgeProjects, fetchJudgeProjectsByPersonId } from '../controllers/judgeProjectController.js';
+import { createJudgeProject, fetchAllJudgeProjects, fetchJudgeProjectsByPersonId } from '../controllers/JudgeProjectController.js';
 
 const router = express.Router();
 

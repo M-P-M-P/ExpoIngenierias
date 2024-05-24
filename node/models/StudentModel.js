@@ -1,16 +1,34 @@
-//importamos la conexión a la DB
-import db from "../database/db.js";
-//importamos sequelize
-import { DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
+import sequelize from '../database/db.js';
 
-const StudentModel = db.define('students', {
-    id: { 
-        type: DataTypes.STRING,
-        primaryKey: true
-    },
-    name: { type: DataTypes.STRING },
-    lastName: { type: DataTypes.STRING }, // CLOB puede ser representado como STRING con un límite alto en Sequelize
-    enrollment: { type: DataTypes.STRING },
+const Student = sequelize.define('students', {
+  id: {
+    type: DataTypes.STRING(50),
+    primaryKey: true,
+    allowNull: false,
+  },
+  name: {
+    type: DataTypes.STRING(30),
+    allowNull: false,
+  },
+  lastName: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+  },
+  enrollment: {
+    type: DataTypes.STRING(20),
+    allowNull: false,
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
 });
 
- export default StudentModel
+export default Student;

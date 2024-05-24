@@ -1,5 +1,5 @@
 // teamMemberController.js
-import TeamMember from '../models/teamMember.js';
+import TeamMember from '../models/TeamMemberModel.js';
 
 async function getTeamMembersByTeamId(req, res) {
   const { id } = req.params;
