@@ -19,8 +19,19 @@ import AnnounRoutes from './routes/AnnounRoutes.js'
 import AdminRoutes from "./routes/AdminRoutes.js"
 //rutas de edicion
 import EditionRoutes from "./routes/EditionRoutes.js"
-// las rutas de juez
 
+// las rutas de juez
+import criteriaRoutes from './routes/criteriaRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import areasRoutes from './routes/areasRoutes.js';
+import criteriaJudgesRoutes from './routes/criteriaJudgesRoutes.js'; 
+import commentRoutes from './routes/commentRoutes.js';
+import judgeProjectRoutes from './routes/judgeProjectRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
+import personRoutes from './routes/personRoutes.js';
+import teamsRoutes from './routes/teamRoutes.js';
+import teamMemberRoutes from './routes/teamMemberRoutes.js';
 
 const app = express()
 
@@ -41,6 +52,21 @@ app.use('/Ediciones',EditionRoutes);
 // app.use('/projects', projectRoutes);
 // app.use('/students', studentRoutes);
 
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api', criteriaRoutes);
+app.use('/api', projectRoutes);
+app.use('/api', categoryRoutes);
+app.use('/api', areasRoutes);
+app.use('/api', criteriaJudgesRoutes);
+app.use('/api', commentRoutes); 
+app.use('/api', judgeProjectRoutes); 
+app.use('/api', studentRoutes);
+app.use('/api', personRoutes);
+app.use('/api', teamsRoutes);
+app.use('/api', teamMemberRoutes);
 
 //console.log(process.env.DB_CONNECTION_STRING)
 
