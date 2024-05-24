@@ -13,12 +13,20 @@ function Historical() {
     setSelectedOption(option);
   };
 
-  const handleExport = () => {
+  const handleExport = async() => {
     setButtonClicked(true);
     if (!selectedOption) {
       alert("Debes seleccionar una opción antes de exportar.");
     } else {
-      alert(selectedOption);
+      const response = await fetch(`${URI}/export/${selectedOption}`);
+      const blob =await response.blob();
+      const url=window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href=url;
+      a.download='Historico.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     }
   };
 

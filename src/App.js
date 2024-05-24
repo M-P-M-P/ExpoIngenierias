@@ -10,6 +10,8 @@ import ProjectPage from './Pages/Admin/ProjectPage';
 import Juez from './Pages/Juez/Juez';
 import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
 import Rubrica from './Pages/Juez/Rubrica';
+import Announces from './Pages/Admin/Announces';
+import Areas from './Pages/Admin/Areas';
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function MainContent() {
         <Route path="/usuarios" element={<Users />} />
         <Route path="/proyectos" element={<Projects />} />
         <Route path="/proyecto/:id" element={<ProjectPage setPageTitle={setPageTitle} />} />
+        <Route path="/anuncios" element={<Announces/>}/>
+        <Route path="/areas" element={<Areas/>}/>
 
 
         <Route path='/ProyectosJuez' element={<Juez />}/>

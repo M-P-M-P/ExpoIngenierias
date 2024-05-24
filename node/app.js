@@ -16,6 +16,7 @@ import EditionRoutes from "./routes/EditionRoutes.js"
 // las rutas de juez
 
 
+
 const app = express()
 
 app.use(cors());
