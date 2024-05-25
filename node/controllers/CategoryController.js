@@ -3,6 +3,15 @@ import{ProjectModel} from "../models/Relations.js";
 
 import  sequelize  from "../database/db.js";
 
+export const getAllCategories = async(req,res)=>{
+  try{
+    const categories = await CategoryModel.findAll();
+    res.json(categories);
+  }catch(error){
+    res.status(500).json({message:error.message});
+  }
+};
+
 export const updateCategory = async(req,res)=>{
     try{
         await CategoryModel.update(req.body,{
