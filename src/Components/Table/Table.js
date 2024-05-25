@@ -23,11 +23,25 @@ function Table({ data, searchQuery, selectedRole }) {
     }, [searchQuery, selectedRole, data]);
 
     const handleDelete = (id) => {
-        // Filter out the row with the given id
         const updatedData = tableData.filter(row => row.id !== id);
         // Update the state with the new data
         setTableData(updatedData);
+        
+        // Make the API call to toggle the active status
+        axios.patch(`http://localhost:8000/users/toggleActiveStatus/${id}`)
+            .then(response => {
+                console.log("User status toggled successfully:", response.data);
+                
+                // Optionally, you can update the local state to reflect the change.
+                // For example, you might want to update a user's status in the table.
+                // Here, we're assuming the backend response contains the updated user data.
+                // Filter out the row with the given id
+            })
+            .catch(error => {
+                console.error("Error toggling user status:", error);
+            });
     };
+    
 
     const handleRoleChange = (id, role) => {
         // Find the index of the target user in the tableData array
@@ -116,16 +130,19 @@ function Table({ data, searchQuery, selectedRole }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* Rows */}
-                    {tableData.map((user) => (
-                        <UserRow 
-                            key={user.id} 
-                            user={user} 
-                            onDelete={handleDelete} 
-                            onRoleChange={(role) => handleRoleChange(user.id, role)} 
-                        />
-                    ))}
-                </tbody>
+    {/* Rows */}
+    {tableData
+        .filter(user => user.isActive !== 0) // Filter out rows where isActive is explicitly 0
+        .map((user) => (
+            <UserRow 
+                key={user.id} 
+                user={user} 
+                onDelete={handleDelete} 
+                onRoleChange={(role) => handleRoleChange(user.id, role)} 
+            />
+    ))}
+</tbody>
+
             </table>
         </div>
     );

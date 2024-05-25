@@ -26,7 +26,8 @@ export const getUsers = async (req, res) => {
         name: `${person.name} ${person.lastName}`,
         roles: roles,
         email: person.email || "",
-        isJudge: person.isJudge || 0
+        isJudge: person.isJudge || 0,
+        isActive: person.ISACTIVE 
       };
     });
 
@@ -34,14 +35,16 @@ export const getUsers = async (req, res) => {
       id: student.id,
       name: `${student.name} ${student.lastName}`,
       roles: ["Alumno"],
-      enrollment: student.enrollment || ""
+      enrollment: student.enrollment || "",
+      isActive: student.isActive 
     }));
 
     const transformedAdmins = admins.map(admin => ({
       id: admin.id,
       name: `${admin.name} ${admin.lastName}`,
       roles: ["Administrador"],
-      email: admin.email || ""
+      email: admin.email || "",
+      isActive: admin.isActive
     }));
 
     const allUsers = [
@@ -173,6 +176,41 @@ export const updateUserRole = async (req, res) => {
     res.status(500).json({ error: 'Internal server error while updating user role' });
   }
 }
+
+
+export const toggleUserActiveStatus = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the user in the Person, Student, or Admin models
+    let user = await PersonModel.findByPk(id);
+    if (user) {
+      user.ISACTIVE = user.ISACTIVE === 0 ? 1 : 0;
+    } else {
+      user = await StudentModel.findByPk(id);
+      if (user) {
+        user.isActive = user.isActive === 0 ? 1 : 0;
+      } else {
+        user = await AdminModel.findByPk(id);
+        if (user) {
+          user.isActive = user.isActive === 0 ? 1 : 0;
+        }
+      }
+    }
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Save the changes
+    await user.save();
+
+    res.json({ message: 'User active status toggled successfully' });
+  } catch (error) {
+    console.error("Error toggling user active status:", error);
+    res.status(500).json({ error: 'Internal server error while toggling user active status.' });
+  }
+};
 
 
 
