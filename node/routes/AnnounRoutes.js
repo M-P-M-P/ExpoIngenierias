@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.get('/announs', getAllAnnouns);
 
-router.get('/announ/:id', getAnnoun);
+router.get('/announs/:id', getAnnoun);
 
 export default router;

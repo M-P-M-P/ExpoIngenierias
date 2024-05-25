@@ -2,13 +2,16 @@ import AnnounModel from '../models/AnnounModel.js'
 
 export const getAllAnnouns = async (req, res) => {
     try {
-        const announs = await AnnounModel.findAll()
+        const announs = await AnnounModel.findAll({
+            order: [
+                ['id','ASC'] // Orden ascendente por id
+            ]
+        });
         res.json(announs)
     } catch (error) {
         res.json( {message: error.message} )
     }
 }
-
 
 export const getAnnoun = async (req, res) => {
     try {
