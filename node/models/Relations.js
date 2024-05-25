@@ -14,6 +14,7 @@ import ProjectMapModel from "./ProjectsMaps.js";
 import CommentModel from "./CommentsModel.js";
 import CriteriaModel from "./CriteriasModel.js";
 import CriteriaJudgeModel from "./CriteriaJudgeModel.js";
+import DisqualifiedModel from "./DisqualifiedModel.js";
 
 
 TeamModel.belongsTo(ProjectModel, {foreignKey: 'id_project'});
@@ -76,7 +77,15 @@ ProjectModel.belongsToMany(MaterialModel, {
         foreignKey: 'id_project'   // Nombre de la columna en team_members que referencia equipos
 });
 
+AdminModel.belongsToMany(ProjectModel,{
+        through: 'project_disqualified',
+        foreignKey: 'id_admin'
+});
 
+ProjectModel.belongsToMany(AdminModel,{
+        through: 'project_disqualified',
+        foreignKey: 'id_project'
+});
 
 StudentModel.hasMany(TeamModel, {foreignKey: 'id_leader'});
 TeamModel.belongsTo(StudentModel, {foreignKey: 'id_leader'});
@@ -125,5 +134,6 @@ export {
         CriteriaJudgeModel,
         CriteriaModel,
         AdminModel,
-        AnnounceModel
+        AnnounceModel,
+        DisqualifiedModel
 };

@@ -13,6 +13,6 @@ router.put('/Categories/update/:id',updateCategory);
 //Rutas de areas
 router.get('/Areas',getAllAreas);
 router.post('/Areas/create',createArea);
-router.put("/Areas/update/:id",updateArea);
+router.put('/Areas/update/:id',updateArea);
 router.delete('/Areas/delete/:id',deleteArea);
 export default router;
