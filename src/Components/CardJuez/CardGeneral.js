@@ -28,7 +28,7 @@ function CardCalif({ projectId, title, nivelDesarrollo, description, categoria }
           <span className="badge">{nivelDesarrollo}</span>
         </div>
 
-        <Link to={`/Juez/5/ProyectoJuez/${projectId}`} className="btn23">Ver Proyecto</Link> 
+        <Link to={`/Juez/general/${projectId}`} className="btn23">Ver Proyecto</Link> 
 
       </div>
     </div>

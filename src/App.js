@@ -17,6 +17,7 @@ import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
 import Rubrica from './Pages/Juez/Rubrica';
 import Anuncios from './Pages/Juez/Announ';
 import DetailedAnnoun from './Pages/Juez/DetailedAnnoun';
+import GeneralProjectResume from './Pages/Juez/GeneralProjectResume';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function MainContent() {
 
         <Route path="/Juez/:idpersona" element={<Juez />} />
         <Route path="/Juez/general" element={<Proyectos />} />
+        <Route path="/Juez/general/:projectId" element={<GeneralProjectResume />} />
         <Route path="/Juez/Anuncios" element={<Anuncios />} />
         <Route path="/Juez/Anuncios/:anuncioId" element={<DetailedAnnoun />} />
         <Route path="/Juez/:idpersona/Calificar/:projectId" element={<Rubrica />} />

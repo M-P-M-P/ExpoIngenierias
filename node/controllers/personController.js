@@ -12,8 +12,8 @@ export const getAllPersons = async (req, res) => {
   }
 }
 
-//Mostrar un proyecto
-export const getStudent = async (req, res) => {
+//Mostrar un registro
+export const getPerson = async (req, res) => {
       try {
           const person = await Person.findAll({
               where:{ id:req.params.id }
