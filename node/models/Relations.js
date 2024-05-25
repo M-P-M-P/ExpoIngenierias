@@ -77,15 +77,9 @@ ProjectModel.belongsToMany(MaterialModel, {
         foreignKey: 'id_project'   // Nombre de la columna en team_members que referencia equipos
 });
 
-AdminModel.belongsToMany(ProjectModel,{
-        through: 'project_disqualified',
-        foreignKey: 'id_admin'
-});
-
-ProjectModel.belongsToMany(AdminModel,{
-        through: 'project_disqualified',
-        foreignKey: 'id_project'
-});
+// Define associations if not already defined
+MaterialModel.hasMany(MaterialProjectModel, { foreignKey: 'id_material' });
+MaterialProjectModel.belongsTo(MaterialModel, { foreignKey: 'id_material' });
 
 StudentModel.hasMany(TeamModel, {foreignKey: 'id_leader'});
 TeamModel.belongsTo(StudentModel, {foreignKey: 'id_leader'});

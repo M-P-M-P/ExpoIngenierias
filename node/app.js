@@ -4,9 +4,15 @@ import express  from "express"
 import cors from 'cors'
 import session from 'express-session'
 import SequelizeStore from 'connect-session-sequelize'
+
 //importamos la conexión a la DB
 import db from "./database/db.js"
+
 //importamos nuestro enrutador
+
+//hay que importar las rutas de admin
+import UserRoutes from './routes/UserRoutes.js';
+import CategoryRoutes from './routes/CategoryRoutes.js'
 import studentRoutes from './routes/StudentRoutes.js'
 import projectRoutes from './routes/ProjectRoutes.js'
 import AnnounRoutes from './routes/AnnounRoutes.js'
@@ -22,6 +28,12 @@ const app = express()
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+// Adimn Routes
+app.use('/users', UserRoutes);
+app.use('/categories', CategoryRoutes);
+
+// Judge Routes
 app.use('/projects', projectRoutes);
 app.use('/students', studentRoutes);
 app.use('/announ', AnnounRoutes);
@@ -32,7 +44,6 @@ app.use('/Ediciones',EditionRoutes);
 
 
 //console.log(process.env.DB_CONNECTION_STRING)
-
 
 try {
     await db.authenticate()

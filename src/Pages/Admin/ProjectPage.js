@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { mockProjects } from '../../MockData/MockData';
+import axios from 'axios';
 
 import Widget from '../../Components/Widget/Widget';
 import VideoCard from '../../Components/VideoCard/VideoCard';
@@ -11,16 +11,26 @@ import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar';
 
 function ProjectPage({ setPageTitle }) {
   const { projectId } = useParams(); // Get the project ID from URL parameter
-  const project = mockProjects.find(project => project.id.toString() === projectId); // Find the project by ID
+  const [project, setProject] = useState(null); // State to store the project data
+  const [loading, setLoading] = useState(true); // State to manage loading state
+  const [error, setError] = useState(null); // State to manage error state
 
   useEffect(() => {
-    // Update the title when the component mounts
-    if (project) {
-      setPageTitle(project.title);
-    }
-  }, [project, setPageTitle]);
+    // Fetch the project data from the backend
+    const fetchProject = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/projects/resume/${projectId}`);
+        setProject(response.data);
+        setPageTitle(response.data.title); // Update the title when data is fetched
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
 
-  const { poster, video, description } = project;
+    fetchProject();
+  }, [projectId, setPageTitle]);
 
   // Function to handle descalification
   const handleDescalify = () => {
@@ -30,10 +40,20 @@ function ProjectPage({ setPageTitle }) {
     }
   };
 
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (error) {
+    return <h1>Error: {error}</h1>;
+  }
+
   // If project is not found, display the project ID
   if (!project) {
     return <h1>Project with ID "{projectId}" not found!</h1>;
   }
+
+  const { poster, video, description } = project;
 
   return (
     <>
@@ -56,15 +76,15 @@ function ProjectPage({ setPageTitle }) {
         </div>
 
         <div className="row">
-          <div className="col-lg-3">
+          {/* <div className="col-lg-3">
             <Widget title={"Juez Encargado"} centered={true} content={<AssignJudge categories={project.categories} />} />
-          </div>
+          </div> */}
           <div className="col-lg-6">
             <Widget title={"Equipo"} centered={true} content={<ProjectMembers project={project} />} />
           </div>
-          <div className="col-lg-3">
+          {/* <div className="col-lg-3">
             <Widget title={"Calificación"} centered={true} content={<ProjectScore score={project.score} isDisqualified={project.isDisqualified} allProjects={mockProjects} />} />
-          </div>
+          </div> */}
         </div>
 
         <div className="row mb-3">

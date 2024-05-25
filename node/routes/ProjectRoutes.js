@@ -1,5 +1,5 @@
 import express from 'express'
-import { deleteProject, getAllProjects, getProject, handleRegister, handleEdition, handleResumen, getProjectsByResponsable} from '../controllers/ProjectController.js'
+import { deleteProject, getAllProjects, getProject, handleRegister, handleEdition, handleResumen, getProjectsByResponsable, getProjectStatusData, getMaterialChecklistItems} from '../controllers/ProjectController.js'
 
 const router = express.Router()
 
@@ -9,6 +9,11 @@ const router = express.Router()
 router.get('/', getAllProjects);
 //Obtener un solo proyecto por su id
 router.get('/resume/:id', getProject);
+
+// Get the count of reviewed project for the dashboard doughnnut chard
+router.get('/getProjectStatusDoughnut/ChartData', getProjectStatusData);
+// Get the admin material checklist
+router.get('/getMaterialChecklist/Data', getMaterialChecklistItems)
 
 //router.put('/:id', updateProject);
 router.delete('/delete/:id', deleteProject);
