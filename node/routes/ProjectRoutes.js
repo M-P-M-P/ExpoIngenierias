@@ -1,5 +1,5 @@
 import express from 'express'
-import { deleteProject, getAllProjects, getProject, handleRegister, handleEdition, handleResumen, getProjectsByResponsable, getProjectStatusData, getMaterialChecklistItems} from '../controllers/ProjectController.js'
+import { deleteProject, disqualifyProject,getAllProjects, getProject, handleRegister, handleEdition, handleResumen, getProjectsByResponsable, getProjectStatusData, getMaterialChecklistItems} from '../controllers/ProjectController.js'
 
 const router = express.Router()
 
@@ -25,6 +25,10 @@ router.all('/resumeProject/:id', handleResumen)
 //Registro del proyecto
 router.all('/register', handleRegister)
 router.get('/responsable/:id_responsable', getProjectsByResponsable);
+
+// Disqualify a project
+router.post('/disqualify', disqualifyProject);
+
 
 
 
