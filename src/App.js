@@ -13,13 +13,13 @@ import Announces from './Pages/Admin/Announces';
 import Areas from './Pages/Admin/Areas';
 
 // Judge
-import Juez from './Pages/Juez/Juez';
-import Proyectos from './Pages/Juez/Proyectos';
+import Juez from './Pages/Juez/Juez'; // Mis Proyectos
+import Proyectos from './Pages/Juez/Proyectos'; // Catalogo Proyectos
 import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
+import GeneralProjectResume from './Pages/Juez/GeneralProjectResume';
 import Rubrica from './Pages/Juez/Rubrica';
 import Anuncios from './Pages/Juez/Announ';
 import DetailedAnnoun from './Pages/Juez/DetailedAnnoun';
-import GeneralProjectResume from './Pages/Juez/GeneralProjectResume';
 
 function App() {
   return (
@@ -46,6 +46,8 @@ function MainContent() {
     <>
       <Routes>
         <Route path="/" element={<Navigate to={`/Juez/${defaultIdPersona}`} />} />
+
+        <Route path="/Admin" element={<Dashboard />} />
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
         <Route path="/usuarios/:userId" element={<EditUserPage />} />
@@ -62,12 +64,7 @@ function MainContent() {
         <Route path="/Juez/Anuncios/:anuncioId" element={<DetailedAnnoun />} />
         <Route path="/Juez/:idpersona/Calificar/:projectId" element={<Rubrica />} />
         <Route path="/Juez/:idpersona/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
-
-{/*
-        <Route path='/ProyectosJuez' element={<Juez />}/>
-        <Route path="/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
-        <Route path="/Calificar/:projectId" element={<Rubrica />} />
-        */}
+        
       </Routes>
     </>
   );
