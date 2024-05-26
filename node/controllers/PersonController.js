@@ -1,8 +1,66 @@
 //importamos el Modelo
-import {PersonModel} from "../models/Relations.js"
+import {ProjectModel, PersonModel, AreaModel, AreaPersonModel} from "../models/Relations.js"
 
 //** Métodos para el CRUD **/
 
+// Get all judges for a given area, excluding the project responsible
+export const getAreaJudge = async (req, res) => {
+    const { areaId } = req.params; // Assume the area ID is provided as a URL parameter
+    const { projectId } = req.query; // Assume the project ID is provided as a query parameter
+
+    try {
+        // Retrieve the project to get the id_responsable
+        const project = await ProjectModel.findByPk(projectId);
+
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        const { id_responsable } = project;
+
+        // Find all judges for the given area
+        const judges = await PersonModel.findAll({
+            include: [{
+                model: AreaModel,
+                through: {
+                    model: AreaPersonModel,
+                    attributes: []
+                },
+                where: { id: areaId }
+            }],
+            where: { isJudge: 1 }
+        });
+
+        if (judges.length === 0) {
+            return res.status(404).json({ message: 'No judges found for the given area' });
+        }
+
+        // Filter out the project responsible from the list of judges
+        const filteredJudges = judges.filter(judge => judge.id !== id_responsable);
+
+        // Map the judges to the desired format
+        const formattedJudges = filteredJudges.map(judge => ({
+            id: judge.id,
+            name: judge.name,
+            lastName: judge.lastName,
+            profileImg: "user.png"
+        }));
+
+        res.json(formattedJudges);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------------
 //Mostrar todos los registros
 export const getAllPersons = async (req, res) => {
     try {

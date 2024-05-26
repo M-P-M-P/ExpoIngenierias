@@ -32,7 +32,7 @@ export const StudentModel = db.define('Student', {
 
 export const AdminModel = db.define('Admin', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     primaryKey: true
   },
   name: { type: DataTypes.STRING },
