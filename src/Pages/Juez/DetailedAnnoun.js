@@ -83,7 +83,7 @@ function AnnounBody({ Contenido, isLoaded }) {
   }
 
 export default function DetailedAnnounCont() {
-    const { anuncioId } = useParams();
+    const { idpersona, anuncioId } = useParams();
     const [announDet, setAnnounDet] = useState({
         id:0,
       title: "",
@@ -99,7 +99,7 @@ export default function DetailedAnnounCont() {
           setAnnounDet(data);
           setIsLoading(false); // Datos obtenidos, desactivar estado de carga
         });
-    }, [anuncioId]);
+    }, [idpersona, anuncioId]);
   
     return (
       <>
@@ -111,8 +111,8 @@ export default function DetailedAnnounCont() {
           <div className="row mt-4 p-3 ContainerAnnoun d-flex align-items-center">
             <AnnounBody Contenido={announDet.description} isLoaded={!isLoading}></AnnounBody>
           </div>
-          <Link to={'/Juez/Anuncios'} className="row mt-4 p-3 ContainerAnnounBut ButtReturn d-flex justify-items-center">
-            <Link to={'/Juez/Anuncios'} className="text-center ButtReturn">Regresar a anuncios</Link>
+          <Link to={`/Juez/Anuncios/${idpersona}`} className="row mt-4 p-3 ContainerAnnounBut ButtReturn d-flex justify-items-center">
+            <Link to={`/Juez/Anuncios/${idpersona}`} className="text-center ButtReturn">Regresar a anuncios</Link>
           </Link>
         </div>
       </>

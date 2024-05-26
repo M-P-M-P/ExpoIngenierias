@@ -30,6 +30,8 @@ function AnnounInfo({ announ, isLoading }) {
       }
       return text.slice(0, limit) + '...';
     };
+
+    const params = useParams();
   
     return (
       <>
@@ -56,7 +58,7 @@ function AnnounInfo({ announ, isLoading }) {
           </>
         ) : (
           <>
-          <Link to={`/Juez/Anuncios/${announ.id}`} className='row m-3 p-2 AnnounInfoContainer d-flex align-items-center'>
+          <Link to={`/Juez/Anuncios/${params.idpersona}/DetailAnnoun/${announ.id}`} className='row m-3 p-2 AnnounInfoContainer d-flex align-items-center'>
             <div className='col-3 d-flex align-items-center'>
               <i className='bi bi-envelope-fill AnnounIcon'></i>
               <span className='Titulo'> {announ.title}</span>
@@ -92,6 +94,7 @@ export default function AnnounCont() {
     const [allAnnouncements, setAllAnnouncements] = useState([]);
     const [filteredAnnouncements, setFilteredAnnouncements] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const {idpersona,anuncioid} = useParams
   
     useEffect(() => {
       fetch('http://localhost:8000/api/announs')
@@ -101,7 +104,7 @@ export default function AnnounCont() {
           setFilteredAnnouncements(data);
           setIsLoading(false); // Datos obtenidos, desactivar estado de carga
         });
-    }, []);
+    }, [idpersona,anuncioid]);
   
     const handleSearch = (searchText) => {
       if (searchText.trim() === '') {

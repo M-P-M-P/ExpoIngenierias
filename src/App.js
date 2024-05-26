@@ -20,6 +20,7 @@ import GeneralProjectResume from './Pages/Juez/GeneralProjectResume';
 import Rubrica from './Pages/Juez/Rubrica';
 import Anuncios from './Pages/Juez/Announ';
 import DetailedAnnoun from './Pages/Juez/DetailedAnnoun';
+import Perfil from './Pages/Juez/Profile';
 
 function App() {
   return (
@@ -58,13 +59,14 @@ function MainContent() {
         <Route path="/areas" element={<Areas/>}/>
 
         <Route path="/Juez/:idpersona" element={<Juez />} />
-        <Route path="/Juez/general" element={<Proyectos />} />
-        <Route path="/Juez/general/:projectId" element={<GeneralProjectResume />} />
-        <Route path="/Juez/Anuncios" element={<Anuncios />} />
-        <Route path="/Juez/Anuncios/:anuncioId" element={<DetailedAnnoun />} />
+        <Route path="/Juez/General/:idpersona" element={<Proyectos />} />
+        <Route path="/Juez/General/:idpersona/Proyectos/:projectId" element={<GeneralProjectResume />} />
+        <Route path="/Juez/Anuncios/:idpersona" element={<Anuncios />} />
+        <Route path="/Juez/Anuncios/:idpersona/DetailAnnoun/:anuncioId" element={<DetailedAnnoun />} />
         <Route path="/Juez/:idpersona/Calificar/:projectId" element={<Rubrica />} />
         <Route path="/Juez/:idpersona/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
-        
+        <Route path="/Juez/Perfil/:idpersona" element={<Perfil />} />
+
       </Routes>
     </>
   );
@@ -81,6 +83,10 @@ const getTitle = (pathname) => {
       return 'Usuarios';
     case '/proyectos':
       return 'Proyectos';
+    case '/anuncios':
+      return 'Anuncios';
+    case '/perfil':
+      return 'Perfil';
     default:
       return 'Your Default Title';
   }

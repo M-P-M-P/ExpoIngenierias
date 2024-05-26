@@ -1,11 +1,11 @@
 //CardGeneral.js
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import './Juez.css'; // Importa el archivo CSS con estilos personalizados
 
-function CardCalif({ projectId, title, nivelDesarrollo, description, categoria }) {
+function CardCalif({ projectId, title, nivelDesarrollo, description, categoria, idpersona}) {
   const truncateText = (text, limit) => {
     if (text.length <= limit) {
       return text;
@@ -28,7 +28,7 @@ function CardCalif({ projectId, title, nivelDesarrollo, description, categoria }
           <span className="badge">{nivelDesarrollo}</span>
         </div>
 
-        <Link to={`/Juez/general/${projectId}`} className="btn23">Ver Proyecto</Link> 
+        <Link to={`/Juez/General/${idpersona}/Proyectos/${projectId}`} className="btn23">Ver Proyecto</Link> 
 
       </div>
     </div>
@@ -39,6 +39,7 @@ export function Cardlist() {
   const [projects, setProjects] = useState([]);
   const [categories, setCategories] = useState({});
   const [areas, setAreas] = useState({});
+  const { idpersona } = useParams();
 
   useEffect(() => {
     // Realizar la llamada al servidor para obtener todos los proyectos
@@ -74,7 +75,7 @@ export function Cardlist() {
         setAreas(areaMap);
       })
       .catch(error => console.error('Error al obtener las áreas:', error));
-  }, []);
+  }, [idpersona]);
 
   return (
     <>
@@ -85,6 +86,7 @@ export function Cardlist() {
           description={project.description}
           categoria={categories[project.id_category]}
           nivelDesarrollo={areas[project.id_area]}
+          idpersona={idpersona}
           key={project.id}
         />
       )}

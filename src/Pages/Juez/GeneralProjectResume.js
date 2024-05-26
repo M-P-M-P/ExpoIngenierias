@@ -66,12 +66,13 @@ function ProjResume({ type, area, descr, title }) {
 }
 
 function ProjVal() {
+  const params = useParams()
 
   return (
     <div className='col-md-3'>
       <div className="Info2 m-2 p-4">
         <div className="row pb-3 mt-3">
-          <Link to={`/Juez/general`} className="btn5">Regresar al Catalogo</Link>
+          <Link to={`/Juez/General/${params.idpersona}`} className="btn5">Regresar al Catalogo</Link>
         </div>
       </div>
     </div>
