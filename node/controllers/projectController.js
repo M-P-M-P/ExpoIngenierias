@@ -1,5 +1,5 @@
 import db from "../database/db.js";
-import {ProjectModel, PersonModel, StudentModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel, EditionModel} from "../models/Relations.js"
+import {ProjectModel, PersonModel, AsessorProjectModel, StudentModel, AdminModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel, EditionModel, DisqualifiedModel} from "../models/Relations.js"
 import Project from "../models/ProjectModel.js";
 import { Sequelize } from 'sequelize';  // Import Sequelize
 
@@ -9,7 +9,7 @@ import { Sequelize } from 'sequelize';  // Import Sequelize
 // Helper function to transform project data into the desired format
 const transformProjectData = async (project) => {
     const leader = await StudentModel.findByPk(project.id_lider);
-    const responsable = await PersonModel.findByPk(project.id_responsable);
+    const teacher = await PersonModel.findByPk(project.id_responsable);
     const category = await CategoryModel.findByPk(project.id_category);
     const area = await AreaModel.findByPk(project.id_area);
     const edition = await EditionModel.findByPk(project.id_edition);
@@ -30,13 +30,30 @@ const transformProjectData = async (project) => {
     // Determine if project is reviewed
     const isReviewed = project.statusGeneral === "revisado";
 
-    // Retrieve the names of the teachers
-    const teachers = await PersonModel.findAll({
-        where: {
-            id: project.id_responsable // Adjust this if multiple teachers are involved
-        }
+    // Check if the project is disqualified
+    const disqualifiedEntry = await DisqualifiedModel.findOne({
+        where: { id_project: project.id }
     });
-    const transformedTeachers = teachers.map(teacher => teacher.name);
+    const isDisqualified = disqualifiedEntry !== null;
+
+    // Retrieve all person IDs related to the project
+    const assessorEntries = await AsessorProjectModel.findAll({
+        where: { id_project: project.id },
+        attributes: ['id_person']
+    });
+    const assessorIds = assessorEntries.map(entry => entry.id_person);
+
+    // Retrieve the names of the persons
+    const assessors = await PersonModel.findAll({
+        where: { id: assessorIds },
+        attributes: ['name']
+    });
+    const teacherNames = assessors.map(assessor => assessor.name);
+
+    // Include the responsible teacher at the beginning of the teacher names array
+    if (teacher) {
+        teacherNames.unshift(teacher.name);
+    }
 
     return {
         id: project.id,
@@ -47,12 +64,13 @@ const transformProjectData = async (project) => {
         video: "https://youtu.be/fFHlfbKVi30?si=L24uiVr-kFUA0eEP",
         description: project.description,
         categories: [category.title, area.name], 
+        id_area: project.id_area,
         leader: leader.name,
         members: transformedMembers,
-        teachers: [transformedTeachers], // Assuming one responsible person
+        teachers: teacherNames, // Assuming one responsible person
         edition: edition.id, 
         score: 0, // Add score to the ProjectModel 
-        isDisqualified: false // Example mapping
+        isDisqualified: isDisqualified
     };
 };
 
@@ -84,6 +102,41 @@ export const getProject = async (req, res) => {
 
         const transformedProject = await transformProjectData(project);
         res.json(transformedProject);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Function to disqualify a project
+export const disqualifyProject = async (req, res) => {
+    const { id_admin, id_project, reason } = req.body;
+
+    // Check if all required fields are provided
+    if (!id_admin || !id_project || !reason) {
+        return res.status(400).json({ message: "id_admin, id_project, and reason are required" });
+    }
+
+    try {
+        // Check if the admin exists
+        const admin = await AdminModel.findByPk(id_admin);
+        if (!admin) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+        
+        // Check if the project exists
+        const project = await ProjectModel.findByPk(id_project);
+        if (!project) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+
+        // Create the disqualification entry
+        await DisqualifiedModel.create({
+            id_admin: id_admin,
+            id_project: id_project,
+            reason: reason
+        });
+
+        res.status(201).json({ message: "Project disqualified successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

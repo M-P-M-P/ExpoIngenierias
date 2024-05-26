@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Button } from 'react-bootstrap';
 
 import Widget from '../../Components/Widget/Widget';
 import VideoCard from '../../Components/VideoCard/VideoCard';
-import AssignJudge from '../../Components/AssignJudge/AssignJudge';
+import AssignJudge from '../../Components/AsignJudge/AsignJudge';
 import ProjectScore from '../../Components/ProjectScore/ProjectScore';
 import ProjectMembers from '../../Components/ProjectMembers/ProjectMembers';
 import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar';
-import CustomModal from '../../Components/CustomModal/CustomModal';
 
 function ProjectPage({ setPageTitle }) {
-  const { projectId } = useParams();
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
-  const adminId = 'Auth013'; // Replace this with the actual admin ID from your authentication logic
+  const { projectId } = useParams(); // Get the project ID from URL parameter
+  const [project, setProject] = useState(null); // State to store the project data
+  const [loading, setLoading] = useState(true); // State to manage loading state
+  const [error, setError] = useState(null); // State to manage error state
 
   useEffect(() => {
+    // Fetch the project data from the backend
     const fetchProject = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/projects/resume/${projectId}`);
         setProject(response.data);
-        setPageTitle(response.data.title);
+        setPageTitle(response.data.title); // Update the title when data is fetched
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -36,17 +32,12 @@ function ProjectPage({ setPageTitle }) {
     fetchProject();
   }, [projectId, setPageTitle]);
 
+  // Function to handle descalification
   const handleDescalify = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
-  const handleSuccess = (message) => {
-    alert(message); // Show success message to the user
-    navigate('/proyectos'); // Redirect to the projects page after the alert
+    const confirmed = window.confirm("Estas seguro de que quieres descalificar el proyecto?");
+    if (confirmed) {
+      // Add your logic to descalify the project here
+    }
   };
 
   if (loading) {
@@ -57,6 +48,7 @@ function ProjectPage({ setPageTitle }) {
     return <h1>Error: {error}</h1>;
   }
 
+  // If project is not found, display the project ID
   if (!project) {
     return <h1>Project with ID "{projectId}" not found!</h1>;
   }
@@ -65,11 +57,9 @@ function ProjectPage({ setPageTitle }) {
 
   return (
     <>
-      <NavigationBar NameSection={project.title}/>
+    <NavigationBar NameSection={project.title}/>
       <div className="container-fluid mt-3">
         <div className="row">
-          {/* Your existing code for displaying project information */}
-
           <div className="col-lg-6">
             <Widget title={"Póster"} centered={true} content={<img style={{height:"625px"}} src={`${process.env.PUBLIC_URL}/${poster}`} alt="Project Image" />} />
           </div>
@@ -84,14 +74,11 @@ function ProjectPage({ setPageTitle }) {
             </div>
           </div>
         </div>
-        {/* Your existing code for displaying project information */}
 
         <div className="row">
-
-          <div className="col-lg-3">
-            <Widget title={"Juez Encargado"} centered={true} content={<AssignJudge area={project.id_area} project={project.id}/>} />
-          </div>
-
+          {/* <div className="col-lg-3">
+            <Widget title={"Juez Encargado"} centered={true} content={<AssignJudge categories={project.categories} />} />
+          </div> */}
           <div className="col-lg-6">
             <Widget title={"Equipo"} centered={true} content={<ProjectMembers project={project} />} />
           </div>
@@ -107,15 +94,6 @@ function ProjectPage({ setPageTitle }) {
           </div>
         </div>
       </div>
-
-      {/* Use CustomModal component */}
-      <CustomModal
-        show={showModal}
-        handleClose={handleCloseModal}
-        projectId={projectId}
-        adminId={adminId}
-        handleSuccess={handleSuccess}
-      />
     </>
   );
 }

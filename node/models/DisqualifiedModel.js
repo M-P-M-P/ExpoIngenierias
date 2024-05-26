@@ -12,7 +12,7 @@ const DisqualifiedModel = db.define('project_disqualified', {
         }
     },
     id_admin: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
         references: {
@@ -21,11 +21,12 @@ const DisqualifiedModel = db.define('project_disqualified', {
         }
     },
     reason: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true
     }
 }, {
-    timestamps: true 
+    timestamps: true,
+    tableName: 'project_disqualified', // Ensure the correct table name
 });
 
 export default DisqualifiedModel;
