@@ -17,9 +17,13 @@ const AdminModel = db.define('admins', {
     lastName: {
         type: DataTypes.STRING,
         allowNull: false,
-    }, email: {
+    }, 
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
+    }, 
+    isActive: {
+        type: DataTypes.INTEGER
     }
 });
 

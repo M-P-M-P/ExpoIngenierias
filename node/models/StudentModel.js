@@ -19,6 +19,10 @@ const Student = sequelize.define('students', {
     type: DataTypes.STRING(20),
     allowNull: false,
   },
+  isActive: { 
+    type: DataTypes.INTEGER,
+    allowNull: false, 
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,

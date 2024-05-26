@@ -22,14 +22,14 @@ function ProjectCard({ project }) {
               <span key={index} className="badge">{category}</span>
             ))}
           </div>
-          <Link to={`/proyecto/${id}`} className="btn btn-primary custom-primaty-btn btnPrin">Abrir</Link>
+          <Link to={`/proyectos/${id}`} className="btn btn-primary custom-primaty-btn btnPrin">Abrir</Link>
         </div>
       </div>
     );
 }
 
-export default function ProjectCardsList({ filter, searchTerm }) {
-  let filteredProjects = mockProjects;
+export default function ProjectCardsList({ data, filter, searchTerm }) {
+  let filteredProjects = data;
 
   // Apply filter based on selected edition
   if (filter) {

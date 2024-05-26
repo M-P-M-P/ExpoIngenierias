@@ -14,6 +14,7 @@ import ProjectMapModel from "./ProjectsMaps.js";
 import CommentModel from "./CommentsModel.js";
 import CriteriaModel from "./CriteriasModel.js";
 import CriteriaJudgeModel from "./CriteriaJudgesModel.js";
+import DisqualifiedModel from "./DisqualifiedModel.js";
 
 
 TeamModel.belongsTo(ProjectModel, {foreignKey: 'id_project'});
@@ -37,6 +38,11 @@ ProjectModel.belongsTo(CategoryModel, { foreignKey: 'id_category' });
 EditionModel.hasMany(ProjectModel, {foreignKey: 'id_edition'});
 PersonModel.hasMany(ProjectModel, {foreignKey: 'id_responsable'});
 
+AdminModel.hasMany(DisqualifiedModel,{foreignKey: 'id_admin'});
+DisqualifiedModel.belongsTo(AdminModel,{foreignKey: 'id_admin'});
+
+ProjectModel.hasMany(DisqualifiedModel,{foreignKey: 'id_project'});
+DisqualifiedModel.belongsTo(AdminModel,{foreignKey: 'id_project'});
 //Definición de la relacion de admin con anuncios
 
 AdminModel.belongsToMany(AnnounceModel,
@@ -97,19 +103,19 @@ MapModel.belongsToMany(ProjectModel,{
 
 //comentarios
 PersonModel.hasMany(CommentModel,{foreignKey:'id_person'});
-CommentModel.belongsTo(PersonModel,{foreignKey:'id'});
+CommentModel.belongsTo(PersonModel,{foreignKey:'id_person'});
 ProjectModel.hasMany(CommentModel,{foreignKey:'id_project'});
-CommentModel.belongsTo(ProjectModel, { foreignKey: 'id' });
+CommentModel.belongsTo(ProjectModel, { foreignKey: 'id_project' });
 
 //criterios
 CriteriaModel.hasMany(CriteriaJudgeModel,{foreignKey:'id_criteria'});
-CriteriaJudgeModel.belongsTo(CriteriaModel,{foreignKey:'id'});
+CriteriaJudgeModel.belongsTo(CriteriaModel,{foreignKey:'id_criteria'});
 
 PersonModel.hasMany(CriteriaJudgeModel,{foreignKey:'id_person'});
-CriteriaJudgeModel.belongsTo(PersonModel,{foreignKey:'id'});
+CriteriaJudgeModel.belongsTo(PersonModel,{foreignKey:'id_person'});
 
 ProjectModel.hasMany(CriteriaJudgeModel,{foreignKey:'id_project'});
-CriteriaJudgeModel.belongsTo(ProjectModel,{foreignKey: 'id'});
+CriteriaJudgeModel.belongsTo(ProjectModel,{foreignKey: 'id_project'});
 
 export {
         AreaModel,
@@ -127,5 +133,6 @@ export {
         CriteriaJudgeModel,
         CriteriaModel,
         AdminModel,
-        AnnounceModel
+        AnnounceModel,
+        DisqualifiedModel
 };

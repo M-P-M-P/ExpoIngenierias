@@ -1,57 +1,142 @@
 import db from "../database/db.js";
-import { ProjectModel, PersonModel, StudentModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel } from "../models/Relations.js"
+import {ProjectModel, PersonModel, StudentModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel, EditionModel} from "../models/Relations.js"
 import Project from "../models/ProjectModel.js";
 import { Sequelize } from 'sequelize';  // Import Sequelize
 
 //** Métodos para el CRUD **/
 
-//Mostrar todos los registros
+
+// Helper function to transform project data into the desired format
+const transformProjectData = async (project) => {
+    const leader = await StudentModel.findByPk(project.id_lider);
+    const responsable = await PersonModel.findByPk(project.id_responsable);
+    const category = await CategoryModel.findByPk(project.id_category);
+    const area = await AreaModel.findByPk(project.id_area);
+    const edition = await EditionModel.findByPk(project.id_edition);
+
+    // Retrieve all team members for the project, excluding the leader
+    const members = await StudentModel.findAll({
+        include: [{
+            model: TeamModel,
+            where: { id_project: project.id }
+        }]
+    });
+
+    // Filter out the leader from the members list
+    const transformedMembers = members
+        .filter(member => member.id !== project.id_lider)
+        .map(member => member.id);
+
+    // Determine if project is reviewed
+    const isReviewed = project.statusGeneral === "revisado";
+
+    // Retrieve the names of the teachers
+    const teachers = await PersonModel.findAll({
+        where: {
+            id: project.id_responsable // Adjust this if multiple teachers are involved
+        }
+    });
+    const transformedTeachers = teachers.map(teacher => teacher.name);
+
+    return {
+        id: project.id,
+        title: project.title,
+        review: isReviewed,
+        img: "mockProject.jpeg", // Placeholder, update as necessary
+        poster: "poster.jpg",
+        video: "https://youtu.be/fFHlfbKVi30?si=L24uiVr-kFUA0eEP",
+        description: project.description,
+        categories: [category.title, area.name], 
+        leader: leader.name,
+        members: transformedMembers,
+        teachers: [transformedTeachers], // Assuming one responsible person
+        edition: edition.id, 
+        score: 0, // Add score to the ProjectModel 
+        isDisqualified: false // Example mapping
+    };
+};
+
+
+// Mostrar todos los registros
 export const getAllProjects = async (req, res) => {
     try {
-        const projects = await ProjectModel.findAll()
-        res.json(projects)
-    } catch (error) {
-        res.json( {message: error.message} )
-    }
-}
+        const projects = await ProjectModel.findAll();
 
-//Mostrar un proyecto
+        const transformedProjects = await Promise.all(
+            projects.map(project => transformProjectData(project))
+        );
+
+        res.json(transformedProjects);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Fetch a single project by ID
 export const getProject = async (req, res) => {
     try {
-        const project = await ProjectModel.findByPk(req.params.id, {
-            include: [
-                { model: AreaModel },
-                { model: CategoryModel },
-                { model: PersonModel },
-                { model: StudentModel },
-                {model: TeamModel,
-                    include: [
-                        {
-                            model: StudentModel,
-                            through: 'team_members'
-                        }
-                    ]
-                }
-                
-            ]
-        });
+        const { id } = req.params;
+        const project = await ProjectModel.findByPk(id);
 
-        // Verificar si se encontró el proyecto
         if (!project) {
-            return res.status(404).json({ message: 'El proyecto no fue encontrado.' });
+            return res.status(404).json({ message: 'Project not found' });
         }
+
+        const transformedProject = await transformProjectData(project);
+        res.json(transformedProject);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+//--------------------------------------------------------------------------------------------------------------------------------------------
+//Mostrar todos los registros
+// export const getAllProjects = async (req, res) => {
+//     try {
+//         const projects = await ProjectModel.findAll()
+//         res.json(projects)
+//     } catch (error) {
+//         res.json( {message: error.message} )
+//     }
+// }
+
+//Mostrar un proyecto
+// export const getProject = async (req, res) => {
+//     try {
+//         const project = await ProjectModel.findByPk(req.params.id, {
+//             include: [
+//                 { model: AreaModel },
+//                 { model: CategoryModel },
+//                 { model: PersonModel },
+//                 { model: StudentModel },
+//                 {model: TeamModel,
+//                     include: [
+//                         {
+//                             model: StudentModel,
+//                             through: 'team_members'
+//                         }
+//                     ]
+//                 }
+                
+//             ]
+//         });
+
+//         // Verificar si se encontró el proyecto
+//         if (!project) {
+//             return res.status(404).json({ message: 'El proyecto no fue encontrado.' });
+//         }
         
 
 
 
-        // Responder con el proyecto que incluye los nombres de la categoría y el área
-        res.json(project);
-    } catch (error) {
-        // Manejar cualquier error que ocurra durante la consulta
-        console.error('Error al obtener el proyecto:', error);
-        res.status(500).json({ message: 'Hubo un error al obtener el proyecto.' });
-    }
-}
+//         // Responder con el proyecto que incluye los nombres de la categoría y el área
+//         res.json(project);
+//     } catch (error) {
+//         // Manejar cualquier error que ocurra durante la consulta
+//         console.error('Error al obtener el proyecto:', error);
+//         res.status(500).json({ message: 'Hubo un error al obtener el proyecto.' });
+//     }
+// }
 
 
 //Actualizar un proyecto

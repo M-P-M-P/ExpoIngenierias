@@ -9,6 +9,8 @@ import Users from './Pages/Admin/Users';
 import EditUserPage from './Pages/Admin/EditUserPage';
 import Projects from './Pages/Admin/Projects';
 import ProjectPage from './Pages/Admin/ProjectPage';
+import Announces from './Pages/Admin/Announces';
+import Areas from './Pages/Admin/Areas';
 
 // Judge
 import Juez from './Pages/Juez/Juez';
@@ -48,7 +50,10 @@ function MainContent() {
         <Route path="/usuarios" element={<Users />} />
         <Route path="/usuarios/:userId" element={<EditUserPage />} />
         <Route path="/proyectos" element={<Projects />} />
+        <Route path="/proyectos/:projectId" element={<ProjectPage setPageTitle={setPageTitle} />} />
         <Route path="/proyecto/:id" element={<ProjectPage setPageTitle={setPageTitle} />} />
+        <Route path="/anuncios" element={<Announces/>}/>
+        <Route path="/areas" element={<Areas/>}/>
 
         <Route path="/Juez/:idpersona" element={<Juez />} />
         <Route path="/Juez/general" element={<Proyectos />} />
