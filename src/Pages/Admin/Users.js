@@ -3,7 +3,8 @@ import Table from '../../Components/Table/Table';
 import { userTabledata } from '../../MockData/MockData';
 import SearchBar from '../../Components/SearchBar/SearchBar';
 import RoleFilter from '../../Components/RoleFilter/RoleFilter';
-import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
+import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar';
+import Loader from '../../Components/Loader/Loader';
 
 // function Users() {
 //     const [searchQuery, setSearchQuery] = useState("");
@@ -71,7 +72,11 @@ function Users() {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <><NavigationBar NameSection={"Usuarios"} />
+        <div style={{display:'flex', justifyContent:'center'}}>
+        <Loader/>
+        </div>
+        </>
     }
 
     if (error) {

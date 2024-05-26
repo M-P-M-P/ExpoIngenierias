@@ -6,6 +6,7 @@ import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar';
 import DoughnutChart from '../../Components/DoughnutChart/DoughnutChart';
 import Checklist from '../../Components/Checklist/Checklist';
 import Timer from '../../Components/Timer/Timer';
+import Loader from '../../Components/Loader/Loader';
 
 const useFetchData = (url, isChecklist = false) => {
   const [data, setData] = useState(isChecklist ? [] : { labels: [], data: [] });
@@ -48,7 +49,14 @@ function Dashboard() {
   const { data: checklistData, loading: loadingChecklistData, error: errorChecklistData } = useFetchData(checklistApiUrl, true); // Fetching checklist items
 
   if (loadingUserData || loadingCategoryData || loadingProjectStatusData || loadingChecklistData) {
-    return <div>Loading...</div>;
+    return (
+      <>
+      <NavigationBar NameSection={"Tablero"} />
+      <div style={{display:'flex', justifyContent:'center'}}>
+      <Loader/>
+      </div>
+      </>
+    );
   }
 
   if (errorUserData || errorCategoryData || errorProjectStatusData || errorChecklistData) {

@@ -1,0 +1,49 @@
+.contenedor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tar{
+    width: 40vw;
+    height: 60vh;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 15px 15px 30px #bebebe,
+               -15px -15px 30px #ffffff;
+    transition: 0.2s ease-in-out;
+    margin: 0.5vw;
+    margin-bottom: 6vh;
+}
+.contenido{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.tarjeta{
+    display: flex;
+    justify-content: center;
+    margin: 1vw;
+}
+h2{
+    margin-top: 1vw;
+    text-align: center;
+    width: 19vw;
+    font-weight: bold;
+}
+p{
+    margin-top: 1vw;
+    text-align: center;
+    width: 19vw;
+    height: 5vh;
+}
+.btnPrin{
+    margin-top: 5vh;
+    width: 10vw;
+}
+
+.btnElim{
+    margin-top: 3vh;
+    width: 10vw;
+}

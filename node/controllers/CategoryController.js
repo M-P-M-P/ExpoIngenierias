@@ -25,6 +25,19 @@ export const updateCategory = async(req,res)=>{
     }
 };
 
+export const createCategory=async(req,res)=>{
+  const {title,description}=req.body;
+  if(!title || !description){
+    return res.status(400).json({error: 'Todos los campos requeridos no estan presentes'});
+  }
+  try{
+    const newCategory=await CategoryModel.create({title,description});
+    console.log("Nueva Categoria: ",newCategory.toJSON());
+    res.status(201).json({newCategory});
+}catch(error){
+    res.json(400).json({message:error.message});
+}
+};
 export const getCategoryProjectData = async (req, res) => {
     try {
       const categories = await CategoryModel.findAll({
