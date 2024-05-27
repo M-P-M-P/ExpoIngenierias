@@ -4,6 +4,7 @@ import ProjectCardsList from '../../Components/ProjectCard/ProjectCard';
 import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar';
 import SearchBar from '../../Components/SearchBar/SearchBar';
 import DropdownMenu from '../../Components/DropdownMenu/DropdownMenu'; // Import DropdownMenu component
+import Loader from '../../Components/Loader/Loader';
 import '../../Components/ProjectCard/ProjectCard.css';
 
 const URI = 'http://localhost:8000/Ediciones/';
@@ -39,7 +40,7 @@ function Projects() {
         <>  
             <NavigationBar NameSection={"Proyectos"}/>
             <div className="container-fluid mt-3">
-                <div className="contenedor">
+                <div className="contenedorSuperior">
                     <SearchBar onSearch={handleSearch} />
                         <DropdownMenu 
                             title="Selecciona la Edición"
@@ -55,7 +56,7 @@ function Projects() {
                 </div>
                 <div className="contenedor">
                     {loading ? (
-                        <p>Loading...</p> // Show a loading message while data is being fetched
+                        <Loader/>// Show a loading message while data is being fetched
                     ) : (
                         <ProjectCardsList data={projects} filter={selectedEdition} searchTerm={searchTerm} />
                     )}

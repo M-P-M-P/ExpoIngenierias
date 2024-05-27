@@ -72,7 +72,9 @@ const filteredProjects = projects.filter(project =>
       <NavigationBar NameSection={"Proyectos"} />
       <div className="container-fluid">
         {loading ? (
-          <Loader />
+          <div style={{display:"flex",justifyContent:"center"}}>
+          <Loader />  
+          </div>
         ) : (
           <>
             <div className="centered-content">

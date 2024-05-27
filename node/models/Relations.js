@@ -1,5 +1,5 @@
-import AreaModel from "./AreaModel.js";
-import CategoryModel from "./CategoryModel.js";
+import AreaModel from "./AreasModel.js";
+import CategoryModel from "./CategorysModel.js";
 import EditionModel from "./EditionModel.js";
 import PersonModel from "./PersonsModel.js";
 import ProjectModel from "./ProjectsModel.js";

@@ -55,7 +55,9 @@ function PageJuez() {
         </div>
         <div className="proyectos">
           {loading ? (
-            <Loader />  // Mostrar el loader mientras se cargan los datos
+            <div style={{display:"flex",justifyContent:"center"}}>
+            <Loader />  
+            </div>
           ) : (
             <>
               <Cardlist />

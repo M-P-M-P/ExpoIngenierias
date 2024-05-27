@@ -116,7 +116,9 @@ const Rubrica = () => {
       <NavigationBar NameSection={"Rúbrica"} />
       <div className="container">
         {loading ? (
-          <Loader />  // Mostrar el loader mientras se cargan los datos
+          <div style={{display:"flex",justifyContent:"center"}}>
+          <Loader />  
+          </div>
         ) : (
           <>
             <h1>CALIFICA EL PROYECTO EN BASE A LA RÚBRICA</h1>

@@ -1,5 +1,28 @@
 import {AnnounceModel} from "../models/Relations.js"
 
+export const getAllAnnounces = async(req,res)=>{
+    try{
+      const Announces = await AnnounceModel.findAll();
+      res.json(Announces);
+    }catch(error){
+      res.status(500).json({message:error.message});
+    }
+  };
+
+export const getAnnounce = async(req,res)=>{
+    try{
+        const {id}=req.params;
+        const Announce = await AnnounceModel.findByPk(id);
+        if(!Announce){
+            return res.status(404).json({message: 'Anuncio no encontrado'});
+        }else{
+            res.json(Announce);
+        }
+    }catch(error){
+        res.json({message:error.message});
+    }
+};
+
 export const createAnnounce = async(req,res)=>{
     const { title, description, audience, multimedia } = req.body;
     if (!title || !description || !audience) {

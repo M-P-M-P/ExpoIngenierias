@@ -26,6 +26,10 @@ const Area = sequelize.define('areas', {
     allowNull: false,
     defaultValue: sequelize.NOW,
   },
+  IsActive: {
+    type: DataTypes.NUMBER,
+    allowNull: true
+  }
 });
 
 export default Area;

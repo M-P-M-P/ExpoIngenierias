@@ -10,8 +10,16 @@ import Judges from './Pages/Admin/Judges';
 import EditUserPage from './Pages/Admin/EditUserPage';
 import Projects from './Pages/Admin/Projects';
 import ProjectPage from './Pages/Admin/ProjectPage';
-import Announces from './Pages/Admin/Announces';
+import Categorias from './Pages/Admin/Categorias';
 import Areas from './Pages/Admin/Areas';
+import EditAreaPage from './Pages/Admin/EditAreas';
+import EditCategoryPage from './Pages/Admin/EditCategory';
+import EditAnnouncePage from './Pages/Admin/EditAnnounces';
+import CreateAreaPage from './Pages/Admin/CreateArea';
+import CreateCategoryPage from './Pages/Admin/CreateCategory';
+import CreateAnnouncePage from './Pages/Admin/CreateAnnounce';
+import Announces from './Pages/Admin/Announces';
+
 
 // Judge
 import Juez from './Pages/Juez/Juez'; // Mis Proyectos
@@ -59,6 +67,13 @@ function MainContent() {
         <Route path="/proyecto/:id" element={<ProjectPage setPageTitle={setPageTitle} />} />
         <Route path="/anuncios" element={<Announces/>}/>
         <Route path="/areas" element={<Areas/>}/>
+        <Route path='/areas/nuevo' element={<CreateAreaPage/>}/>
+        <Route path="/areas/:areaId" element={<EditAreaPage/>}/>
+        <Route path='/categorias' element={<Categorias/>}/>
+        <Route path='/categorias/nuevo' element={<CreateCategoryPage/>}/>
+        <Route path='/Categorias/:categoriaId' element={<EditCategoryPage/>}/>
+        <Route path='/anuncios/:anunciosId' element={<EditAnnouncePage/>}/>
+        <Route path='/anuncios/nuevo' element={<CreateAnnouncePage/>}/>
 
         <Route path="/Juez/:idpersona" element={<Juez />} />
         <Route path="/Juez/General/:idpersona" element={<Proyectos />} />

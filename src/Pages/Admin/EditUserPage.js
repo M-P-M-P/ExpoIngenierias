@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
 import ContentCard from '../../Components/ContentCard/ContentCard';
 import TextInput from '../../Components/TextInput/TextInput';
+import Loader from '../../Components/Loader/Loader';
 
 function EditUserPage() {
     const { userId } = useParams(); // Retrieve the userId from the URL parameters
@@ -55,7 +56,9 @@ function EditUserPage() {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div style={{display:'flex', justifyContent:'center'}}>
+        <Loader/>
+        </div>;
     }
 
     return (

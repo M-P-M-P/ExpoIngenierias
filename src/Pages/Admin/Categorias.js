@@ -1,51 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
-import AreasCardList from '../../Components/AreaCard/AreaCard';
-import AddCard from '../../Components/AddCard/AddCard';
+import CategoriesCardList from '../../Components/CategoriesCard/CategoriesCard';
 import Loader from '../../Components/Loader/Loader';
 import '../../Components/AreaCard/AreaCard.css';
 
-const AREAS_API = 'http://localhost:8000/Admin/Areas/';
+const CATEGORIES_API = 'http://localhost:8000/Admin/Categories/';
 
 
-function Areas(){
+function Categorias(){
     
-    const [areas, setAreas] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchProjects = async () => {
+    const fetchCategories = async () => {
     
         try {
-            const response = await axios.get(AREAS_API);
-            setAreas(response.data);
+            const response = await axios.get(CATEGORIES_API);
+            setCategories(response.data);
             setLoading(false);
         } catch (error) {
-            console.error("Error fetching areas:", error);
+            console.error("Error fetching categories:", error);
             setLoading(false);
         }
     };
     
     useEffect(() => {
-        fetchProjects();
+        fetchCategories();
     }, []);
 
     return(
         <>
-            <NavigationBar NameSection={"Áreas"}/>
+            <NavigationBar NameSection={"Categorías"}/>
             <div className='contenedor'>
                 {loading? (
                     <Loader/>
                 ) : (
-                    <>
-                    <AreasCardList data={areas}/>
-                    </>
-                )
-                }
+                    <CategoriesCardList data={categories}/>
+                )}
             </div>
             
         </>
     );
 }
 
-export default Areas;
+export default Categorias;

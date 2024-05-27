@@ -279,7 +279,9 @@ export default function ProjResumeCont() {
         <div className='container-fluid'>
           <div className='row justify-content-between d-flex align-items-center'>
             {loading ? (
-              <Loader />  // Mostrar el loader mientras se cargan los datos
+              <div style={{display:"flex",justifyContent:"center"}}>
+              <Loader />  
+              </div>
             ) : (
               <>
                 {studentInfo && professorInfo && (

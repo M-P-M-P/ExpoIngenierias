@@ -1,11 +1,14 @@
 /* Widget.css */
 .content-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: white;
     border-radius: 5px;
     text-align: center;
     
 }
-
 .content-title {
     color: gray;
     padding: 10px;
