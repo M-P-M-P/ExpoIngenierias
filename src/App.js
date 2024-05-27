@@ -10,6 +10,7 @@ import Judges from './Pages/Admin/Judges';
 import EditUserPage from './Pages/Admin/EditUserPage';
 import Projects from './Pages/Admin/Projects';
 import ProjectPage from './Pages/Admin/ProjectPage';
+import AdminRubrica from './Pages/Admin/AdminRubrica';
 
 // Judge
 import Juez from './Pages/Juez/Juez';
@@ -50,6 +51,7 @@ function MainContent() {
         <Route path="/proyecto/:id" element={<ProjectPage setPageTitle={setPageTitle} />} />
         <Route path="/anuncios" element={<Announces/>}/>
         <Route path="/areas" element={<Areas/>}/>
+        <Route path="/rubrica" element={<AdminRubrica />}/>
 
 
         <Route path='/ProyectosJuez' element={<Juez />}/>
