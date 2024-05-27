@@ -1,4 +1,4 @@
-import CategoryModel from "../models/Relations.js"
+import {CategoryModel} from "../models/Relations.js"
 import Category from "../models/CategoryModel.js";
 import ProjectModel from "../models/ProjectsModel.js";
 
@@ -39,7 +39,7 @@ async function createCategory(req,res) {
 
 async function updateCategory(req,res) {
     try{
-        await Category.update(req.body,{
+        await CategoryModel.update(req.body,{
             where : {id:req.params.id}
         })
         res.status(201).json({
@@ -52,7 +52,7 @@ async function updateCategory(req,res) {
 
 async function getCategoryProjectData(req, res) {
     try {
-      const categories = await Category.findAll({
+      const categories = await CategoryModel.findAll({
         include: [{
           model: ProjectModel,
           attributes: []
@@ -77,7 +77,7 @@ async function getCategoryProjectData(req, res) {
 // Obtener todas las categorías
 async function getAllCategories(req, res) {
   try {
-    const categories = await Category.findAll();
+    const categories = await CategoryModel.findAll();
     res.json(categories);
   } catch (error) {
     console.error('Error al obtener las categorías:', error);

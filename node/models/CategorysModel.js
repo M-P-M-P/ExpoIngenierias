@@ -13,4 +13,4 @@ const CategoryModel = db.define('categories', {
     isActive: {type:DataTypes.NUMBER}
 });
 
-export default CategoryModel
+export default CategoryModel;
