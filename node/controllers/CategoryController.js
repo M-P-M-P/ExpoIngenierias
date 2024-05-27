@@ -12,6 +12,20 @@ export const getAllCategories = async(req,res)=>{
   }
 };
 
+export const getCategoryById = async(req,res)=>{
+  try{
+      const {id}=req.params;
+      const Category = await CategoryModel.findByPk(id);
+      if(!Category){
+          return res.status(404).json({message: 'Categoria no encontrada'});
+      }else{
+          res.json(Category);
+      }
+  }catch(error){
+      res.json({message:error.message});
+  }
+};
+
 export const updateCategory = async(req,res)=>{
     try{
         await CategoryModel.update(req.body,{
@@ -25,13 +39,32 @@ export const updateCategory = async(req,res)=>{
     }
 };
 
+export const  inhabilitateCategory = async(req,res)=>{
+  const {id}=req.params;
+  try{
+      let category = await CategoryModel.findByPk(id);
+      if(category){
+          category.isActive = category.isActive===0?1:0;
+      }else{
+          return res.status(404).json({ error: 'User not found' });
+      }
+      category.save();
+      res.json({message: "Categoria correctamente inhabilitada"})
+
+  }catch(error){
+      console.error("Error toggling area active status:", error);
+  res.status(500).json({ error: 'Internal server error while toggling user active status.' });
+  }
+};
+
 export const createCategory=async(req,res)=>{
   const {title,description}=req.body;
+  const isActive=1;
   if(!title || !description){
     return res.status(400).json({error: 'Todos los campos requeridos no estan presentes'});
   }
   try{
-    const newCategory=await CategoryModel.create({title,description});
+    const newCategory=await CategoryModel.create({title,description,isActive});
     console.log("Nueva Categoria: ",newCategory.toJSON());
     res.status(201).json({newCategory});
 }catch(error){

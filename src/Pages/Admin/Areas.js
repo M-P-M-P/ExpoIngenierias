@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavigationBar from '../../Components/NavigationBar/Admin/NavigationBar'
 import AreasCardList from '../../Components/AreaCard/AreaCard';
+import AddCard from '../../Components/AddCard/AddCard';
 import Loader from '../../Components/Loader/Loader';
 import '../../Components/AreaCard/AreaCard.css';
 
@@ -36,8 +37,11 @@ function Areas(){
                 {loading? (
                     <Loader/>
                 ) : (
+                    <>
                     <AreasCardList data={areas}/>
-                )}
+                    </>
+                )
+                }
             </div>
             
         </>

@@ -9,6 +9,21 @@ export const getAllAreas = async(req,res)=>{
     }
 };
 
+export const getAresById = async(req,res)=>{
+    try{
+        const {id}=req.params;
+        const Area = await AreaModel.findByPk(id);
+        if(!Area){
+            return res.status(404).json({message: 'Area no encontrada'});
+        }else{
+            res.json(Area);
+        }
+    }catch(error){
+        res.json({message:error.message});
+    }
+};
+
+
 export const createArea = async(req,res)=>{
     const {name,description}=req.body;
     if(!name || !description){
@@ -32,6 +47,24 @@ export const updateArea = async(req,res)=>{
         })
     }catch(error){
         res.json({message:error.message});
+    }
+};
+
+export const  inhabilitateArea = async(req,res)=>{
+    const {id}=req.params;
+    try{
+        let area = await AreaModel.findByPk(id);
+        if(area){
+            area.IsActive = area.IsActive===0?1:0;
+        }else{
+            return res.status(404).json({ error: 'User not found' });
+        }
+        area.save();
+        res.json({message: "Area correctamente inhabilitada"})
+
+    }catch(error){
+        console.error("Error toggling area active status:", error);
+    res.status(500).json({ error: 'Internal server error while toggling user active status.' });
     }
 };
 

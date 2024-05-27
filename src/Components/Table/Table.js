@@ -81,10 +81,10 @@ function Table({ data, searchQuery, selectedRole }) {
                         roles: updatedUser.roles // Assuming updatedUser is the modified user object
                     })
                     .then(response => {
-                        console.log("Roles updated successfully:", response.data);
+                        console.log("Roles exitosamente actualizados:", response.data);
                     })
                     .catch(error => {
-                        console.error("Error updating roles:", error);
+                        console.error("Error al actualizar los roles:", error);
                     });
                 }
             } else {

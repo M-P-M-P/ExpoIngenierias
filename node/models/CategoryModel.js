@@ -11,6 +11,7 @@ const CategoryModel = db.define('categories', {
     },
     title: { type: DataTypes.STRING },
     description: { type: DataTypes.STRING }, 
+    isActive: {type:DataTypes.NUMBER}
 });
 
 export default CategoryModel;

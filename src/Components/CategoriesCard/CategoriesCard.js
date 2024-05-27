@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
@@ -8,10 +10,12 @@ import imagen1 from './1.png';
 import imagen2 from './2.png';
 import imagen3 from './3.png';
 import imagenLoco from './Areas.png';
+import AddCard from '../AddCard/AddCard';
 
 
 function CategoriesCard({data}){
-    const {id,title,description} = data;
+    const navigate = useNavigate();
+    const {id,title,description,isActive} = data;
     const truncateString = (str, num) => {
         if (str.length <= num) {
             return str;
@@ -19,12 +23,17 @@ function CategoriesCard({data}){
         return str.slice(0, num) + ' . . .';
     };
 
-    const handleDescalify = () => {
-      const confirmed = window.confirm("Estas seguro de que quieres descalificar el proyecto?");
-      if (confirmed) {
-        // Add your logic to descalify the project here
-      }
+    const handleDelete = (id) => {
+      axios.patch(`http://localhost:8000/Admin/Categories/inhabilitate/${id}`).then(response => {
+        console.log("Categoria correctamente inhabilitada:",response.data);
+      }).catch(error=>{console.error("Error al inhabilitar la Categoria:", error)})
+      window.location.reload();
     };
+
+    const handleEditClick = () => {
+      // Redirect to EditUserPage and pass the userId as a URL parameter
+      navigate(`/categorias/${id}`);
+  };
 
     const imagen = (title)=>{
         if(title==="Concepto"){
@@ -38,24 +47,30 @@ function CategoriesCard({data}){
           return imagenLoco;
         }
     };
-
+    if(isActive){
     return (
         <div className='tar'>
-            <img src={imagen(`${title}`)} className="card-img-top" alt="Project Image"/>
+            <img src={imagen(`${title}`)} className="card-img-top catImg" alt="Project Image"/>
             <div className='contenido'>
-            <h2>{truncateString(`${title}`,10)}</h2>
-            <p>{truncateString(`${description}`,53)}</p>
-            <Link to={`/Areas/${id}`} className="btn btn-primary custom-primaty-btn btnPrin">Editar</Link>
-            <button className="btn  btn-danger mx-2 btnElim" onClick={handleDescalify}>Eliminar</button>
+            <h2 className='titleCat'>{truncateString(`${title}`,10)}</h2>
+            <p className='descriptionCat'>{truncateString(`${description}`,53)}</p>
+            <button className="btn btn-primary custom-primaty-btn btnPrin" onClick={handleEditClick}>Editar</button>
+            <button className="btn  btn-danger mx-2 btnElim" onClick={()=>handleDelete(id)}>inhabilitar</button>
             </div>
         </div>
     );
+  }else{
+    return;
+  }
 }
 
 export default function CategoriesCardList({data}){
     let categoriesInfo=data;
     return(
         <div className="contenedor row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+          <div className='tarjeta'>
+          <AddCard name="categorias"/>
+          </div>
         {categoriesInfo.map(categories => (
           <div key={categories.id} className='tarjeta'>
             <CategoriesCard data={categories} />
