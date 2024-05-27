@@ -1,6 +1,6 @@
 //importamos el Modelo
 import db from "../database/db.js"
-import {ProjectModel, PersonModel, JudgeProjectModel, AsessorProjectModel, StudentModel, AdminModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel, EditionModel, DisqualifiedModel} from "../models/Relations.js"
+import {ProjectModel, PersonModel, JudgeProjectModel, CommentModel, AsessorProjectModel, StudentModel, AdminModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel, EditionModel, DisqualifiedModel} from "../models/Relations.js"
 import { Sequelize } from 'sequelize';  // Import Sequelize
 
 //** Métodos para el CRUD **/
@@ -176,6 +176,18 @@ export const removeProjectJudge = async (req, res) => {
     const { judgeId, projectId } = req.params; // Assume the judge ID and project ID are provided as URL parameters
 
     try {
+        // Check if there are any comments associated with the judge for the project
+        const commentExists = await CommentModel.findOne({
+            where: {
+                id_person: judgeId,
+                id_project: projectId
+            }
+        });
+
+        if (commentExists) {
+            return res.status(400).json({ message: 'Cannot remove project judge because comments exist for the judge in the project' });
+        }
+
         // Find the judge-project relation to ensure it exists
         const judgeProject = await JudgeProjectModel.findOne({
             where: {
