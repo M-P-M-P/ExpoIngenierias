@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Dashboard from './Pages/Admin/Dashboard';
 import Historical from './Pages/Admin/Historical';
 import Users from './Pages/Admin/Users';
+import Judges from './Pages/Admin/Judges';
 import EditUserPage from './Pages/Admin/EditUserPage';
 import Projects from './Pages/Admin/Projects';
 import ProjectPage from './Pages/Admin/ProjectPage';
@@ -42,6 +43,7 @@ function MainContent() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
+        <Route path="/usuarios/jueces/:projectId" element={<Judges />} />
         <Route path="/usuarios/:userId" element={<EditUserPage />} />
         <Route path="/proyectos" element={<Projects />} />
         <Route path="/proyectos/:projectId" element={<ProjectPage setPageTitle={setPageTitle} />} />

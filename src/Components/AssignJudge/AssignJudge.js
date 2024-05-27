@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+
 import "./AssignJudge.css";
 
 const AssignJudge = ({ area, project }) => {
@@ -59,9 +61,9 @@ const AssignJudge = ({ area, project }) => {
           Automatico
         </button>
 
-        <button className="btn btn-primary">
+        <Link to={`/usuarios/jueces/${project}`} className="btn btn-primary">
           Manual
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -112,8 +112,6 @@ export const getAllJudges = async (req, res) => {
 
 
 
-
-
 //------------------------------------------------------------------------------------------------------------------
 //Mostrar todos los registros
 export const getAllPersons = async (req, res) => {
