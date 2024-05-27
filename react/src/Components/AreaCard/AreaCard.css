@@ -21,6 +21,8 @@
 .addNew{
     border: none;
     background-color: white;
+    border-radius: 15px;
+    padding: 15px;
 }
 .addImg{
     height: 55vh;
@@ -73,6 +75,10 @@ h2{
 @media(max-width: 1024px){
     .areasImg{
         height: 25vh;
+    }
+    .addImg{
+        height: 60vh;
+        
     }
     .tar{
         width: 70vw;

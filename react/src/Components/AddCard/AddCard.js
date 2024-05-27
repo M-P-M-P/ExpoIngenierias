@@ -19,9 +19,7 @@ export default function AddCard({name}){
     };
     return (
         <div className='tarj'>
-           
-           <button className='addNew' onClick={handleEditClick}><img src={imagen} className="addImg" alt="Project Image"/></button>
-           
+           <button className='addNew' onClick={handleEditClick}><img src={imagen} className="addImg" alt="Project Image"/></button>       
        </div>
     );
 }

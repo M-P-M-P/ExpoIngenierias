@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
-
+import Loader from '../../Components/Loader/Loader';
 import Widget from '../../Components/Widget/Widget';
 import VideoCard from '../../Components/VideoCard/VideoCard';
 import AssignJudge from '../../Components/AssignJudge/AssignJudge';
@@ -50,7 +50,14 @@ function ProjectPage({ setPageTitle }) {
   };
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+    <>
+      <NavigationBar NameSection={"Proyecto"} />
+      <div style={{display:'flex', justifyContent:'center'}}>
+      <Loader/>
+      </div>
+      </>
+    );
   }
 
   if (error) {
