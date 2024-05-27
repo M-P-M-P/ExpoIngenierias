@@ -13,8 +13,10 @@ import Categorias from './Pages/Admin/Categorias';
 import Areas from './Pages/Admin/Areas';
 import EditAreaPage from './Pages/Admin/EditAreas';
 import EditCategoryPage from './Pages/Admin/EditCategory';
+import EditAnnouncePage from './Pages/Admin/EditAnnounces';
 import CreateAreaPage from './Pages/Admin/CreateArea';
 import CreateCategoryPage from './Pages/Admin/CreateCategory';
+import CreateAnnouncePage from './Pages/Admin/CreateAnnounce';
 // Judge
 import Juez from './Pages/Juez/Juez';
 import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
@@ -58,7 +60,8 @@ function MainContent() {
         <Route path='/categorias' element={<Categorias/>}/>
         <Route path='/categorias/nuevo' element={<CreateCategoryPage/>}/>
         <Route path='/Categorias/:categoriaId' element={<EditCategoryPage/>}/>
-
+        <Route path='/anuncios/:anunciosId' element={<EditAnnouncePage/>}/>
+        <Route path='/anuncios/nuevo' element={<CreateAnnouncePage/>}/>
 
         <Route path='/ProyectosJuez' element={<Juez />}/>
         <Route path="/ProyectoJuez/:projectId" element={<ProjResumeCont />} />

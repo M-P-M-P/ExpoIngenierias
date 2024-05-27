@@ -13,7 +13,7 @@ function AnnounceCard({data}){
     const truncateString = (str, num) => {
         if (str.length <= num) {
             return str;
-        }
+        } 
         return str.slice(0, num) + ' . . .';
     };
     const navigate = useNavigate();
@@ -27,13 +27,13 @@ function AnnounceCard({data}){
 
     const handleEditClick = () => {
         // Redirect to EditUserPage and pass the userId as a URL parameter
-        navigate(`/Anuncio/${id}`);
+        navigate(`/anuncios/${id}`);
     };
     return (
         <div className='tar'>
             <img src={imagen} className="card-img-top" alt="Project Image"/>
             <div className='contenido'>
-            <h2>{truncateString(`${title}`,7)}</h2>
+            <h2>{truncateString(`${title}`,15)}</h2>
             <p className='description'>{truncateString(`${description}`,53)}</p>
             <button className="btn btn-primary custom-primaty-btn btnPrin" onClick={handleEditClick}>Editar</button>
             <button className="btn  btn-danger mx-2 btnElim" onClick={()=>handleDelete(id)}>Eliminar</button>
