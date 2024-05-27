@@ -3,7 +3,8 @@ import { createAnnounce, updateAnnounce,deleteAnnounce,getAllAnnounces,getAnnoun
 import { updateCategory,createCategory,getAllCategories,getCategoryById,inhabilitateCategory } from '../controllers/CategoryController.js';
 import { updateArea,createArea,getAllAreas,deleteArea,getAresById,inhabilitateArea } from '../controllers/AreasControllers.js';
 
-import { getAreaJudge } from '../controllers/personController.js';
+import { getAreaJudge, getAllJudges } from '../controllers/personController.js';
+import { getProjectJudges, removeProjectJudge, assignProjectJudge } from '../controllers/ProjectController.js';
 
 const router = express.Router()
 // Rutas de anuncios
@@ -27,6 +28,13 @@ router.put('/Areas/update/:id',updateArea);
 router.patch('/Areas/inhabilitate/:id',inhabilitateArea);
 
 //Judges Routes
-router.get('/getJudges/:areaId', getAreaJudge); // Add this line for the new route
+router.get('/getJudges/:areaId', getAreaJudge); // query string (?projectId=<project.id>)
+router.get('/getAllJudges', getAllJudges); // query string (?projectId=<project.id>)
+
+// Projects Routes
+router.get('/getProjectJudges', getProjectJudges); // query string (?projectId=<project.id>)
+router.delete('/remove/projects/:projectId/judges/:judgeId', removeProjectJudge) // query string (?projectId=<project.id>&judgeId=<person.id>)
+router.post('/assignProjectJudge', assignProjectJudge);
+
 
 export default router;

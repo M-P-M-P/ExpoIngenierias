@@ -1,6 +1,6 @@
 //importamos el Modelo
 import db from "../database/db.js"
-import {ProjectModel, PersonModel, AsessorProjectModel, StudentModel, AdminModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel, EditionModel, DisqualifiedModel} from "../models/Relations.js"
+import {ProjectModel, PersonModel, JudgeProjectModel, CommentModel, AsessorProjectModel, StudentModel, AdminModel, TeamModel, MaterialModel, MaterialProjectModel, CategoryModel, AreaModel, EditionModel, DisqualifiedModel} from "../models/Relations.js"
 import { Sequelize } from 'sequelize';  // Import Sequelize
 
 //** Métodos para el CRUD **/
@@ -141,6 +141,103 @@ export const disqualifyProject = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Get all judges assigned to a project
+export const getProjectJudges = async (req, res) => {
+    const { projectId } = req.query; // Assume the project ID is provided as a query string
+
+    try {
+        // Retrieve the project to ensure it exists
+        const project = await ProjectModel.findByPk(projectId);
+
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        // Retrieve all person IDs related to the project
+        const judgeEntries = await JudgeProjectModel.findAll({
+            where: { id_project: project.id },
+            attributes: ['id_person']
+        });
+
+        // Extract the person IDs from the assessorEntries
+        const judgesIds = judgeEntries.map(entry => entry.id_person);
+
+
+        res.json(judgesIds);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+// Remove a judge from a project
+export const removeProjectJudge = async (req, res) => {
+    const { judgeId, projectId } = req.params; // Assume the judge ID and project ID are provided as URL parameters
+
+    try {
+        // Check if there are any comments associated with the judge for the project
+        const commentExists = await CommentModel.findOne({
+            where: {
+                id_person: judgeId,
+                id_project: projectId
+            }
+        });
+
+        if (commentExists) {
+            return res.status(400).json({ message: 'Cannot remove project judge because comments exist for the judge in the project' });
+        }
+
+        // Find the judge-project relation to ensure it exists
+        const judgeProject = await JudgeProjectModel.findOne({
+            where: {
+                id_person: judgeId,
+                id_project: projectId
+            }
+        });
+
+        if (!judgeProject) {
+            return res.status(404).json({ message: 'Judge not assigned to the project' });
+        }
+
+        // Remove the judge from the project
+        await judgeProject.destroy();
+
+        res.json({ message: 'Judge removed from the project successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Add a judge to a project
+export const assignProjectJudge = async (req, res) => {
+    const { judgeId, projectId } = req.body; // Assume the judge ID and project ID are provided in the request body
+
+    try {
+        // Check if the judge-project relation already exists
+        const existingRelation = await JudgeProjectModel.findOne({
+            where: {
+                id_person: judgeId,
+                id_project: projectId
+            }
+        });
+
+        if (existingRelation) {
+            return res.status(400).json({ message: 'Judge is already assigned to the project' });
+        }
+
+        // Create a new entry in the JudgeProjectModel
+        await JudgeProjectModel.create({
+            id_person: judgeId,
+            id_project: projectId
+        });
+
+        res.json({ message: 'Judge added to the project successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 //Mostrar todos los registros

@@ -3,8 +3,9 @@ import axios from 'axios'; // Import Axios if you're using it
 
 import "./Table.css";
 import UserRow from './UserRow';
+import JudgeRow from './JudgeRow';
 
-function Table({ data, searchQuery, selectedRole }) {
+function Table({ data, searchQuery = "", selectedRole = "", judgeTable = false }) {
     const [tableData, setTableData] = useState(data);
 
     // Filter data based on search query and selected role
@@ -31,11 +32,6 @@ function Table({ data, searchQuery, selectedRole }) {
         axios.patch(`http://localhost:8000/users/toggleActiveStatus/${id}`)
             .then(response => {
                 console.log("User status toggled successfully:", response.data);
-                
-                // Optionally, you can update the local state to reflect the change.
-                // For example, you might want to update a user's status in the table.
-                // Here, we're assuming the backend response contains the updated user data.
-                // Filter out the row with the given id
             })
             .catch(error => {
                 console.error("Error toggling user status:", error);
@@ -123,29 +119,47 @@ function Table({ data, searchQuery, selectedRole }) {
                 <thead>
                     <tr>
                         {/* Headers */}
-                        <th className="text-center">Usuarios</th>
-                        <th className="text-center">Roles</th>
-                        <th className="text-center">Administrar</th>
+                        {judgeTable ? (
+                            <>
+                                <th className="text-center">Jueces</th>
+                                <th className="text-center">Administrar</th>
+                            </>
+                        ) : (
+                            <>
+                                <th className="text-center">Usuarios</th>
+                                <th className="text-center">Roles</th>
+                                <th className="text-center">Administrar</th>
+                            </>
+                        )}
                         {/* Add more headers as needed */}
                     </tr>
                 </thead>
                 <tbody>
-    {/* Rows */}
-    {tableData
-        .filter(user => user.isActive !== 0) // Filter out rows where isActive is explicitly 0
-        .map((user) => (
-            <UserRow 
-                key={user.id} 
-                user={user} 
-                onDelete={handleDelete} 
-                onRoleChange={(role) => handleRoleChange(user.id, role)} 
-            />
-    ))}
-</tbody>
-
+                    {/* Rows */}
+                    {judgeTable ? (
+                        tableData.map((user) => (
+                            <JudgeRow 
+                                key={user.id} 
+                                user={user} 
+                            />
+                        ))
+                    ) : (
+                        tableData
+                            .filter(user => user.isActive !== 0) // Filter out rows where isActive is explicitly 0
+                            .map((user) => (
+                                <UserRow 
+                                    key={user.id} 
+                                    user={user} 
+                                    onDelete={handleDelete} 
+                                    onRoleChange={(role) => handleRoleChange(user.id, role)} 
+                                />
+                            ))
+                    )}
+                </tbody>
             </table>
         </div>
     );
+    
 }
 
 export default Table;

@@ -89,7 +89,7 @@ function ProjectPage({ setPageTitle }) {
         <div className="row">
 
           <div className="col-lg-3">
-            <Widget title={"Juez Encargado"} centered={true} content={<AssignJudge area={project.id_area} project={project.id}/>} />
+            <Widget title={"Asignar Jueces"} centered={true} content={<AssignJudge area={project.id_area} project={project.id}/>} />
           </div>
 
           <div className="col-lg-6">

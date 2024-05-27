@@ -16,7 +16,8 @@ import CriteriaModel from "./CriteriasModel.js";
 import CriteriaJudgeModel from "./CriteriaJudgeModel.js";
 import DisqualifiedModel from "./DisqualifiedModel.js";
 import AreaPersonModel from "./AreaPersonModel.js";
-import AsessorProjectModel from './AsessorProjectModel.js'; // Import AsessorProjectModel if not already imported
+import AsessorProjectModel from './AsessorProjectModel.js'; 
+import JudgeProjectModel from "./JudgeProjectModel.js";
 
 
 TeamModel.belongsTo(ProjectModel, {foreignKey: 'id_project'});
@@ -48,6 +49,17 @@ ProjectModel.belongsToMany(PersonModel, { through: AsessorProjectModel, foreignK
 
 // PersonModel associations
 PersonModel.belongsToMany(ProjectModel, { through: AsessorProjectModel, foreignKey: 'id_person' });
+
+
+// JudgeProjectModel associations
+JudgeProjectModel.belongsTo(ProjectModel, { foreignKey: 'id_project' });
+JudgeProjectModel.belongsTo(PersonModel, { foreignKey: 'id_person' });
+
+// ProjectModel associations
+ProjectModel.belongsToMany(PersonModel, { through: JudgeProjectModel, foreignKey: 'id_project' });
+
+// PersonModel associations
+PersonModel.belongsToMany(ProjectModel, { through: JudgeProjectModel, foreignKey: 'id_person' });
 
 
 EditionModel.hasMany(ProjectModel, {foreignKey: 'id_edition'});
@@ -151,5 +163,6 @@ export {
         AdminModel,
         AnnounceModel,
         DisqualifiedModel,
-        AsessorProjectModel
+        AsessorProjectModel,
+        JudgeProjectModel
 };
