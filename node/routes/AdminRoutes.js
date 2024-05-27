@@ -4,7 +4,7 @@ import { updateCategory } from '../controllers/CategoryController.js';
 import { updateArea,createArea,getAllAreas,deleteArea } from '../controllers/AreasControllers.js';
 
 import { getAreaJudge, getAllJudges } from '../controllers/personController.js';
-import { getProjectJudges } from '../controllers/ProjectController.js';
+import { getProjectJudges, removeProjectJudge, assignProjectJudge } from '../controllers/ProjectController.js';
 
 const router = express.Router()
 // Rutas de anuncios
@@ -25,6 +25,8 @@ router.get('/getAllJudges', getAllJudges); // query string (?projectId=<project.
 
 // Projects Routes
 router.get('/getProjectJudges', getProjectJudges); // query string (?projectId=<project.id>)
+router.delete('/remove/projects/:projectId/judges/:judgeId', removeProjectJudge) // query string (?projectId=<project.id>&judgeId=<person.id>)
+router.post('/assignProjectJudge', assignProjectJudge);
 
 
 export default router;

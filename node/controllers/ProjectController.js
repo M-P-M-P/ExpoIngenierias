@@ -170,6 +170,63 @@ export const getProjectJudges = async (req, res) => {
     }
 };
 
+
+// Remove a judge from a project
+export const removeProjectJudge = async (req, res) => {
+    const { judgeId, projectId } = req.params; // Assume the judge ID and project ID are provided as URL parameters
+
+    try {
+        // Find the judge-project relation to ensure it exists
+        const judgeProject = await JudgeProjectModel.findOne({
+            where: {
+                id_person: judgeId,
+                id_project: projectId
+            }
+        });
+
+        if (!judgeProject) {
+            return res.status(404).json({ message: 'Judge not assigned to the project' });
+        }
+
+        // Remove the judge from the project
+        await judgeProject.destroy();
+
+        res.json({ message: 'Judge removed from the project successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Add a judge to a project
+export const assignProjectJudge = async (req, res) => {
+    const { judgeId, projectId } = req.body; // Assume the judge ID and project ID are provided in the request body
+
+    try {
+        // Check if the judge-project relation already exists
+        const existingRelation = await JudgeProjectModel.findOne({
+            where: {
+                id_person: judgeId,
+                id_project: projectId
+            }
+        });
+
+        if (existingRelation) {
+            return res.status(400).json({ message: 'Judge is already assigned to the project' });
+        }
+
+        // Create a new entry in the JudgeProjectModel
+        await JudgeProjectModel.create({
+            id_person: judgeId,
+            id_project: projectId
+        });
+
+        res.json({ message: 'Judge added to the project successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 //--------------------------------------------------------------------------------------------------------------------------------------------
 //Mostrar todos los registros
 // export const getAllProjects = async (req, res) => {
