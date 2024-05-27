@@ -1,5 +1,5 @@
 import express from 'express'
-import { createAnnounce, updateAnnounce,deleteAnnounce } from '../controllers/AnnounceAdminController.js'
+import { createAnnounce, updateAnnounce,deleteAnnounce,getAllAnnounces } from '../controllers/AnnounceAdminController.js'
 import { updateCategory,createCategory,getAllCategories,getCategoryById,inhabilitateCategory } from '../controllers/CategoryController.js';
 import { updateArea,createArea,getAllAreas,deleteArea,getAresById,inhabilitateArea } from '../controllers/AreasControllers.js';
 
@@ -7,6 +7,7 @@ import { getAreaJudge } from '../controllers/personController.js';
 
 const router = express.Router()
 // Rutas de anuncios
+router.get('/Announces/',getAllAnnounces);
 router.post('/Announce/create',createAnnounce);
 router.put('/Announce/update/:id',updateAnnounce);
 router.delete('/Announce/delete/:id',deleteAnnounce);

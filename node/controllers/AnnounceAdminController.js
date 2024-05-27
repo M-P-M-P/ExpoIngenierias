@@ -1,5 +1,14 @@
 import {AnnounceModel} from "../models/Relations.js"
 
+export const getAllAnnounces = async(req,res)=>{
+    try{
+      const Announces = await AnnounceModel.findAll();
+      res.json(Announces);
+    }catch(error){
+      res.status(500).json({message:error.message});
+    }
+  };
+
 export const createAnnounce = async(req,res)=>{
     const { title, description, audience, multimedia } = req.body;
     if (!title || !description || !audience) {
