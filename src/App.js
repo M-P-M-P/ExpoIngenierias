@@ -19,7 +19,7 @@ import CreateAreaPage from './Pages/Admin/CreateArea';
 import CreateCategoryPage from './Pages/Admin/CreateCategory';
 import CreateAnnouncePage from './Pages/Admin/CreateAnnounce';
 import Announces from './Pages/Admin/Announces';
-
+import AdminRubrica from './Pages/Admin/AdminRubrica';
 
 // Judge
 import Juez from './Pages/Juez/Juez'; // Mis Proyectos
@@ -67,6 +67,7 @@ function MainContent() {
         <Route path="/proyecto/:id" element={<ProjectPage setPageTitle={setPageTitle} />} />
         <Route path="/anuncios" element={<Announces/>}/>
         <Route path="/areas" element={<Areas/>}/>
+<<<<<<< HEAD
         <Route path='/areas/nuevo' element={<CreateAreaPage/>}/>
         <Route path="/areas/:areaId" element={<EditAreaPage/>}/>
         <Route path='/categorias' element={<Categorias/>}/>
@@ -74,6 +75,9 @@ function MainContent() {
         <Route path='/Categorias/:categoriaId' element={<EditCategoryPage/>}/>
         <Route path='/anuncios/:anunciosId' element={<EditAnnouncePage/>}/>
         <Route path='/anuncios/nuevo' element={<CreateAnnouncePage/>}/>
+=======
+        <Route path="/rubrica" element={<AdminRubrica />}/>
+>>>>>>> 1a06cf323fb4207cc88b4daaaa3354fb90fa7508
 
         <Route path="/Juez/:idpersona" element={<Juez />} />
         <Route path="/Juez/General/:idpersona" element={<Proyectos />} />
