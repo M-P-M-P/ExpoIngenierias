@@ -54,9 +54,15 @@ const AssignJudge = ({ area, project }) => {
       ) : (
         <p className="not-assign-judge">No hay un juez asignado</p>
       )}
-      <button className="btn btn-primary custom-primary-btn" onClick={handleAssignJudgeClick}>
-        Asignar Juez
-      </button>
+      <div className="button-container">
+        <button className="btn btn-primary custom-primary-btn" onClick={handleAssignJudgeClick}>
+          Automatico
+        </button>
+
+        <button className="btn btn-primary">
+          Manual
+        </button>
+      </div>
     </div>
   );
 };

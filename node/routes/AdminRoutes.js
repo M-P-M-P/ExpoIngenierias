@@ -3,7 +3,7 @@ import { createAnnounce, updateAnnounce,deleteAnnounce } from '../controllers/An
 import { updateCategory } from '../controllers/CategoryController.js';
 import { updateArea,createArea,getAllAreas,deleteArea } from '../controllers/AreasControllers.js';
 
-import { getAreaJudge } from '../controllers/personController.js';
+import { getAreaJudge, getAllJudges } from '../controllers/personController.js';
 
 const router = express.Router()
 // Rutas de anuncios
@@ -19,6 +19,7 @@ router.put('/Areas/update/:id',updateArea);
 router.delete('/Areas/delete/:id',deleteArea);
 
 //Judges Routes
-router.get('/getJudges/:areaId', getAreaJudge); // Add this line for the new route
+router.get('/getJudges/:areaId', getAreaJudge); // query string (?projectId=<project.id>)
+router.get('/getAllJudges', getAllJudges); // query string (?projectId=<project.id>)
 
 export default router;
