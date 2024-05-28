@@ -55,8 +55,6 @@ function MainContent() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to={`/Juez/${defaultIdPersona}`} />} />
-
         <Route path="/Admin" element={<Dashboard />} />
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
