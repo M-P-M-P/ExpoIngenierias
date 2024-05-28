@@ -12,15 +12,27 @@ import db from "./database/db.js"
 
 //hay que importar las rutas de admin
 import UserRoutes from './routes/UserRoutes.js';
-import CategoryRoutes from './routes/CategoryRoutes.js'
-import studentRoutes from './routes/StudentRoutes.js'
-import projectRoutes from './routes/ProjectRoutes.js'
-import AnnounRoutes from './routes/AnnounRoutes.js'
-import AdminRoutes from "./routes/AdminRoutes.js"
+import CategorysRoutes from './routes/CategorysRoutes.js';
+import StudentsRoutes from './routes/StudentsRoutes.js';
+import ProjectsRoutes from './routes/ProjectsRoutes.js';
+import AnnounsRoutes from './routes/AnnounsRoutes.js';
+import AdminRoutes from "./routes/AdminRoutes.js";
 //rutas de edicion
-import EditionRoutes from "./routes/EditionRoutes.js"
-// las rutas de juez
+import EditionRoutes from "./routes/EditionRoutes.js";
 
+// las rutas de juez
+import CriteriaRoutes from './routes/CriteriaRoutes.js';
+import ProjectRoutes from './routes/ProjectRoutes.js';
+import CategoryRoutes from './routes/CategoryRoutes.js';
+import AreaRoutes from './routes/AreaRoutes.js';
+import CriteriaJudgeRoutes from './routes/CriteriaJudgeRoutes.js'; 
+import CommentRoutes from './routes/CommentRoutes.js';
+import JudgeProjectRoutes from './routes/JudgeProjectRoutes.js';
+import StudentRoutes from './routes/StudentRoutes.js';
+import PersonRoutes from './routes/PersonRoutes.js';
+import TeamRoutes from './routes/TeamRoutes.js';
+import TeamMemberRoutes from './routes/TeamMemberRoutes.js';
+import AnnounRoutes from './routes/AnnounRoutes.js';
 
 
 const app = express()
@@ -31,17 +43,29 @@ app.use(express.urlencoded({extended: true}));
 
 // Adimn Routes
 app.use('/users', UserRoutes);
-app.use('/categories', CategoryRoutes);
+app.use('/categories', CategorysRoutes);
 
 // Judge Routes
-app.use('/projects', projectRoutes);
-app.use('/students', studentRoutes);
-app.use('/announ', AnnounRoutes);
+app.use('/projects', ProjectsRoutes);
+app.use('/students', StudentsRoutes);
+app.use('/announ', AnnounsRoutes);
 app.use('/Admin',  AdminRoutes);
 app.use('/Ediciones',EditionRoutes);
-// app.use('/projects', projectRoutes);
-// app.use('/students', studentRoutes);
 
+
+// JUDGE ROUTES
+app.use('/api', CriteriaRoutes);
+app.use('/api', ProjectRoutes);
+app.use('/api', CategoryRoutes);
+app.use('/api', AreaRoutes);
+app.use('/api', CriteriaJudgeRoutes);
+app.use('/api', CommentRoutes); 
+app.use('/api', JudgeProjectRoutes); 
+app.use('/api', StudentRoutes);
+app.use('/api', PersonRoutes);
+app.use('/api', TeamRoutes);
+app.use('/api', TeamMemberRoutes);
+app.use('/api', AnnounRoutes);
 
 //console.log(process.env.DB_CONNECTION_STRING)
 

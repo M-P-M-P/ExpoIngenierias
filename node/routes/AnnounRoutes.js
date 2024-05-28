@@ -3,8 +3,8 @@ import { getAllAnnouns, getAnnoun } from '../controllers/AnnounController.js'
 
 const router = express.Router()
 
-router.get('/', getAllAnnouns);
+router.get('/announs', getAllAnnouns);
 
-router.get('/:id', getAnnoun);
+router.get('/announs/:id', getAnnoun);
 
 export default router;

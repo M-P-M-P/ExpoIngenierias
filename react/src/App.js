@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
 // Admin
 import Dashboard from './Pages/Admin/Dashboard';
@@ -18,12 +18,18 @@ import EditAnnouncePage from './Pages/Admin/EditAnnounces';
 import CreateAreaPage from './Pages/Admin/CreateArea';
 import CreateCategoryPage from './Pages/Admin/CreateCategory';
 import CreateAnnouncePage from './Pages/Admin/CreateAnnounce';
-// Judge
-import Juez from './Pages/Juez/Juez';
-import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
-import Rubrica from './Pages/Juez/Rubrica';
 import Announces from './Pages/Admin/Announces';
+import AdminRubrica from './Pages/Admin/AdminRubrica';
 
+// Judge
+import Juez from './Pages/Juez/Juez'; // Mis Proyectos
+import Proyectos from './Pages/Juez/Proyectos'; // Catalogo Proyectos
+import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
+import GeneralProjectResume from './Pages/Juez/GeneralProjectResume';
+import Rubrica from './Pages/Juez/Rubrica';
+import Anuncios from './Pages/Juez/Announ';
+import DetailedAnnoun from './Pages/Juez/DetailedAnnoun';
+import Perfil from './Pages/Juez/Profile';
 
 function App() {
   return (
@@ -36,6 +42,8 @@ function App() {
 }
 
 function MainContent() {
+  const defaultIdPersona = 5;  // Define un valor por defecto para idpersona por ahora antes de poner el auth0
+
   const location = useLocation(); // Get current location
   const [pageTitle, setPageTitle] = useState('');
 
@@ -47,7 +55,9 @@ function MainContent() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Navigate to={`/Juez/${defaultIdPersona}`} />} />
+
+        <Route path="/Admin" element={<Dashboard />} />
         <Route path="/historico" element={<Historical />} />
         <Route path="/usuarios" element={<Users />} />
         <Route path="/usuarios/jueces/:projectId" element={<Judges />} />
@@ -64,10 +74,17 @@ function MainContent() {
         <Route path='/Categorias/:categoriaId' element={<EditCategoryPage/>}/>
         <Route path='/anuncios/:anunciosId' element={<EditAnnouncePage/>}/>
         <Route path='/anuncios/nuevo' element={<CreateAnnouncePage/>}/>
+        <Route path="/rubrica" element={<AdminRubrica />}/>
 
-        <Route path='/ProyectosJuez' element={<Juez />}/>
-        <Route path="/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
-        <Route path="/Calificar/:projectId" element={<Rubrica />} />
+        <Route path="/Juez/:idpersona" element={<Juez />} />
+        <Route path="/Juez/General/:idpersona" element={<Proyectos />} />
+        <Route path="/Juez/General/:idpersona/Proyectos/:projectId" element={<GeneralProjectResume />} />
+        <Route path="/Juez/Anuncios/:idpersona" element={<Anuncios />} />
+        <Route path="/Juez/Anuncios/:idpersona/DetailAnnoun/:anuncioId" element={<DetailedAnnoun />} />
+        <Route path="/Juez/:idpersona/Calificar/:projectId" element={<Rubrica />} />
+        <Route path="/Juez/:idpersona/ProyectoJuez/:projectId" element={<ProjResumeCont />} />
+        <Route path="/Juez/Perfil/:idpersona" element={<Perfil />} />
+
       </Routes>
     </>
   );
@@ -84,6 +101,10 @@ const getTitle = (pathname) => {
       return 'Usuarios';
     case '/proyectos':
       return 'Proyectos';
+    case '/anuncios':
+      return 'Anuncios';
+    case '/perfil':
+      return 'Perfil';
     default:
       return 'Your Default Title';
   }

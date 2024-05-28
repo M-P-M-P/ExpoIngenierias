@@ -1,45 +1,10 @@
-import {CategoryModel} from "../models/Relations.js";
-import{ProjectModel} from "../models/Relations.js";
+import {CategoryModel} from "../models/Relations.js"
+import Category from "../models/CategoryModel.js";
+import ProjectModel from "../models/ProjectsModel.js";
 
 import  sequelize  from "../database/db.js";
 
-export const getAllCategories = async(req,res)=>{
-  try{
-    const categories = await CategoryModel.findAll();
-    res.json(categories);
-  }catch(error){
-    res.status(500).json({message:error.message});
-  }
-};
-
-export const getCategoryById = async(req,res)=>{
-  try{
-      const {id}=req.params;
-      const Category = await CategoryModel.findByPk(id);
-      if(!Category){
-          return res.status(404).json({message: 'Categoria no encontrada'});
-      }else{
-          res.json(Category);
-      }
-  }catch(error){
-      res.json({message:error.message});
-  }
-};
-
-export const updateCategory = async(req,res)=>{
-    try{
-        await CategoryModel.update(req.body,{
-            where : {id:req.params.id}
-        })
-        res.status(201).json({
-            message:"Categoria correctamente actualizada!"
-        })
-    }catch(error){
-        res.json({message:error.message});
-    }
-};
-
-export const  inhabilitateCategory = async(req,res)=>{
+async function  inhabilitateCategory(req,res) {
   const {id}=req.params;
   try{
       let category = await CategoryModel.findByPk(id);
@@ -57,7 +22,7 @@ export const  inhabilitateCategory = async(req,res)=>{
   }
 };
 
-export const createCategory=async(req,res)=>{
+async function createCategory(req,res) {
   const {title,description}=req.body;
   const isActive=1;
   if(!title || !description){
@@ -71,7 +36,21 @@ export const createCategory=async(req,res)=>{
     res.json(400).json({message:error.message});
 }
 };
-export const getCategoryProjectData = async (req, res) => {
+
+async function updateCategory(req,res) {
+    try{
+        await CategoryModel.update(req.body,{
+            where : {id:req.params.id}
+        })
+        res.status(201).json({
+            message:"Categoria correctamente actualizada!"
+        })
+    }catch(error){
+        res.json({message:error.message});
+    }
+};
+
+async function getCategoryProjectData(req, res) {
     try {
       const categories = await CategoryModel.findAll({
         include: [{
@@ -94,3 +73,30 @@ export const getCategoryProjectData = async (req, res) => {
       res.status(500).json({ error: 'Internal server error while fetching category project data.' });
     }
   }
+
+// Obtener todas las categorías
+async function getAllCategories(req, res) {
+  try {
+    const categories = await CategoryModel.findAll();
+    res.json(categories);
+  } catch (error) {
+    console.error('Error al obtener las categorías:', error);
+    res.status(500).json({ error: 'Error al obtener las categorías.' });
+  }
+}
+
+async function getCategoryById(req,res) {
+  try{
+      const {id}=req.params;
+      const Category = await CategoryModel.findByPk(id);
+      if(!Category){
+          return res.status(404).json({message: 'Categoria no encontrada'});
+      }else{
+          res.json(Category);
+      }
+  }catch(error){
+      res.json({message:error.message});
+  }
+};
+
+export { inhabilitateCategory, createCategory, updateCategory, getCategoryProjectData, getAllCategories, getCategoryById };

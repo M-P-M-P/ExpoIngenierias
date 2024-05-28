@@ -1,17 +1,31 @@
-//importamos la conexión a la DB
-import db from "../database/db.js";
-//importamos sequelize
-import { DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
+import sequelize from '../database/db.js';
 
-const CategoryModel = db.define('categories', {
-    id: { 
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    title: { type: DataTypes.STRING },
-    description: { type: DataTypes.STRING }, 
-    isActive: {type:DataTypes.NUMBER}
+const Category = sequelize.define('categories', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: sequelize.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: sequelize.NOW,
+  },
 });
 
-export default CategoryModel;
+export default Category;

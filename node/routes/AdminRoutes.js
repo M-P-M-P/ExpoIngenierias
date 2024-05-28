@@ -3,7 +3,7 @@ import { createAnnounce, updateAnnounce,deleteAnnounce,getAllAnnounces,getAnnoun
 import { updateCategory,createCategory,getAllCategories,getCategoryById,inhabilitateCategory } from '../controllers/CategoryController.js';
 import { updateArea,createArea,getAllAreas,deleteArea,getAresById,inhabilitateArea } from '../controllers/AreasControllers.js';
 
-import { getAreaJudge, getAllJudges } from '../controllers/personController.js';
+import { getAreaJudge, getAllJudges } from '../controllers/PersonController.js';
 import { getProjectJudges, removeProjectJudge, assignProjectJudge } from '../controllers/ProjectController.js';
 
 const router = express.Router()
