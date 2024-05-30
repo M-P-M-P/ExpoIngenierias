@@ -12,7 +12,7 @@ import AnnounceModel from "./AnnounceModel.js";
 import MapModel from "./MapModel.js";
 import ProjectMapModel from "./ProjectsMaps.js";
 import CommentModel from "./CommentsModel.js";
-import CriteriaModel from "./CriteriasModel.js";
+import CriteriaModel from "./CriteriaModel.js";
 import CriteriaJudgeModel from "./CriteriaJudgeModel.js";
 import DisqualifiedModel from "./DisqualifiedModel.js";
 import AreaPersonModel from "./AreaPersonModel.js";

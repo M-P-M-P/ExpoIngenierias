@@ -618,7 +618,7 @@ export const getProjectStatusData = async (req, res) => {
   try {
     const reviewedCount = await ProjectModel.count({
       where: {
-        statusGeneral: 'revisado'
+        statusGeneral: 'aprobado'
       }
     });
 
@@ -628,9 +628,15 @@ export const getProjectStatusData = async (req, res) => {
       }
     });
 
+    const refusedCount = await ProjectModel.count({
+        where: {
+          statusGeneral: 'rechazado'
+        }
+      });
+
     res.json({
-      labels: ['Revisado', 'Pendiente'],
-      data: [reviewedCount, pendingCount]
+      labels: ['Aprobado', 'Pendiente', 'Rechazado'],
+      data: [reviewedCount, pendingCount, refusedCount]
     });
   } catch (error) {
     console.error('Error fetching project status data:', error);

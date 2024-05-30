@@ -18,6 +18,7 @@ import ProjResumeCont from './Pages/Juez/ProjectResumenContent';
 import Rubrica from './Pages/Juez/Rubrica';
 import Announces from './Pages/Admin/Announces';
 import Areas from './Pages/Admin/Areas';
+import EditCriteriaPage from './Pages/Admin/EditCriteriaPage';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function MainContent() {
         <Route path="/anuncios" element={<Announces/>}/>
         <Route path="/areas" element={<Areas/>}/>
         <Route path="/rubrica" element={<AdminRubrica />}/>
+        <Route path="/rubrica/:criteriaId" element={<EditCriteriaPage />}/>
 
 
         <Route path='/ProyectosJuez' element={<Juez />}/>
