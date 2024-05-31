@@ -4,6 +4,6 @@ import { getTeamMembersByTeamId } from '../controllers/TeamMemberController.js';
 
 const router = express.Router();
 
-router.get('/teamMembers/team/:id', getTeamMembersByTeamId);
+router.get('/getMembers/team/:id', getTeamMembersByTeamId);
 
 export default router;

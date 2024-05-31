@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../database/db.js';
+import db from '../database/db.js';
 
-const Criteria = sequelize.define('criterias', {
+const CriteriaModel = db.define('criterias', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -14,17 +14,7 @@ const Criteria = sequelize.define('criterias', {
   weight: {
     type: DataTypes.INTEGER, 
     allowNull: true,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-  updatedAt: {
-    type: DataTypes.DATE, 
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-});
+  }},
+{timestamps:true});
 
-export default Criteria;
+export default CriteriaModel;

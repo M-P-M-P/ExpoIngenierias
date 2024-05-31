@@ -40,7 +40,7 @@ function Datos({name,email,type,id}){
     );
 }
 
-export default function Perfil(){
+export default function PerfilJuez(){
     const [person, setPerson] = useState({
         id: "",
         name: "",
@@ -49,7 +49,7 @@ export default function Perfil(){
     })
     const {idpersona} = useParams();
     useEffect(() => {
-        fetch(`http://localhost:8000/api/persons/${idpersona}`)
+        fetch(`http://localhost:8000/Juez/fetchPerson/${idpersona}`)
           .then((res) => res.json())
           .then((data)=>setPerson(data));
         

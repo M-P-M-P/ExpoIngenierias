@@ -1,38 +1,18 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../database/db.js';
+//importamos la conexión a la DB
+import db from "../database/db.js";
+//importamos sequelize
+import { DataTypes } from "sequelize";
 
-const Person = sequelize.define('persons', {
-  id: {
-    type: DataTypes.STRING(50),
-    primaryKey: true,
-    allowNull: false,
-  },
-  name: {
-    type: DataTypes.STRING(30),
-    allowNull: false,
-  },
-  lastName: {
-    type: DataTypes.STRING(50),
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING(60),
-    allowNull: false,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: sequelize.NOW,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: sequelize.NOW,
-  },
-  isJudge: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-});
+const PersonModel = db.define('persons', {
+    id: { 
+        type: DataTypes.STRING,
+        primaryKey: true
+    },
+    name: { type: DataTypes.STRING },
+    lastName: { type: DataTypes.STRING }, // CLOB puede ser representado como STRING con un límite alto en Sequelize
+    email: { type: DataTypes.STRING },
+    isJudge: {type: DataTypes.INTEGER},
+    ISACTIVE: {type: DataTypes.INTEGER}
+},{timestamps:false});
 
-export default Person;
+ export default PersonModel

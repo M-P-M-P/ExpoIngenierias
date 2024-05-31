@@ -1,7 +1,8 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../database/db.js';
+import db from "../database/db.js";
 
-const Category = sequelize.define('categories', {
+import { DataTypes } from "sequelize";
+
+const CategoryModel = db.define('categories', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -16,16 +17,10 @@ const Category = sequelize.define('categories', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: sequelize.NOW,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: sequelize.NOW,
-  },
-});
+  isActive: {
+    type: DataTypes.NUMBER,
+    allowNull: true,
+  }
+},{timestamps:false});
 
-export default Category;
+export default CategoryModel;

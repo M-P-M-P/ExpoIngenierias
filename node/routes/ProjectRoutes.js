@@ -1,28 +1,30 @@
 import express from 'express';
-import Project from '../models/ProjectModel.js';
-import { fetchProjectById } from '../controllers/ProjectController.js';
+import { deleteProject, disqualifyProject, getAllProjects, getProject, handleRegister, handleEdition, handleResumen, getProjectsByResponsable, getProjectStatusData, getMaterialChecklistItems,getProjectAdmin} from '../controllers/ProjectController.js'
 
 const router = express.Router();
 
-// Ruta para obtener todos los proyectos
-router.get('/projects', async (req, res) => {
-  try {
-    const projects = await Project.findAll();
-    res.json(projects);
-  } catch (error) {
-    console.error('Error al obtener los proyectos:', error);
-    res.status(500).json({ error: 'Error al obtener los proyectos.' });
-  }
-});
+//Obtener todos los proyectos
+router.get('/getProjects', getAllProjects);
+//Obtener un solo proyecto por su id
+router.get('/getProject/resume/:id', getProjectAdmin);
 
-router.get('/projects/:id', async (req, res) => {
-  try {
-    const projectId = req.params.id;
-    const project = await fetchProjectById(projectId);
-    res.json(project);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// Get the count of reviewed project for the dashboard doughnnut chard
+router.get('/getProjectStatusDoughnut/ChartData', getProjectStatusData);
+// Get the admin material checklist
+router.get('/getMaterialChecklist/Data', getMaterialChecklistItems)
+
+//router.put('/:id', updateProject);
+router.delete('/delete/:id', deleteProject);
+
+router.all('/editionProject/:id', handleEdition)
+
+router.all('/resumeProject/:id', handleResumen)
+
+//Registro del proyecto
+router.all('/register', handleRegister)
+router.get('/responsable/:id_responsable', getProjectsByResponsable);
+
+// Disqualify a project
+router.post('/disqualify', disqualifyProject);
 
 export default router;

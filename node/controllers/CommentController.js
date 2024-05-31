@@ -1,12 +1,12 @@
 // controllers/commentController.js
-import Comment from '../models/CommentModel.js';
+import {ProjectModel,PersonModel,CommentsModel} from "../models/Relations.js"
 
 // Crear un nuevo comentario
-async function createComment(req, res) {
+async function createCommentJudge(req, res) {
   const { id_person, id_project, comment } = req.body;
 
   try {
-    const newComment = await Comment.create({
+    const newComment = await CommentsModel.create({
       id_person,
       id_project,
       comment,
@@ -21,7 +21,7 @@ async function createComment(req, res) {
 // Obtener todos los comentarios
 async function fetchAllComments(req, res) {
   try {
-    const comments = await Comment.findAll();
+    const comments = await CommentsModel.findAll();
     res.status(200).json(comments);
   } catch (error) {
     console.error('Error al obtener los comentarios:', error);
@@ -34,7 +34,7 @@ async function fetchCommentByPersonAndProject(req, res) {
   const { id_person, id_project } = req.params;
 
   try {
-    const comment = await Comment.findOne({
+    const comment = await CommentsModel.findOne({
       where: {
         id_person,
         id_project
@@ -56,7 +56,7 @@ async function fetchCommentByPersonAndProject(req, res) {
 async function fetchCommentsByProject(req, res) {
   const { id_project } = req.params;
   try {
-    const comments = await Comment.findAll({
+    const comments = await CommentsModel.findAll({
       where: {
         id_project
       }
@@ -73,4 +73,35 @@ async function fetchCommentsByProject(req, res) {
   }
 }
 
-export { fetchAllComments, createComment, fetchCommentByPersonAndProject, fetchCommentsByProject };
+// Crear un nuevo comentario
+export const createComment = async (req, res) => {
+    const { id_person, id_project, comment } = req.body;
+
+    try {
+        // Verificar que el proyecto y la persona existen
+        const project = await ProjectModel.findByPk(id_project);
+        const person = await PersonModel.findByPk(id_person);
+
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        if (!person) {
+            return res.status(404).json({ message: 'Person not found' });
+        }
+
+        // Crear el comentario
+        const newComment = await CommentsModel.create({
+            id_person,
+            id_project,
+            comment
+        });
+
+        res.status(201).json(newComment);
+    } catch (error) {
+        console.error('Error creating comment:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export { fetchAllComments, fetchCommentByPersonAndProject, fetchCommentsByProject, createCommentJudge };

@@ -1,23 +1,24 @@
-import AreaModel from "./AreasModel.js";
-import CategoryModel from "./CategorysModel.js";
+import AreaModel from "./AreaModel.js";
+import CategoryModel from "./CategoryModel.js";
 import EditionModel from "./EditionModel.js";
-import PersonModel from "./PersonsModel.js";
-import ProjectModel from "./ProjectsModel.js";
-import StudentModel from "./StudentsModel.js";
-import TeamModel from "./TeamsModel.js";
+import PersonModel from "./PersonModel.js";
+import ProjectModel from "./ProjectModel.js";
+import StudentModel from "./StudentModel.js";
+import TeamModel from "./TeamModel.js";
 import MaterialModel from "./MaterialModel.js";
 import MaterialProjectModel from "./MaterialProjectModel.js";
-import AdminModel from "./AdminsModel.js";
+import AdminModel from "./AdminModel.js";
 import AnnounceModel from "./AnnounceModel.js";
 import MapModel from "./MapModel.js";
-import ProjectMapModel from "./ProjectsMaps.js";
-import CommentModel from "./CommentsModel.js";
-import CriteriaModel from "./CriteriasModel.js";
-import CriteriaJudgeModel from "./CriteriaJudgesModel.js";
+import ProjectMapModel from "./ProjectMapModel.js";
+import CommentsModel from "./CommentModel.js";
+import CriteriaModel from "./CriteriaModel.js";
+import CriteriaJudgeModel from "./CriteriaJudgeModel.js";
 import DisqualifiedModel from "./DisqualifiedModel.js";
 import AreaPersonModel from "./AreaPersonModel.js";
 import AsessorProjectModel from './AsessorProjectModel.js'; 
 import JudgeProjectModel from "./JudgeProjectModel.js";
+import TeamMemberModel from "./TeamMemberModel.js";
 
 
 TeamModel.belongsTo(ProjectModel, {foreignKey: 'id_project'});
@@ -27,8 +28,8 @@ ProjectModel.hasOne(TeamModel, {foreignKey: 'id_project'});
 StudentModel.hasMany(ProjectModel, {foreignKey: 'id_lider'});
 ProjectModel.belongsTo(StudentModel, { foreignKey: 'id_lider' });
 
-PersonModel.hasMany(ProjectModel, {foreignKey: 'id_responsable'});
-ProjectModel.belongsTo(PersonModel, { foreignKey: 'id_responsable' });
+PersonModel.hasMany(ProjectModel, {foreignKey: 'id_responsable', as: 'ProyectosLiderados'});
+ProjectModel.belongsTo(PersonModel, { foreignKey: 'id_responsable', as: 'Lider' });
 
 AreaModel.hasMany(ProjectModel, {foreignKey: 'id_area'});
 ProjectModel.belongsTo(AreaModel, { foreignKey: 'id_area' });
@@ -83,6 +84,23 @@ AnnounceModel.belongsToMany(AdminModel,
         otherKey: 'id_admin'
 });
 
+
+PersonModel.belongsToMany(ProjectModel, {
+        through: 'asessor_projects', // Nombre de tu tabla intermedia
+        foreignKey: 'id_person', // Nombre de la columna en team_members que referencia estudiantes
+        otherKey: 'id_project',
+        as: 'ProyectosAsesorados'
+});
+
+ProjectModel.belongsToMany(PersonModel, {
+        through: 'asessor_projects', // Nombre de tu tabla intermedia
+        foreignKey: 'id_project', // Nombre de la columna en team_members que referencia estudiantes
+        otherKey: 'id_person',
+        as: 'Asesores'
+});
+
+
+
 // Definición de la relación desde StudentModel a TeamModel
 StudentModel.belongsToMany(TeamModel, {
         through: 'team_members', // Nombre de tu tabla intermedia
@@ -109,6 +127,10 @@ ProjectModel.belongsToMany(MaterialModel, {
         foreignKey: 'id_project'   // Nombre de la columna en team_members que referencia equipos
 });
 
+ProjectModel.hasMany(MaterialProjectModel, {foreignKey: 'id_project'});
+MaterialProjectModel.belongsTo(ProjectModel, {foreignKey: 'id_project'})
+
+
 // Define associations if not already defined
 MaterialModel.hasMany(MaterialProjectModel, { foreignKey: 'id_material' });
 MaterialProjectModel.belongsTo(MaterialModel, { foreignKey: 'id_material' });
@@ -129,10 +151,10 @@ MapModel.belongsToMany(ProjectModel,{
 });
 
 //comentarios
-PersonModel.hasMany(CommentModel,{foreignKey:'id_person'});
-CommentModel.belongsTo(PersonModel,{foreignKey:'id_person'});
-ProjectModel.hasMany(CommentModel,{foreignKey:'id_project'});
-CommentModel.belongsTo(ProjectModel, { foreignKey: 'id_project' });
+PersonModel.hasMany(CommentsModel,{foreignKey:'id_person'});
+CommentsModel.belongsTo(PersonModel,{foreignKey:'id_person'});
+ProjectModel.hasMany(CommentsModel,{foreignKey:'id_project'});
+CommentsModel.belongsTo(ProjectModel, { foreignKey: 'id_project' });
 
 //criterios
 CriteriaModel.hasMany(CriteriaJudgeModel,{foreignKey:'id_criteria'});
@@ -156,7 +178,7 @@ export {
         MaterialModel,
         MaterialProjectModel,
         ProjectMapModel,
-        CommentModel,
+        CommentsModel,
         MapModel,
         CriteriaJudgeModel,
         CriteriaModel,
@@ -164,5 +186,6 @@ export {
         AnnounceModel,
         DisqualifiedModel,
         AsessorProjectModel,
-        JudgeProjectModel
+        JudgeProjectModel,
+        TeamMemberModel
 };

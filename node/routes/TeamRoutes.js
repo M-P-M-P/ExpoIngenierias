@@ -5,8 +5,8 @@ import { fetchAllTeams, fetchTeamById, fetchTeamsByLeaderId } from '../controlle
 const router = express.Router();
 
 // Definir las rutas para los equipos
-router.get('/teams', fetchAllTeams);
-router.get('/teams/:id', fetchTeamById);
-router.get('/teams/leader/:id_leader', fetchTeamsByLeaderId);
+router.get('/fetchTeams', fetchAllTeams);
+router.get('/fetchTeam/:id', fetchTeamById);
+router.get('/fetchTeam/leader/:id_leader', fetchTeamsByLeaderId);
 
 export default router;

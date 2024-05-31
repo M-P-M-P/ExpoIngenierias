@@ -1,35 +1,16 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../database/db.js';
+import db from "../database/db.js";
 
-const Area = sequelize.define('areas', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: sequelize.NOW,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: sequelize.NOW,
-  },
-  IsActive: {
-    type: DataTypes.NUMBER,
-    allowNull: true
-  }
-});
+import { DataTypes } from "sequelize";
 
-export default Area;
+const AreaModel = db.define('areas', {
+    id: { 
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    name: { type: DataTypes.STRING },
+    description: { type: DataTypes.STRING }, 
+    isActive: {type: DataTypes.NUMBER}
+},{timestamps:false});
+
+export default AreaModel;
